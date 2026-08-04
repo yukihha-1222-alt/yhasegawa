@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>長谷川 侑希｜PCを使わない現場のための業務アプリ開発</title>
+<meta name="description" content="兵庫県姫路市。紙やExcelでの記録作業を、現場のスマートフォンで完結させる業務アプリをつくります。まず2週間、動くものを無償でおつくりします。">
+<meta property="og:title" content="長谷川 侑希｜PCを使わない現場のための業務アプリ開発">
+<meta property="og:description" content="紙やExcelでの記録作業を、現場のスマートフォンで完結させます。まず2週間、動くものを無償で。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yhasegawa.com">
+<meta name="theme-color" content="#1B3A57">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yomogi&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sumi:#14181C;
+  --ai:#1B3A57;
+  --ai-light:#2C5680;
+  --usuai:#E7EDF2;
+  --hai:#6E7378;
+  --kami:#FFFFFF;
+  --washi:#F5F7F9;
+  --line:#DFE5EA;
+  --mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","MS Mincho",serif;
+  --gothic:"Hiragino Kaku Gothic ProN","Yu Gothic","YuGothic","Noto Sans JP","Meiryo",sans-serif;
+  --tegaki:"Yomogi","Klee One","Hiragino Maru Gothic ProN",var(--mincho);
+  --wrap:760px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--gothic);
+  color:var(--sumi);
+  background:var(--kami);
+  line-height:1.85;
+  font-size:16px;
+  letter-spacing:.02em;
+}
+a{color:var(--ai)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--ai);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+
+/* ---------- hero ---------- */
+.hero{
+  padding:72px 0 64px;
+  border-bottom:1px solid var(--line);
+  position:relative;
+}
+.hero::before{
+  content:"";position:absolute;top:0;left:0;width:100%;height:4px;background:var(--ai);
+}
+.eyebrow{
+  font-size:12px;letter-spacing:.28em;color:var(--hai);margin-bottom:22px;
+}
+.hero h1{
+  font-family:var(--mincho);
+  font-size:clamp(34px,8.5vw,52px);
+  font-weight:600;line-height:1.15;letter-spacing:.09em;
+}
+.hero .furi{
+  font-size:12px;letter-spacing:.3em;color:var(--hai);margin-bottom:8px;
+}
+.hero .role{
+  font-size:clamp(15px,3.9vw,19px);
+  font-weight:700;color:var(--ai);line-height:1.62;
+  margin-top:22px;
+}
+.hero .lede{
+  font-size:15px;color:#3D4247;margin-top:16px;max-width:34em;
+}
+
+/* ---------- promise ---------- */
+.promise{
+  background:var(--washi);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:56px 0;
+}
+.promise .line{
+  font-family:var(--tegaki);
+  font-size:clamp(24px,6.4vw,36px);
+  line-height:1.55;color:var(--ai);letter-spacing:.01em;
+}
+.promise .fontnote{
+  font-size:12px;color:#98A0A8;margin-top:14px;letter-spacing:.03em;
+}
+.promise .body{
+  font-size:15px;color:#3D4247;margin-top:22px;max-width:36em;
+}
+
+/* ---------- sections ---------- */
+section{padding:64px 0}
+.sechead{
+  display:flex;align-items:baseline;gap:14px;margin-bottom:34px;
+  border-bottom:1px solid var(--line);padding-bottom:12px;
+}
+.sechead h2{
+  font-family:var(--mincho);font-size:22px;font-weight:600;letter-spacing:.09em;
+}
+.sechead .en{
+  font-size:11px;letter-spacing:.24em;color:var(--hai);
+}
+
+/* steps */
+.steps{list-style:none;display:flex;flex-direction:column;gap:2px}
+.steps li{
+  display:grid;grid-template-columns:44px 1fr;gap:16px;
+  padding:18px 0;border-bottom:1px dotted var(--line);
+}
+.steps li:last-child{border-bottom:0}
+.steps .n{
+  font-family:var(--mincho);font-size:20px;color:var(--ai);
+  line-height:1.4;letter-spacing:.04em;
+}
+.steps h3{font-size:16px;font-weight:700;line-height:1.5}
+.steps .dur{
+  display:inline-block;font-size:11px;letter-spacing:.1em;color:var(--ai);
+  background:var(--usuai);padding:2px 8px;border-radius:3px;margin-left:8px;
+  vertical-align:1px;font-weight:700;
+}
+.steps p{font-size:14.5px;color:#4A4F54;margin-top:5px}
+.freenote{
+  margin-top:26px;padding:18px 20px;background:var(--usuai);
+  border-left:3px solid var(--ai);font-size:15px;font-weight:700;color:var(--ai);
+  line-height:1.7;
+}
+.freenote span{display:block;font-weight:400;font-size:13.5px;color:#3D4247;margin-top:6px}
+
+/* tasks */
+.tasks{list-style:none;display:grid;gap:12px}
+.tasks li{
+  border:1px solid var(--line);border-radius:4px;padding:16px 18px;
+}
+.tasks strong{display:block;font-size:15.5px;color:var(--ai);margin-bottom:4px}
+.tasks p{font-size:14px;color:#4A4F54;line-height:1.7}
+
+/* works */
+.works{list-style:none;display:flex;flex-direction:column}
+.works li{
+  padding:16px 0;border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:1fr;gap:4px;
+}
+.works li:first-child{border-top:1px solid var(--line)}
+.works .t{font-size:15.5px;font-weight:700}
+.works .d{font-size:13.5px;color:#5A6066;line-height:1.7}
+.works .r{font-size:12px;color:var(--hai);letter-spacing:.04em}
+.nda{font-size:12.5px;color:var(--hai);margin-top:14px}
+
+/* apps */
+.apps{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.apps a{
+  display:block;text-decoration:none;color:inherit;
+  border:1px solid var(--line);border-radius:4px;padding:14px 16px;
+  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+}
+.apps a:hover{border-color:var(--ai-light);background:var(--washi);transform:translateY(-1px)}
+.apps .n{font-size:14.5px;font-weight:700;color:var(--ai)}
+.apps .s{font-size:12.5px;color:#5A6066;margin-top:3px;line-height:1.6}
+
+/* contact */
+.contact{background:var(--washi);border-top:1px solid var(--line)}
+.contact dl{display:grid;grid-template-columns:76px 1fr;gap:12px 16px;margin-top:6px}
+.contact dt{font-size:11px;letter-spacing:.18em;color:var(--hai);padding-top:5px}
+.contact dd{font-size:16px;word-break:break-all}
+.contact dd a{text-decoration:none;border-bottom:1px solid var(--usuai)}
+.contact dd a:hover{border-bottom-color:var(--ai)}
+.contact .msg{font-size:15px;color:#3D4247;max-width:34em}
+
+footer{
+  padding:30px 0 44px;font-size:12px;color:var(--hai);
+  border-top:1px solid var(--line);
+}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(10px);transition:opacity .5s ease,transform .5s ease}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none;transition:none}
+  .apps a{transition:none}
+}
+@media (max-width:520px){
+  .contact dl{grid-template-columns:1fr;gap:2px 0}
+  .contact dt{padding-top:10px}
+  .steps li{grid-template-columns:30px 1fr;gap:12px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">兵庫県姫路市</p>
+    <p class="furi">はせがわ　ゆうき</p>
+    <h1>長谷川　侑希</h1>
+    <p class="role">PCを使わない現場のための<br>業務アプリ開発</p>
+    <p class="lede">日報、点検記録、在庫。紙とExcelでやっている記録の作業を、現場のスマートフォンだけで完結できるようにします。</p>
+  </div>
+</header>
+
+<div class="promise">
+  <div class="wrap">
+    <p class="line rv">まず2週間、<br>動くものを無償でおつくりします。</p>
+    <p class="fontnote rv">— この書体は、自作アプリでつくった私の手書き文字です</p>
+    <p class="body rv">いきなりお見積りをお出ししても、判断のしようがないと思います。実際に現場で使っていただいて、それから決めていただく形にしています。</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="sechead"><h2>進め方</h2><span class="en">HOW IT WORKS</span></div>
+    <ol class="steps">
+      <li class="rv">
+        <span class="n">一</span>
+        <div>
+          <h3>お話を聞く<span class="dur">約1週間</span></h3>
+          <p>現場を見せていただき、どの作業に何分かかっているかを確認します。作る前に、そもそも作るべきかを一緒に判断します。</p>
+        </div>
+      </li>
+      <li class="rv">
+        <span class="n">二</span>
+        <div>
+          <h3>プロトタイプをつくる<span class="dur">約2週間</span></h3>
+          <p>実際に動くものをお作りします。この段階の費用はいただきません。</p>
+        </div>
+      </li>
+      <li class="rv">
+        <span class="n">三</span>
+        <div>
+          <h3>現場で試していただく<span class="dur">約2週間</span></h3>
+          <p>着手前に決めた条件（たとえば入力時間が今より短くなる）を満たすか、現場の方に使っていただいて確認します。</p>
+        </div>
+      </li>
+      <li class="rv">
+        <span class="n">四</span>
+        <div>
+          <h3>お見積り</h3>
+          <p>ご納得いただけた場合のみ、正式にお見積りします。初期費用と月額を、最初から両方お出しします。</p>
+        </div>
+      </li>
+    </ol>
+    <p class="freenote rv">一から三の段階では、費用は一切かかりません。
+      <span>合わなければ、そこでやめていただいて構いません。請求は発生しません。</span>
+    </p>
+  </div>
+</section>
+
+<section style="background:var(--washi);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sechead"><h2>こんな作業を</h2><span class="en">WHAT I BUILD</span></div>
+    <ul class="tasks">
+      <li class="rv"><strong>日報・作業報告</strong><p>現場で紙に書いて、事務所に持ち帰ってExcelに打ち直している。その二度手間をなくします。</p></li>
+      <li class="rv"><strong>点検・製造記録</strong><p>決まった項目を毎日記録する作業。スマホやタブレットでの入力にすると、記入漏れが起きなくなります。</p></li>
+      <li class="rv"><strong>在庫・仕入れの管理</strong><p>手元で数えて、後からまとめる作業。その場で入力して、そのまま集計まで終わらせます。</p></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sechead"><h2>これまでの仕事</h2><span class="en">WORK</span></div>
+    <ul class="works">
+      <li class="rv">
+        <span class="t">食品商社グループ｜製造記録アプリ（iPad）</span>
+        <span class="d">製造現場で紙に記入していた記録を、iPad上で入力・保存できるようにしたアプリ。電子化により作業が効率化され、記入漏れが発生しなくなりました。</span>
+        <span class="r">要件設計から担当／アプリ開発リーダーとしてiPad版を実装（SwiftUI）</span>
+      </li>
+      <li class="rv">
+        <span class="t">大手銀行｜公式スマートフォンアプリ</span>
+        <span class="d">個人のお客様向けバンキングアプリ。</span>
+        <span class="r">iOSアプリの開発を担当</span>
+      </li>
+      <li class="rv">
+        <span class="t">大手家電量販店｜公式スマートフォンアプリ</span>
+        <span class="d">会員向けアプリ。全国の店舗・ECと連携。</span>
+        <span class="r">iOSアプリの開発を担当</span>
+      </li>
+      <li class="rv">
+        <span class="t">公共インフラ企業｜待ち番号表示システム</span>
+        <span class="d">窓口の待ち番号を表示するデジタルサイネージシステム。</span>
+        <span class="r">システム開発を担当</span>
+      </li>
+    </ul>
+    <p class="nda">守秘義務のため、企業名は伏せています。</p>
+  </div>
+</section>
+
+<section style="background:var(--washi);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sechead"><h2>つくったアプリ</h2><span class="en">MY APPS</span></div>
+    <ul class="apps">
+      <li><a href="https://apps.apple.com/jp/app/id6785926739" target="_blank" rel="noopener"><span class="n">Pokory（ぽこりー）</span><span class="s">家族で共有する育児記録・成長ダイアリー</span></a></li>
+      <li><a href="https://apps.apple.com/jp/app/id6781990488" target="_blank" rel="noopener"><span class="n">Omry（オムリー）</span><span class="s">犬猫の記録手帳。記録・写真・健康手帳を家族で共有</span></a></li>
+      <li><a href="https://apps.apple.com/jp/app/id6781115517" target="_blank" rel="noopener"><span class="n">ぽこナビ</span><span class="s">出産・育児の手続きナビ。やること・助成・医療費を整理</span></a></li>
+      <li><a href="https://apps.apple.com/jp/app/id6794361869" target="_blank" rel="noopener"><span class="n">KARARI</span><span class="s">コスメの使い切り管理。開けた日から使い切るまでを一覧で</span></a></li>
+      <li><a href="https://apps.apple.com/jp/app/id6786967194" target="_blank" rel="noopener"><span class="n">カベメーター</span><span class="s">アルバイト収入の「扶養の壁」を1つの数字で把握</span></a></li>
+      <li><a href="https://apps.apple.com/jp/app/id6789184486" target="_blank" rel="noopener"><span class="n">余白と、あじ。</span><span class="s">手書きフォントを作成・販売・利用できるアプリ</span></a></li>
+      <li><a href="https://apps.apple.com/jp/app/id6787623874" target="_blank" rel="noopener"><span class="n">Wakuru（ワクル）</span><span class="s">縦型動画エディタ。投稿時の表示枠を確認しながら編集</span></a></li>
+      <li><a href="https://apps.apple.com/jp/app/id6792430378" target="_blank" rel="noopener"><span class="n">TAMURO（タムロ）</span><span class="s">仲間内で「集まるかどうか」を決めるアプリ</span></a></li>
+    </ul>
+  </div>
+</section>
+
+<section class="contact">
+  <div class="wrap">
+    <div class="sechead"><h2>ご相談</h2><span class="en">CONTACT</span></div>
+    <p class="msg rv">「これはアプリで解決することなのか」という段階のご相談で構いません。作らないほうがいい、というお返事をすることもあります。</p>
+    <dl>
+      <dt>TEL</dt><dd><a href="tel:08062061245">080-6206-1245</a></dd>
+      <dt>MAIL</dt><dd><a href="mailto:sakamotoyuki.develop@gmail.com">sakamotoyuki.develop@gmail.com</a></dd>
+      <dt>AREA</dt><dd>兵庫県姫路市（播磨一円、応相談）</dd>
+    </dl>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 長谷川 侑希</div>
+</footer>
+
+<script>
+(function(){
+  var els = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window) ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    els.forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  els.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+</body>
+</html>
