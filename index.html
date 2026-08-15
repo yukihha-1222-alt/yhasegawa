@@ -17,321 +17,368 @@
 :root{
   --sumi:#14181C;
   --ai:#1B3A57;
-  --ai-light:#2C5680;
+  --ai-mid:#2C5680;
   --usuai:#E7EDF2;
-  --hai:#6E7378;
-  --kami:#FFFFFF;
-  --washi:#F5F7F9;
-  --line:#DFE5EA;
+  --hai:#767C82;
+  --kami:#FCFCFB;
+  --washi:#F4F6F8;
+  --line:#E2E7EB;
   --mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","MS Mincho",serif;
   --gothic:"Hiragino Kaku Gothic ProN","Yu Gothic","YuGothic","Noto Sans JP","Meiryo",sans-serif;
   --tegaki:"Yomogi","Klee One","Hiragino Maru Gothic ProN",var(--mincho);
-  --wrap:760px;
+  --wrap:1040px;
+  --pad:clamp(22px,5vw,56px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
-  font-family:var(--gothic);
-  color:var(--sumi);
-  background:var(--kami);
-  line-height:1.85;
-  font-size:16px;
-  letter-spacing:.02em;
+  font-family:var(--gothic);color:var(--sumi);background:var(--kami);
+  line-height:1.9;font-size:15px;letter-spacing:.02em;overflow-x:hidden;
 }
 a{color:var(--ai)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--ai);outline-offset:3px;border-radius:2px}
-.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+a:focus-visible{outline:2px solid var(--ai);outline-offset:3px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
 
-/* ---------- hero ---------- */
+/* ============ vertical section heading ============ */
+.vhead{
+  writing-mode:vertical-rl;font-family:var(--mincho);
+  font-size:15px;letter-spacing:.42em;color:var(--ai);
+  height:auto;padding-top:2px;white-space:nowrap;user-select:none;
+}
+.grid2{
+  display:grid;grid-template-columns:38px 1fr;gap:clamp(20px,4vw,44px);
+  align-items:start;
+}
+
+/* ============ HERO ============ */
 .hero{
-  padding:72px 0 64px;
-  border-bottom:1px solid var(--line);
-  position:relative;
+  min-height:88vh;display:flex;flex-direction:column;justify-content:center;
+  padding:70px 0 56px;position:relative;
 }
-.hero::before{
-  content:"";position:absolute;top:0;left:0;width:100%;height:4px;background:var(--ai);
+.hero::after{
+  content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--line);
 }
-.eyebrow{
-  font-size:12px;letter-spacing:.28em;color:var(--hai);margin-bottom:22px;
+.hero .eyebrow{
+  font-size:11px;letter-spacing:.34em;color:var(--hai);margin-bottom:clamp(26px,6vh,54px);
 }
+.hero .furi{font-size:11px;letter-spacing:.44em;color:var(--hai);margin-bottom:10px}
 .hero h1{
-  font-family:var(--mincho);
-  font-size:clamp(34px,8.5vw,52px);
-  font-weight:600;line-height:1.15;letter-spacing:.09em;
-}
-.hero .furi{
-  font-size:12px;letter-spacing:.3em;color:var(--hai);margin-bottom:8px;
+  font-family:var(--mincho);font-weight:600;
+  font-size:clamp(52px,13vw,132px);
+  line-height:.98;letter-spacing:.05em;color:var(--sumi);
 }
 .hero .role{
-  font-size:clamp(15px,3.9vw,19px);
-  font-weight:700;color:var(--ai);line-height:1.62;
-  margin-top:22px;
+  margin-top:clamp(30px,6vh,58px);
+  font-size:clamp(15px,2.6vw,20px);font-weight:700;color:var(--ai);
+  line-height:1.7;letter-spacing:.03em;
+  padding-left:18px;border-left:2px solid var(--ai);
 }
-.hero .lede{
-  font-size:15px;color:#3D4247;margin-top:16px;max-width:34em;
+.scroll{
+  margin-top:clamp(34px,7vh,64px);font-size:10px;letter-spacing:.3em;color:var(--hai);
+  display:flex;align-items:center;gap:12px;
 }
+.scroll i{display:block;width:34px;height:1px;background:var(--ai);opacity:.45}
 
-/* ---------- promise ---------- */
+/* ============ PROMISE ============ */
 .promise{
-  background:var(--washi);
-  border-top:1px solid var(--line);
+  padding:clamp(80px,15vh,150px) 0;background:var(--washi);
   border-bottom:1px solid var(--line);
-  padding:56px 0;
 }
 .promise .line{
-  font-family:var(--tegaki);
-  font-size:clamp(24px,6.4vw,36px);
-  line-height:1.55;color:var(--ai);letter-spacing:.01em;
+  font-family:var(--tegaki);color:var(--ai);
+  font-size:clamp(30px,7.2vw,68px);line-height:1.5;letter-spacing:.005em;
 }
-.promise .fontnote{
-  font-size:12px;color:#98A0A8;margin-top:14px;letter-spacing:.03em;
-}
+.promise .fontnote{font-size:11.5px;color:#9BA3AA;margin-top:20px;letter-spacing:.04em}
 .promise .body{
-  font-size:15px;color:#3D4247;margin-top:22px;max-width:36em;
+  font-size:15px;color:#41474D;margin-top:34px;max-width:31em;
 }
 
-/* ---------- sections ---------- */
-section{padding:64px 0}
-.sechead{
-  display:flex;align-items:baseline;gap:14px;margin-bottom:34px;
-  border-bottom:1px solid var(--line);padding-bottom:12px;
+/* ============ DIAGRAM ============ */
+.diagram{padding:clamp(78px,13vh,132px) 0}
+.dwrap{margin-top:44px}
+.flow{
+  display:grid;grid-template-columns:1fr 62px 1fr;align-items:stretch;gap:0;
+  border:1px solid var(--line);background:#fff;
 }
-.sechead h2{
-  font-family:var(--mincho);font-size:22px;font-weight:600;letter-spacing:.09em;
+.side{padding:clamp(26px,4vw,42px) clamp(20px,3vw,34px)}
+.side .cap{font-size:10.5px;letter-spacing:.26em;color:var(--hai);margin-bottom:16px}
+.side h3{font-family:var(--mincho);font-size:clamp(19px,3.4vw,27px);font-weight:600;line-height:1.4;letter-spacing:.05em}
+.side ul{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:9px}
+.side li{font-size:13px;line-height:1.6;color:#4E545A;padding-left:15px;position:relative}
+.side li::before{content:"";position:absolute;left:0;top:.72em;width:6px;height:1px;background:var(--hai)}
+.before{background:#FAFAF9}
+.after{background:var(--ai);color:#fff}
+.after .cap{color:#9DB6CD}
+.after li{color:#D3DFEA}
+.after li::before{background:#7E9DBA}
+.arrow{
+  background:#fff;display:flex;align-items:center;justify-content:center;
+  border-left:1px solid var(--line);border-right:1px solid var(--line);
 }
-.sechead .en{
-  font-size:11px;letter-spacing:.24em;color:var(--hai);
+.arrow svg{width:24px;height:24px;color:var(--ai)}
+@media (max-width:720px){
+  .flow{grid-template-columns:1fr;grid-template-rows:auto 54px auto}
+  .arrow{border:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .arrow svg{transform:rotate(90deg)}
 }
 
-/* steps */
-.steps{list-style:none;display:flex;flex-direction:column;gap:2px}
+/* ============ STEPS ============ */
+.steps-sec{padding:clamp(78px,13vh,132px) 0;border-top:1px solid var(--line);background:var(--washi)}
+.steps{list-style:none;margin-top:40px;display:flex;flex-direction:column}
 .steps li{
-  display:grid;grid-template-columns:44px 1fr;gap:16px;
-  padding:18px 0;border-bottom:1px dotted var(--line);
+  display:grid;grid-template-columns:clamp(54px,9vw,96px) 1fr;
+  gap:clamp(16px,3vw,34px);align-items:baseline;
+  padding:clamp(22px,3.4vw,34px) 0;border-top:1px solid var(--line);
 }
-.steps li:last-child{border-bottom:0}
+.steps li:last-child{border-bottom:1px solid var(--line)}
 .steps .n{
-  font-family:var(--mincho);font-size:20px;color:var(--ai);
-  line-height:1.4;letter-spacing:.04em;
+  font-family:var(--mincho);font-size:clamp(34px,7vw,62px);
+  line-height:.9;color:var(--ai);opacity:.24;letter-spacing:0;
 }
-.steps h3{font-size:16px;font-weight:700;line-height:1.5}
+.steps h3{font-size:clamp(16px,2.4vw,19px);font-weight:700;line-height:1.5}
 .steps .dur{
-  display:inline-block;font-size:11px;letter-spacing:.1em;color:var(--ai);
-  background:var(--usuai);padding:2px 8px;border-radius:3px;margin-left:8px;
-  vertical-align:1px;font-weight:700;
+  display:inline-block;font-size:10.5px;letter-spacing:.12em;color:var(--ai);
+  background:var(--usuai);padding:3px 9px;border-radius:2px;margin-left:11px;
+  vertical-align:2px;font-weight:700;
 }
-.steps p{font-size:14.5px;color:#4A4F54;margin-top:5px}
-.freenote{
-  margin-top:26px;padding:18px 20px;background:var(--usuai);
-  border-left:3px solid var(--ai);font-size:15px;font-weight:700;color:var(--ai);
-  line-height:1.7;
+.steps p{font-size:14px;color:#4E545A;margin-top:8px;max-width:38em}
+.freebox{
+  margin-top:44px;padding:clamp(26px,4vw,40px);background:var(--ai);color:#fff;
 }
-.freenote span{display:block;font-weight:400;font-size:13.5px;color:#3D4247;margin-top:6px}
+.freebox strong{
+  display:block;font-family:var(--mincho);font-weight:600;
+  font-size:clamp(19px,3.6vw,30px);line-height:1.55;letter-spacing:.05em;
+}
+.freebox span{display:block;font-size:13.5px;color:#C6D5E2;margin-top:14px;line-height:1.8}
 
-/* tasks */
-.tasks{list-style:none;display:grid;gap:12px}
-.tasks li{
-  border:1px solid var(--line);border-radius:4px;padding:16px 18px;
-}
-.tasks strong{display:block;font-size:15.5px;color:var(--ai);margin-bottom:4px}
-.tasks p{font-size:14px;color:#4A4F54;line-height:1.7}
-
-/* works */
-.works{list-style:none;display:flex;flex-direction:column}
+/* ============ WORKS (dense) ============ */
+.dense{padding:clamp(70px,11vh,110px) 0;border-top:1px solid var(--line)}
+.works{list-style:none;margin-top:36px;border-top:1px solid var(--line)}
 .works li{
-  padding:16px 0;border-bottom:1px solid var(--line);
-  display:grid;grid-template-columns:1fr;gap:4px;
+  padding:15px 0;border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:1fr auto;gap:6px 22px;align-items:baseline;
 }
-.works li:first-child{border-top:1px solid var(--line)}
-.works .t{font-size:15.5px;font-weight:700}
-.works .d{font-size:13.5px;color:#5A6066;line-height:1.7}
-.works .r{font-size:12px;color:var(--hai);letter-spacing:.04em}
-.nda{font-size:12.5px;color:var(--hai);margin-top:14px}
+.works .t{font-size:14px;font-weight:700;letter-spacing:.02em}
+.works .r{font-size:11.5px;color:var(--hai);letter-spacing:.03em;text-align:right;white-space:nowrap}
+.works .d{grid-column:1/-1;font-size:12.5px;color:#5C6268;line-height:1.72;max-width:44em}
+.nda{font-size:11.5px;color:var(--hai);margin-top:16px}
+@media (max-width:560px){
+  .works li{grid-template-columns:1fr}
+  .works .r{text-align:left;white-space:normal}
+}
 
-/* apps */
-.apps{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+/* ============ APPS (dense grid) ============ */
+.apps{list-style:none;margin-top:36px;display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:1px;
+      background:var(--line);border:1px solid var(--line)}
 .apps a{
-  display:block;text-decoration:none;color:inherit;
-  border:1px solid var(--line);border-radius:4px;padding:14px 16px;
-  transition:border-color .18s ease,background .18s ease,transform .18s ease;
+  display:block;text-decoration:none;color:inherit;background:var(--kami);
+  padding:15px 16px;transition:background .18s ease;height:100%;
 }
-.apps a:hover{border-color:var(--ai-light);background:var(--washi);transform:translateY(-1px)}
-.apps .n{font-size:14.5px;font-weight:700;color:var(--ai)}
-.apps .s{font-size:12.5px;color:#5A6066;margin-top:3px;line-height:1.6}
+.apps a:hover{background:#fff}
+.apps .n{font-size:13px;font-weight:700;color:var(--ai);line-height:1.5}
+.apps .s{font-size:11.5px;color:#5C6268;margin-top:3px;line-height:1.6}
 
-/* contact */
-.contact{background:var(--washi);border-top:1px solid var(--line)}
-.contact dl{display:grid;grid-template-columns:76px 1fr;gap:12px 16px;margin-top:6px}
-.contact dt{font-size:11px;letter-spacing:.18em;color:var(--hai);padding-top:5px}
-.contact dd{font-size:16px;word-break:break-all}
-.contact dd a{text-decoration:none;border-bottom:1px solid var(--usuai)}
-.contact dd a:hover{border-bottom-color:var(--ai)}
-.contact .msg{font-size:15px;color:#3D4247;max-width:34em}
-
-footer{
-  padding:30px 0 44px;font-size:12px;color:var(--hai);
-  border-top:1px solid var(--line);
+/* ============ CONTACT ============ */
+.contact{padding:clamp(78px,13vh,132px) 0;background:var(--ai);color:#fff}
+.contact .vhead{color:#9DB6CD}
+.contact .msg{
+  font-family:var(--mincho);font-size:clamp(18px,3.4vw,28px);line-height:1.7;
+  letter-spacing:.05em;max-width:22em;
 }
+.contact .sub{font-size:14px;color:#C6D5E2;margin-top:22px;max-width:30em;line-height:1.85}
+.contact dl{margin-top:44px;display:grid;gap:0}
+.contact dt{font-size:10px;letter-spacing:.24em;color:#8FAAC4;padding-top:16px}
+.contact dd{font-size:clamp(16px,3vw,22px);padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.16);word-break:break-all}
+.contact dd a{color:#fff;text-decoration:none}
+.contact dd a:hover{color:#C6D5E2}
+
+footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
 
 /* reveal */
-.rv{opacity:0;transform:translateY(10px);transition:opacity .5s ease,transform .5s ease}
+.rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .rv{opacity:1;transform:none;transition:none}
-  .apps a{transition:none}
 }
-@media (max-width:520px){
-  .contact dl{grid-template-columns:1fr;gap:2px 0}
-  .contact dt{padding-top:10px}
-  .steps li{grid-template-columns:30px 1fr;gap:12px}
+@media (max-width:640px){
+  .grid2{grid-template-columns:26px 1fr;gap:16px}
+  .vhead{font-size:13px;letter-spacing:.34em}
 }
 </style>
 </head>
 <body>
 
+<!-- HERO -->
 <header class="hero">
   <div class="wrap">
     <p class="eyebrow">兵庫県姫路市</p>
     <p class="furi">はせがわ　ゆうき</p>
     <h1>長谷川　侑希</h1>
     <p class="role">PCを使わない現場のための<br>業務アプリ開発</p>
-    <p class="lede">日報、点検記録、在庫。紙とExcelでやっている記録の作業を、現場のスマートフォンだけで完結できるようにします。</p>
+    <p class="scroll"><i></i>SCROLL</p>
   </div>
 </header>
 
+<!-- PROMISE -->
 <div class="promise">
   <div class="wrap">
-    <p class="line rv">まず2週間、<br>動くものを無償でおつくりします。</p>
+    <p class="line rv">まず2週間、<br>動くものを無償で<br>おつくりします。</p>
     <p class="fontnote rv">— この書体は、自作アプリでつくった私の手書き文字です</p>
     <p class="body rv">いきなりお見積りをお出ししても、判断のしようがないと思います。実際に現場で使っていただいて、それから決めていただく形にしています。</p>
   </div>
 </div>
 
-<section>
-  <div class="wrap">
-    <div class="sechead"><h2>進め方</h2><span class="en">HOW IT WORKS</span></div>
-    <ol class="steps">
-      <li class="rv">
-        <span class="n">一</span>
-        <div>
-          <h3>お話を聞く<span class="dur">約1週間</span></h3>
-          <p>現場を見せていただき、どの作業に何分かかっているかを確認します。作る前に、そもそも作るべきかを一緒に判断します。</p>
+<!-- DIAGRAM -->
+<section class="diagram">
+  <div class="wrap grid2">
+    <p class="vhead">紙から、現場のスマホへ</p>
+    <div>
+      <div class="dwrap rv">
+        <div class="flow">
+          <div class="side before">
+            <p class="cap">BEFORE</p>
+            <h3>紙とExcel</h3>
+            <ul>
+              <li>現場で紙に書く</li>
+              <li>事務所に持ち帰る</li>
+              <li>Excelに打ち直す</li>
+              <li>記入漏れに後から気づく</li>
+            </ul>
+          </div>
+          <div class="arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+              <path d="M4 12h15M13 6l6 6-6 6"/>
+            </svg>
+          </div>
+          <div class="side after">
+            <p class="cap">AFTER</p>
+            <h3>手元のスマホ</h3>
+            <ul>
+              <li>その場で入力して終わり</li>
+              <li>打ち直しが要らない</li>
+              <li>集計まで自動</li>
+              <li>未入力はその場で分かる</li>
+            </ul>
+          </div>
         </div>
-      </li>
-      <li class="rv">
-        <span class="n">二</span>
-        <div>
-          <h3>プロトタイプをつくる<span class="dur">約2週間</span></h3>
-          <p>実際に動くものをお作りします。この段階の費用はいただきません。</p>
-        </div>
-      </li>
-      <li class="rv">
-        <span class="n">三</span>
-        <div>
-          <h3>現場で試していただく<span class="dur">約2週間</span></h3>
-          <p>着手前に決めた条件（たとえば入力時間が今より短くなる）を満たすか、現場の方に使っていただいて確認します。</p>
-        </div>
-      </li>
-      <li class="rv">
-        <span class="n">四</span>
-        <div>
-          <h3>お見積り</h3>
-          <p>ご納得いただけた場合のみ、正式にお見積りします。初期費用と月額を、最初から両方お出しします。</p>
-        </div>
-      </li>
-    </ol>
-    <p class="freenote rv">一から三の段階では、費用は一切かかりません。
-      <span>合わなければ、そこでやめていただいて構いません。請求は発生しません。</span>
-    </p>
+      </div>
+    </div>
   </div>
 </section>
 
-<section style="background:var(--washi);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
-  <div class="wrap">
-    <div class="sechead"><h2>こんな作業を</h2><span class="en">WHAT I BUILD</span></div>
-    <ul class="tasks">
-      <li class="rv"><strong>日報・作業報告</strong><p>現場で紙に書いて、事務所に持ち帰ってExcelに打ち直している。その二度手間をなくします。</p></li>
-      <li class="rv"><strong>点検・製造記録</strong><p>決まった項目を毎日記録する作業。スマホやタブレットでの入力にすると、記入漏れが起きなくなります。</p></li>
-      <li class="rv"><strong>在庫・仕入れの管理</strong><p>手元で数えて、後からまとめる作業。その場で入力して、そのまま集計まで終わらせます。</p></li>
-    </ul>
+<!-- STEPS -->
+<section class="steps-sec">
+  <div class="wrap grid2">
+    <p class="vhead">進め方</p>
+    <div>
+      <ol class="steps">
+        <li class="rv"><span class="n">01</span>
+          <div><h3>お話を聞く<span class="dur">約1週間</span></h3>
+          <p>現場を見せていただき、どの作業に何分かかっているかを確認します。作る前に、そもそも作るべきかを一緒に判断します。</p></div>
+        </li>
+        <li class="rv"><span class="n">02</span>
+          <div><h3>プロトタイプをつくる<span class="dur">約2週間</span></h3>
+          <p>実際に動くものをお作りします。この段階の費用はいただきません。</p></div>
+        </li>
+        <li class="rv"><span class="n">03</span>
+          <div><h3>現場で試していただく<span class="dur">約2週間</span></h3>
+          <p>着手前に決めた条件を満たすか、現場の方に使っていただいて確認します。</p></div>
+        </li>
+        <li class="rv"><span class="n">04</span>
+          <div><h3>お見積り</h3>
+          <p>ご納得いただけた場合のみ、正式にお見積りします。初期費用と月額を、最初から両方お出しします。</p></div>
+        </li>
+      </ol>
+      <div class="freebox rv">
+        <strong>01から03まで、<br>費用は一切かかりません。</strong>
+        <span>合わなければ、そこでやめていただいて構いません。請求は発生しません。</span>
+      </div>
+    </div>
   </div>
 </section>
 
-<section>
-  <div class="wrap">
-    <div class="sechead"><h2>これまでの仕事</h2><span class="en">WORK</span></div>
-    <ul class="works">
-      <li class="rv">
-        <span class="t">食品商社グループ｜製造記録アプリ（iPad）</span>
-        <span class="d">製造現場で紙に記入していた記録を、iPad上で入力・保存できるようにしたアプリ。電子化により作業が効率化され、記入漏れが発生しなくなりました。</span>
-        <span class="r">要件設計から担当／アプリ開発リーダーとしてiPad版を実装（SwiftUI）</span>
-      </li>
-      <li class="rv">
-        <span class="t">大手銀行｜公式スマートフォンアプリ</span>
-        <span class="d">個人のお客様向けバンキングアプリ。</span>
-        <span class="r">iOSアプリの開発を担当</span>
-      </li>
-      <li class="rv">
-        <span class="t">大手家電量販店｜公式スマートフォンアプリ</span>
-        <span class="d">会員向けアプリ。全国の店舗・ECと連携。</span>
-        <span class="r">iOSアプリの開発を担当</span>
-      </li>
-      <li class="rv">
-        <span class="t">公共インフラ企業｜待ち番号表示システム</span>
-        <span class="d">窓口の待ち番号を表示するデジタルサイネージシステム。</span>
-        <span class="r">システム開発を担当</span>
-      </li>
-    </ul>
-    <p class="nda">守秘義務のため、企業名は伏せています。</p>
+<!-- WORKS -->
+<section class="dense">
+  <div class="wrap grid2">
+    <p class="vhead">これまでの仕事</p>
+    <div>
+      <ul class="works">
+        <li class="rv">
+          <span class="t">食品商社グループ｜製造記録アプリ（iPad）</span>
+          <span class="r">要件設計・開発リーダー</span>
+          <span class="d">製造現場で紙に記入していた記録を、iPad上で入力・保存できるようにしたアプリ。電子化により作業が効率化され、記入漏れが発生しなくなりました。</span>
+        </li>
+        <li class="rv">
+          <span class="t">大手銀行｜公式スマートフォンアプリ</span>
+          <span class="r">iOS開発</span>
+          <span class="d">個人のお客様向けバンキングアプリ。</span>
+        </li>
+        <li class="rv">
+          <span class="t">大手家電量販店｜公式スマートフォンアプリ</span>
+          <span class="r">iOS開発</span>
+          <span class="d">会員向けアプリ。全国の店舗・ECと連携。</span>
+        </li>
+        <li class="rv">
+          <span class="t">公共インフラ企業｜待ち番号表示システム</span>
+          <span class="r">システム開発</span>
+          <span class="d">窓口の待ち番号を表示するデジタルサイネージシステム。</span>
+        </li>
+      </ul>
+      <p class="nda">上記はいずれも受託開発会社に所属していた期間に、チームの一員として担当したものです。守秘義務のため企業名は伏せています。</p>
+    </div>
   </div>
 </section>
 
-<section style="background:var(--washi);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
-  <div class="wrap">
-    <div class="sechead"><h2>つくったアプリ</h2><span class="en">MY APPS</span></div>
-    <ul class="apps">
-      <li><a href="https://apps.apple.com/jp/app/id6785926739" target="_blank" rel="noopener"><span class="n">Pokory（ぽこりー）</span><span class="s">家族で共有する育児記録・成長ダイアリー</span></a></li>
-      <li><a href="https://apps.apple.com/jp/app/id6781990488" target="_blank" rel="noopener"><span class="n">Omry（オムリー）</span><span class="s">犬猫の記録手帳。記録・写真・健康手帳を家族で共有</span></a></li>
-      <li><a href="https://apps.apple.com/jp/app/id6781115517" target="_blank" rel="noopener"><span class="n">ぽこナビ</span><span class="s">出産・育児の手続きナビ。やること・助成・医療費を整理</span></a></li>
-      <li><a href="https://apps.apple.com/jp/app/id6794361869" target="_blank" rel="noopener"><span class="n">KARARI</span><span class="s">コスメの使い切り管理。開けた日から使い切るまでを一覧で</span></a></li>
-      <li><a href="https://apps.apple.com/jp/app/id6786967194" target="_blank" rel="noopener"><span class="n">カベメーター</span><span class="s">アルバイト収入の「扶養の壁」を1つの数字で把握</span></a></li>
-      <li><a href="https://apps.apple.com/jp/app/id6789184486" target="_blank" rel="noopener"><span class="n">余白と、あじ。</span><span class="s">手書きフォントを作成・販売・利用できるアプリ</span></a></li>
-      <li><a href="https://apps.apple.com/jp/app/id6787623874" target="_blank" rel="noopener"><span class="n">Wakuru（ワクル）</span><span class="s">縦型動画エディタ。投稿時の表示枠を確認しながら編集</span></a></li>
-      <li><a href="https://apps.apple.com/jp/app/id6792430378" target="_blank" rel="noopener"><span class="n">TAMURO（タムロ）</span><span class="s">仲間内で「集まるかどうか」を決めるアプリ</span></a></li>
-    </ul>
+<!-- APPS -->
+<section class="dense" style="background:var(--washi)">
+  <div class="wrap grid2">
+    <p class="vhead">つくったアプリ</p>
+    <div>
+      <ul class="apps">
+        <li><a href="https://apps.apple.com/jp/app/id6785926739" target="_blank" rel="noopener"><span class="n">Pokory</span><span class="s">家族で共有する育児記録</span></a></li>
+        <li><a href="https://apps.apple.com/jp/app/id6781990488" target="_blank" rel="noopener"><span class="n">Omry</span><span class="s">犬猫の記録手帳</span></a></li>
+        <li><a href="https://apps.apple.com/jp/app/id6781115517" target="_blank" rel="noopener"><span class="n">ぽこナビ</span><span class="s">出産・育児の手続きナビ</span></a></li>
+        <li><a href="https://apps.apple.com/jp/app/id6794361869" target="_blank" rel="noopener"><span class="n">KARARI</span><span class="s">コスメの使い切り管理</span></a></li>
+        <li><a href="https://apps.apple.com/jp/app/id6786967194" target="_blank" rel="noopener"><span class="n">カベメーター</span><span class="s">扶養の壁を1つの数字で</span></a></li>
+        <li><a href="https://apps.apple.com/jp/app/id6789184486" target="_blank" rel="noopener"><span class="n">余白と、あじ。</span><span class="s">手書きフォントの作成・販売</span></a></li>
+        <li><a href="https://apps.apple.com/jp/app/id6787623874" target="_blank" rel="noopener"><span class="n">Wakuru</span><span class="s">縦型動画エディタ</span></a></li>
+        <li><a href="https://apps.apple.com/jp/app/id6792430378" target="_blank" rel="noopener"><span class="n">TAMURO</span><span class="s">集まるかどうかを決める</span></a></li>
+      </ul>
+    </div>
   </div>
 </section>
 
+<!-- CONTACT -->
 <section class="contact">
-  <div class="wrap">
-    <div class="sechead"><h2>ご相談</h2><span class="en">CONTACT</span></div>
-    <p class="msg rv">「これはアプリで解決することなのか」という段階のご相談で構いません。作らないほうがいい、というお返事をすることもあります。</p>
-    <dl>
-      <dt>TEL</dt><dd><a href="tel:08062061245">080-6206-1245</a></dd>
-      <dt>MAIL</dt><dd><a href="mailto:sakamotoyuki.develop@gmail.com">sakamotoyuki.develop@gmail.com</a></dd>
-      <dt>AREA</dt><dd>兵庫県姫路市</dd>
-    </dl>
+  <div class="wrap grid2">
+    <p class="vhead">ご相談</p>
+    <div>
+      <p class="msg rv">「これはアプリで解決することなのか」<br>という段階のご相談で構いません。</p>
+      <p class="sub rv">作らないほうがいい、というお返事をすることもあります。まずは現場を見せてください。</p>
+      <dl>
+        <dt>TEL</dt><dd><a href="tel:08062061245">080-6206-1245</a></dd>
+        <dt>MAIL</dt><dd><a href="mailto:sakamotoyuki.develop@gmail.com">sakamotoyuki.develop@gmail.com</a></dd>
+      </dl>
+    </div>
   </div>
 </section>
 
-<footer>
-  <div class="wrap">© 長谷川 侑希</div>
-</footer>
+<footer><div class="wrap">© 長谷川 侑希</div></footer>
 
 <script>
 (function(){
   var els = document.querySelectorAll('.rv');
   if (!('IntersectionObserver' in window) ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    els.forEach(function(el){ el.classList.add('in'); });
-    return;
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    els.forEach(function(el){ el.classList.add('in'); }); return;
   }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
     });
-  }, { rootMargin: '0px 0px -8% 0px' });
+  }, { rootMargin:'0px 0px -6% 0px' });
   els.forEach(function(el){ io.observe(el); });
 })();
 </script>
