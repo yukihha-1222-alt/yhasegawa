@@ -3,26 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>長谷川 侑希｜PCを使わない現場のための業務アプリ開発</title>
-<meta name="description" content="兵庫県姫路市。紙やExcelでの記録作業を、現場のスマートフォンで完結させる業務アプリをつくります。まず2週間、動くものを無償でおつくりします。">
-<meta property="og:title" content="長谷川 侑希｜PCを使わない現場のための業務アプリ開発">
-<meta property="og:description" content="紙やExcelでの記録作業を、現場のスマートフォンで完結させます。まず2週間、動くものを無償で。">
+<title>長谷川 侑希｜tapuda（かざすと渡せる名刺）と、現場のための業務アプリ開発</title>
+<meta name="description" content="兵庫県姫路市。かざすと渡せるNFC名刺「tapuda」を運営しています。あわせて、PCを使わない現場のための業務アプリを受託で開発。受託はまず2週間、動くものを無償で。">
+<meta property="og:title" content="長谷川 侑希｜tapuda と、現場のための業務アプリ開発">
+<meta property="og:description" content="かざすと渡せる名刺「tapuda」。現場の記録作業を手元のスマホへ。受託はまず2週間、動くものを無償で。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yhasegawa.com">
-<meta name="theme-color" content="#1B3A57">
+<meta name="theme-color" content="#E8380D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Yomogi&display=swap" rel="stylesheet">
 <style>
 :root{
-  --sumi:#14181C;
-  --ai:#1B3A57;
-  --ai-mid:#2C5680;
-  --usuai:#E7EDF2;
-  --hai:#767C82;
-  --kami:#FCFCFB;
-  --washi:#F4F6F8;
-  --line:#E2E7EB;
+  /* tapuda のブランドカラー #E8380D を基調にする。
+     1色では白抜き文字がコントラスト不足になるため、用途別に3段持たせている。
+       --hi       … 24px以上の見出し・罫線・装飾（白背景で3:1以上）
+       --hi-text  … 小さい文字をブランド色で置くとき（白背景で4.5:1以上）
+       --hi-deep  … 白文字を載せる塗り（#fff で4.5:1以上）
+     この3つを混同すると可読性が落ちる。塗りに --hi を使わないこと。 */
+  --hi:#E8380D;        /* tapuda --pop-fill */
+  --hi-text:#D4320B;   /* tapuda --pop。地の上で 4.5:1 を満たす */
+  --hi-deep:#D4320B;   /* 白文字を載せる赤の塗り */
+  --hi-mid:#F1886E;    /* tapuda --pop-pale */
+  --hi-tint:#FEF6F4;   /* tapuda --pop-soft */
+  --navy:#16233F;      /* tapuda --ground-navyband。赤の塗りを続けないための錨 */
+  --sumi:#2C2C2A;      /* tapuda --text */
+  --hai:#6E6B63;       /* tapuda --text-sub */
+  --kami:#FBF9F4;      /* tapuda --bg */
+  --washi:#EFEDE6;     /* tapuda --ground-deep */
+  --line:#E4DFD3;      /* tapuda --border */
+  /* 頁の光。tapuda の .hero::before と同じ2枚。
+     白を 86% で広く被せ、そこへ赤みを 7% だけ差す。
+     要素を横に -50vw 伸ばすので、上の左右の角が白く抜けて薄くなる。 */
+  --wash:rgba(255,255,255,.86);
+  --wash-pop:rgba(212,50,11,.07);
   --mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","MS Mincho",serif;
   --gothic:"Hiragino Kaku Gothic ProN","Yu Gothic","YuGothic","Noto Sans JP","Meiryo",sans-serif;
   --tegaki:"Yomogi","Klee One","Hiragino Maru Gothic ProN",var(--mincho);
@@ -30,168 +44,334 @@
   --pad:clamp(22px,5vw,56px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}  /* ここに overflow を足さないこと。#stage の sticky が死ぬ */
 body{
   font-family:var(--gothic);color:var(--sumi);background:var(--kami);
   line-height:1.9;font-size:15px;letter-spacing:.02em;overflow-x:hidden;
 }
-a{color:var(--ai)}
-a:focus-visible{outline:2px solid var(--ai);outline-offset:3px}
+a{color:var(--hi-text)}
+a:focus-visible{outline:2px solid var(--hi);outline-offset:3px}
 .wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
 
-/* ============ vertical section heading ============ */
 .vhead{
   writing-mode:vertical-rl;font-family:var(--mincho);
-  font-size:15px;letter-spacing:.42em;color:var(--ai);
+  font-size:15px;letter-spacing:.42em;color:var(--hi-text);
   height:auto;padding-top:2px;white-space:nowrap;user-select:none;
 }
-.grid2{
-  display:grid;grid-template-columns:38px 1fr;gap:clamp(20px,4vw,44px);
-  align-items:start;
+.grid2{display:grid;grid-template-columns:38px 1fr;gap:clamp(20px,4vw,44px);align-items:start}
+
+.btn{
+  display:inline-block;border:1px solid var(--hi);color:var(--hi-text);
+  font-size:12px;letter-spacing:.08em;padding:9px 18px;border-radius:2px;
+  text-decoration:none;background:transparent;
 }
+.btn.fill{background:var(--hi-deep);color:#fff}
 
 /* ============ HERO ============ */
 .hero{
-  min-height:88vh;display:flex;flex-direction:column;justify-content:center;
+  min-height:92vh;display:flex;flex-direction:column;justify-content:center;
   padding:70px 0 56px;position:relative;
 }
-.hero::after{
-  content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--line);
+.hero::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--line)}
+/* 頁の光。inset を横 -50vw に伸ばすことで、上の左右の角へ白が回って薄くなる。
+   色を塗って隠すのではなく、白を被せる形にしている（継ぎ目が出ないため）。
+   body に overflow-x:hidden があるので -50vw でも横スクロールは出ない。 */
+.hero{z-index:0;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:-6rem -50vw 30%;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(60% 70% at 30% 30%, var(--wash-pop) 0%, transparent 70%),
+    radial-gradient(90% 80% at 50% 20%, var(--wash) 0%, transparent 72%);
 }
-.hero .eyebrow{
-  font-size:11px;letter-spacing:.34em;color:var(--hai);margin-bottom:clamp(26px,6vh,54px);
-}
+.hero .eyebrow{font-size:11px;letter-spacing:.34em;color:var(--hai);margin-bottom:clamp(26px,6vh,54px)}
 .hero .furi{font-size:11px;letter-spacing:.44em;color:var(--hai);margin-bottom:10px}
 .hero h1{
   font-family:var(--mincho);font-weight:600;
-  font-size:clamp(52px,13vw,132px);
-  line-height:.98;letter-spacing:.05em;color:var(--sumi);
+  font-size:clamp(52px,13vw,132px);line-height:.98;letter-spacing:.05em;color:var(--sumi);
 }
 .hero .role{
   margin-top:clamp(30px,6vh,58px);
-  font-size:clamp(15px,2.6vw,20px);font-weight:700;color:var(--ai);
-  line-height:1.7;letter-spacing:.03em;
-  padding-left:18px;border-left:2px solid var(--ai);
+  font-size:clamp(15px,2.6vw,20px);font-weight:700;color:var(--hi-text);
+  line-height:1.7;letter-spacing:.03em;padding-left:18px;border-left:2px solid var(--hi);
 }
 .scroll{
   margin-top:clamp(34px,7vh,64px);font-size:10px;letter-spacing:.3em;color:var(--hai);
   display:flex;align-items:center;gap:12px;
 }
-.scroll i{display:block;width:34px;height:1px;background:var(--ai);opacity:.45}
+.scroll i{display:block;width:34px;height:1px;background:var(--hi);opacity:.45}
 
-/* ============ PROMISE ============ */
-.promise{
-  padding:clamp(80px,15vh,150px) 0;background:var(--washi);
-  border-bottom:1px solid var(--line);
-}
-.promise .line{
-  font-family:var(--tegaki);color:var(--ai);
-  font-size:clamp(30px,7.2vw,68px);line-height:1.5;letter-spacing:.005em;
-}
-.promise .fontnote{font-size:11.5px;color:#9BA3AA;margin-top:20px;letter-spacing:.04em}
-.promise .body{
-  font-size:15px;color:#41474D;margin-top:34px;max-width:31em;
+/* ==================================================================
+   オービット
+   トラックの高さは JS が (N-1)*vh*0.8 + vh で設定する。
+   ステージを sticky で貼り、スクロール量を回転に変換する。
+   トラックを抜ければ sticky は自然解除され、通常スクロールへ戻る。
+================================================================== */
+#track{position:relative;background:var(--kami)}
+#stage{position:sticky;top:0;height:100vh;overflow:hidden}
+/* オービットにも同じ光を敷く。z-index:0 なので補助線(1)より下に入る。 */
+#stage::before{
+  content:"";position:absolute;inset:-6rem -50vw 30%;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60% 70% at 30% 30%, var(--wash-pop) 0%, transparent 70%),
+    radial-gradient(90% 80% at 50% 20%, var(--wash) 0%, transparent 72%);
 }
 
-/* ============ DIAGRAM ============ */
-.diagram{padding:clamp(78px,13vh,132px) 0}
-.dwrap{margin-top:44px}
-.flow{
-  display:grid;grid-template-columns:1fr 62px 1fr;align-items:stretch;gap:0;
-  border:1px solid var(--line);background:#fff;
+/* 補助線。#ring は残すと軌道が読めるので残している */
+#ring{position:absolute;border:1px dashed var(--line);border-radius:50%;pointer-events:none;z-index:1}
+#spoke{position:absolute;height:0;border-top:1px dashed var(--line);transform-origin:0 0;z-index:1}
+#slot{position:absolute;border:1px dashed #CFC4B8;border-radius:50%;pointer-events:none;z-index:2}
+
+/* 大円。位置・サイズとも固定で、中身だけが差し替わる */
+#big{position:absolute;border-radius:50%;background:#fff;border:1px solid var(--hi);z-index:2}
+
+/* 大円の中身。8枚を重ねてクロスフェードさせる */
+#bigwrap{position:absolute;z-index:3}
+.layer{position:absolute;left:0;top:0;width:100%;display:flex;flex-direction:column;gap:var(--g)}
+.layer .lk{font-size:var(--k);letter-spacing:.24em;color:var(--hai)}
+.layer .lt{
+  font-family:var(--mincho);font-size:var(--t);font-weight:600;
+  color:var(--sumi);line-height:1.4;letter-spacing:.04em;
 }
-.side{padding:clamp(26px,4vw,42px) clamp(20px,3vw,34px)}
-.side .cap{font-size:10.5px;letter-spacing:.26em;color:var(--hai);margin-bottom:16px}
-.side h3{font-family:var(--mincho);font-size:clamp(19px,3.4vw,27px);font-weight:600;line-height:1.4;letter-spacing:.05em}
-.side ul{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:9px}
-.side li{font-size:13px;line-height:1.6;color:#4E545A;padding-left:15px;position:relative}
-.side li::before{content:"";position:absolute;left:0;top:.72em;width:6px;height:1px;background:var(--hai)}
-.before{background:#FAFAF9}
-.after{background:var(--ai);color:#fff}
-.after .cap{color:#9DB6CD}
-.after li{color:#D3DFEA}
-.after li::before{background:#7E9DBA}
-.arrow{
-  background:#fff;display:flex;align-items:center;justify-content:center;
-  border-left:1px solid var(--line);border-right:1px solid var(--line);
+.layer .lt em{font-style:normal;font-family:var(--tegaki);color:var(--hi);letter-spacing:0}
+.layer .lp{font-size:var(--b);color:#4A4845;line-height:1.85}
+.layer .lb{margin-top:calc(var(--g) * .2);display:flex;flex-wrap:wrap;gap:.6em}
+.layer .lb a{font-size:var(--b);padding:.5em 1.3em}
+
+/* BEFORE → AFTER。円の中なので枠線を持たせない */
+.layer .lba{display:flex;align-items:flex-start;gap:var(--g)}
+.layer .lba .col{flex:1;min-width:0}
+.layer .lba .cap{font-size:var(--k);letter-spacing:.2em;color:var(--hai);margin-bottom:.6em}
+.layer .lba .col.aft .cap{color:var(--hi-text)}
+.layer .lba ul{list-style:none;display:flex;flex-direction:column;gap:.3em}
+.layer .lba li{font-size:var(--l);line-height:1.7;color:#4A4845;padding-left:.9em;position:relative}
+.layer .lba li::before{content:"";position:absolute;left:0;top:.82em;width:.45em;height:1px;background:var(--hai)}
+.layer .lba .col.aft li{color:var(--hi-text);font-weight:700}
+.layer .lba .col.aft li::before{background:var(--hi-mid)}
+.layer .lba .sep{width:1px;align-self:stretch;background:var(--line)}
+
+/* 円内の一覧。行数は4までに抑える */
+.layer .lst{list-style:none;display:flex;flex-direction:column}
+.layer .lst li{
+  font-size:var(--l);line-height:1.6;padding:.52em 0;
+  border-top:1px solid var(--line);
 }
-.arrow svg{width:24px;height:24px;color:var(--ai)}
-@media (max-width:720px){
-  .flow{grid-template-columns:1fr;grid-template-rows:auto 54px auto}
-  .arrow{border:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .arrow svg{transform:rotate(90deg)}
+.layer .lst li:last-child{border-bottom:1px solid var(--line)}
+.layer .lst .n{font-weight:700;color:var(--hi-text);letter-spacing:.02em}
+.layer .lst .s{color:#6E6B63;margin-left:.6em}
+.layer .lst a{text-decoration:none;color:inherit}
+.layer .lst a:hover .n{color:var(--hi-mid)}
+.layer .lst a:hover .s{color:var(--sumi)}
+
+/* 小円。button で実装（キーボード到達とスクリーンリーダー対応のため必須） */
+.mini{
+  position:absolute;border-radius:50%;background:#fff;border:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  cursor:pointer;z-index:4;will-change:transform;font:inherit;color:inherit;padding:0;
 }
+.mini .mn{font-family:var(--mincho);font-size:var(--mn);color:#B4ABA3;letter-spacing:.08em;line-height:1}
+.mini .ml{font-size:var(--ml);color:#6E6B63;line-height:1.3;text-align:center;padding:0 6px;letter-spacing:.02em}
+.mini.on{border-color:var(--hi)}
+.mini.on .mn{color:var(--hi-text)}
+.mini:focus-visible{outline:2px solid var(--hi);outline-offset:3px}
+/* タップ領域を一回り広げる。これが無いと SP で取りこぼす */
+.mini::after{content:"";position:absolute;inset:-10px;border-radius:50%}
+
+/* PC のみ：大円の右に空く余白へ、番号・見出し・進捗を置く */
+#tb{
+  position:absolute;right:4%;top:50%;transform:translateY(-50%);max-width:25%;
+  display:none;flex-direction:column;gap:8px;z-index:5;
+}
+#tb .tn{font-family:var(--mincho);font-size:12px;letter-spacing:.24em;color:#B4ABA3}
+#tb .tl{font-size:14px;letter-spacing:.14em;color:var(--hai)}
+#tb .prog{margin-top:6px;display:flex;flex-direction:column;gap:6px}
+#tb .prog i{display:block;width:26px;height:2px;background:var(--line);transition:width .3s,background .3s}
+#tb .prog i.on{background:var(--hi);width:40px}
+body[data-lay="pc"] #tb{display:flex}
+
+.omark{
+  position:absolute;left:var(--pad);bottom:18px;font-size:10px;letter-spacing:.14em;
+  color:#B4ABA3;z-index:6;
+}
+.omark b{font-family:var(--mincho);font-size:15px;color:var(--hi-text)}
+.omark span{margin-left:.7em}
+
+/* ------------------------------------------------------------------
+   フォールバック
+   prefers-reduced-motion 指定時と JS 失敗時は8枚を縦積みで出す。
+   代替経路であって省略可能なものではない。初期は縦積み側を表示にし、
+   JS が成功したら切り替える。
+------------------------------------------------------------------ */
+#track{display:none}
+#fallback{display:block}
+body[data-orbit="on"] #track{display:block}
+body[data-orbit="on"] #fallback{display:none}
+#fallback{padding:clamp(60px,10vh,96px) 0}
+#fallback .fb{max-width:640px;margin:0 auto;padding:clamp(30px,5vh,48px) var(--pad);border-top:1px solid var(--line)}
+#fallback .fb:first-child{border-top:0}
+#fallback .fb .lk{font-size:10.5px;letter-spacing:.24em;color:var(--hai)}
+#fallback .fb .lt{font-family:var(--mincho);font-size:clamp(21px,4.4vw,30px);font-weight:600;line-height:1.45;letter-spacing:.05em;margin-top:12px}
+#fallback .fb .lt em{font-style:normal;font-family:var(--tegaki);color:var(--hi)}
+#fallback .fb .lp{font-size:14px;color:#4A4845;margin-top:14px}
+#fallback .fb .lba{display:flex;gap:26px;margin-top:18px}
+#fallback .fb .lba .sep{display:none}
+#fallback .fb .lba .cap{font-size:10px;letter-spacing:.2em;color:var(--hai);margin-bottom:8px}
+#fallback .fb .lba ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+#fallback .fb .lba li{font-size:13px;color:#4A4845}
+#fallback .fb .lba .col.aft li{color:var(--hi-text);font-weight:700}
+#fallback .fb .lst{list-style:none;margin-top:18px}
+#fallback .fb .lst li{font-size:13px;padding:9px 0;border-top:1px solid var(--line)}
+#fallback .fb .lst .n{font-weight:700;color:var(--hi-text)}
+#fallback .fb .lst .s{color:#6E6B63;margin-left:8px}
+#fallback .fb .lst a{text-decoration:none;color:inherit}
+#fallback .fb .lb{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
+
+/* ============ 共通セクション ============ */
+.dense{padding:clamp(70px,11vh,112px) 0;border-top:1px solid var(--line)}
+.dense.shade{background:var(--washi)}
+.lead{font-family:var(--mincho);font-size:clamp(18px,3.2vw,26px);font-weight:600;line-height:1.6;letter-spacing:.05em}
+.lead-sub{font-size:14px;color:#4A4845;margin-top:16px;max-width:34em}
+.cta-row{margin-top:30px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.cta-row .btn{min-height:40px;display:inline-flex;align-items:center}
+
+/* ============ TAPUDA（一番の推し） ============ */
+.tapuda{
+  padding:clamp(80px,14vh,140px) 0;border-top:1px solid var(--line);
+  background:var(--washi);position:relative;z-index:0;overflow:hidden;
+}
+.tapuda::before{
+  content:"";position:absolute;inset:-4rem -50vw 40%;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(60% 70% at 30% 30%, var(--wash-pop) 0%, transparent 70%),
+    radial-gradient(90% 80% at 50% 20%, var(--wash) 0%, transparent 72%);
+}
+.tapuda .tag{
+  display:inline-block;font-size:10px;letter-spacing:.24em;color:#fff;
+  background:var(--hi-deep);padding:4px 11px;border-radius:2px;
+}
+.tapuda .name{
+  font-family:var(--mincho);font-size:clamp(40px,9vw,88px);font-weight:600;
+  line-height:1;letter-spacing:.02em;color:var(--hi);margin-top:22px;
+}
+.tapuda .copy{
+  font-family:var(--mincho);font-size:clamp(20px,4vw,34px);font-weight:600;
+  line-height:1.55;letter-spacing:.05em;margin-top:24px;
+}
+.tapuda .desc{font-size:14.5px;color:#4A4845;margin-top:22px;max-width:32em;line-height:1.9}
+.feat{
+  list-style:none;margin-top:40px;display:grid;gap:1px;
+  grid-template-columns:repeat(3,1fr);   /* 6項目なので 3/2/1 のいずれかで必ず埋まる */
+  background:var(--line);border:1px solid var(--line);
+}
+@media (max-width:860px){ .feat{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:520px){ .feat{grid-template-columns:1fr} }
+.feat li{background:#fff;padding:20px 20px 22px}
+.feat .fn{font-size:10.5px;letter-spacing:.2em;color:var(--hai)}
+.feat .ft{font-size:14px;font-weight:700;color:var(--hi-text);margin-top:9px;line-height:1.55}
+.feat .fd{font-size:12.5px;color:#6E6B63;margin-top:6px;line-height:1.75}
+.price{list-style:none;margin-top:34px;border-top:1px solid var(--line)}
+.price li{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:13px 0;border-bottom:1px solid var(--line)}
+.price .pn{font-size:13.5px;font-weight:700}
+.price .pv{font-family:var(--mincho);font-size:clamp(16px,3vw,21px);color:var(--hi-text);white-space:nowrap}
+.pricenote{font-size:11.5px;color:var(--hai);margin-top:14px}
+.users{font-size:12.5px;color:#6E6B63;margin-top:26px;line-height:1.9;max-width:40em}
 
 /* ============ STEPS ============ */
-.steps-sec{padding:clamp(78px,13vh,132px) 0;border-top:1px solid var(--line);background:var(--washi)}
-.steps{list-style:none;margin-top:40px;display:flex;flex-direction:column}
+.steps{list-style:none;margin-top:34px;display:flex;flex-direction:column}
 .steps li{
-  display:grid;grid-template-columns:clamp(54px,9vw,96px) 1fr;
-  gap:clamp(16px,3vw,34px);align-items:baseline;
-  padding:clamp(22px,3.4vw,34px) 0;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:clamp(48px,8vw,82px) 1fr;
+  gap:clamp(14px,3vw,30px);align-items:baseline;
+  padding:clamp(18px,3vw,28px) 0;border-top:1px solid var(--line);
 }
 .steps li:last-child{border-bottom:1px solid var(--line)}
-.steps .n{
-  font-family:var(--mincho);font-size:clamp(34px,7vw,62px);
-  line-height:.9;color:var(--ai);opacity:.24;letter-spacing:0;
-}
-.steps h3{font-size:clamp(16px,2.4vw,19px);font-weight:700;line-height:1.5}
+.steps .n{font-family:var(--mincho);font-size:clamp(30px,6vw,54px);line-height:.9;color:var(--hi);opacity:.24}
+.steps h3{font-size:clamp(15px,2.3vw,18px);font-weight:700;line-height:1.5}
 .steps .dur{
-  display:inline-block;font-size:10.5px;letter-spacing:.12em;color:var(--ai);
-  background:var(--usuai);padding:3px 9px;border-radius:2px;margin-left:11px;
+  display:inline-block;font-size:10.5px;letter-spacing:.12em;color:var(--hi-text);
+  background:var(--hi-tint);padding:3px 9px;border-radius:2px;margin-left:11px;
   vertical-align:2px;font-weight:700;
 }
-.steps p{font-size:14px;color:#4E545A;margin-top:8px;max-width:38em}
-.freebox{
-  margin-top:44px;padding:clamp(26px,4vw,40px);background:var(--ai);color:#fff;
-}
-.freebox strong{
-  display:block;font-family:var(--mincho);font-weight:600;
-  font-size:clamp(19px,3.6vw,30px);line-height:1.55;letter-spacing:.05em;
-}
-.freebox span{display:block;font-size:13.5px;color:#C6D5E2;margin-top:14px;line-height:1.8}
+.steps p{font-size:13.5px;color:#4A4845;margin-top:7px;max-width:38em}
+.freebox{margin-top:38px;padding:clamp(24px,4vw,38px);background:var(--hi-deep);color:#fff}
+.freebox strong{display:block;font-family:var(--mincho);font-weight:600;font-size:clamp(18px,3.4vw,28px);line-height:1.55;letter-spacing:.05em}
+.freebox span{display:block;font-size:13.5px;color:#F7DAD2;margin-top:13px;line-height:1.8}
 
-/* ============ WORKS (dense) ============ */
-.dense{padding:clamp(70px,11vh,110px) 0;border-top:1px solid var(--line)}
-.works{list-style:none;margin-top:36px;border-top:1px solid var(--line)}
-.works li{
-  padding:15px 0;border-bottom:1px solid var(--line);
-  display:grid;grid-template-columns:1fr auto;gap:6px 22px;align-items:baseline;
-}
+/* ============ WORKS ============ */
+.works{list-style:none;margin-top:32px;border-top:1px solid var(--line)}
+.works li{padding:15px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:6px 22px;align-items:baseline}
 .works .t{font-size:14px;font-weight:700;letter-spacing:.02em}
 .works .r{font-size:11.5px;color:var(--hai);letter-spacing:.03em;text-align:right;white-space:nowrap}
-.works .d{grid-column:1/-1;font-size:12.5px;color:#5C6268;line-height:1.72;max-width:44em}
+.works .d{grid-column:1/-1;font-size:12.5px;color:#6E6B63;line-height:1.72;max-width:44em}
 .nda{font-size:11.5px;color:var(--hai);margin-top:16px}
 @media (max-width:560px){
   .works li{grid-template-columns:1fr}
   .works .r{text-align:left;white-space:normal}
 }
 
-/* ============ APPS (dense grid) ============ */
-.apps{list-style:none;margin-top:36px;display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:1px;
-      background:var(--line);border:1px solid var(--line)}
-.apps a{
-  display:block;text-decoration:none;color:inherit;background:var(--kami);
-  padding:15px 16px;transition:background .18s ease;height:100%;
+/* ============ つくったもの（リンク＋QR） ============ */
+.prods{list-style:none;margin-top:34px;border-top:1px solid var(--line)}
+.prods li{
+  display:grid;grid-template-columns:1fr auto;gap:clamp(18px,4vw,44px);
+  align-items:start;padding:clamp(20px,3vw,30px) 0;border-bottom:1px solid var(--line);
 }
-.apps a:hover{background:#fff}
-.apps .n{font-size:13px;font-weight:700;color:var(--ai);line-height:1.5}
-.apps .s{font-size:11.5px;color:#5C6268;margin-top:3px;line-height:1.6}
+.prods .pn{font-size:clamp(16px,2.6vw,20px);font-weight:700;color:var(--hi-text);line-height:1.4}
+.prods .pbadge{
+  display:inline-block;vertical-align:2px;margin-left:11px;
+  font-size:9.5px;letter-spacing:.2em;font-weight:700;color:#fff;
+  background:var(--hi-deep);padding:3px 8px;border-radius:2px;white-space:nowrap;
+}
+.prods .ps{font-size:13.5px;color:#4A4845;margin-top:7px;line-height:1.8;max-width:34em}
+.prods .plinks{margin-top:14px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.prods .plinks a{font-size:12.5px;letter-spacing:.04em;color:var(--hi-text);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
+.prods .plinks a:hover{border-bottom-color:var(--hi)}
+
+/* QR。スマホで見ている人には意味がないので SP では出さない。
+   1モジュールが小さいと読めないため 104px より下げないこと。 */
+.pqr{display:flex;gap:14px}
+.pqr figure{width:120px;text-align:center}
+.pqr .qr{display:block;width:120px;height:120px;border:1px solid var(--line)}
+.pqr figcaption{font-size:9.5px;letter-spacing:.14em;color:var(--hai);margin-top:7px;line-height:1.4}
+@media (max-width:1080px){
+  .prods li{grid-template-columns:1fr}
+  .pqr{margin-top:6px}
+}
+@media (max-width:720px){
+  .pqr{display:none}   /* スマホでQRは無意味なので出さない */
+}
+
+/* ============ ストアバッジ ============
+   Apple / Google の公式素材。両社の規約で図形の改変は不可なので、
+   拡大縮小のみ行い、色や比率は触らない。
+   どちらも余白なしのタイト素材だったため、同じ高さで見た目が揃う。
+   幅は --bh から実測アスペクト比で算出しているので、高さだけ変えれば追従する。
+   画像は背景で敷き、読み上げ用の名前は .vh のテキストで与えている
+   （CSS が落ちてもテキストが残る）。 */
+.badge{
+  --bh:40px;
+  display:inline-block;height:var(--bh);
+  background-repeat:no-repeat;background-position:center;background-size:contain;
+  border-radius:5px;
+}
+.badge:focus-visible{outline:2px solid var(--hi);outline-offset:3px}
+.badge.ios{width:calc(var(--bh) * 2.72129);background-image:url("data:image/svg+xml,%3Csvg id=%22JP%22 xmlns=%22http://www.w3.org/2000/svg%22 width=%22108.85157%22 height=%2240%22 viewBox=%220 0 108.85157 40%22%3E%3Cg%3E%3Cg%3E%3Cpath d=%22M99.32227,0H9.53468c-.3667,0-.729,0-1.09473.002-.30615.002-.60986.00781-.91895.0127A13.21476,13.21476,0,0,0,5.5171.19141a6.66509,6.66509,0,0,0-1.90088.627A6.43779,6.43779,0,0,0,1.99757,1.99707,6.25844,6.25844,0,0,0,.81935,3.61816a6.60119,6.60119,0,0,0-.625,1.90332,12.993,12.993,0,0,0-.1792,2.002C.00587,7.83008.00489,8.1377,0,8.44434V31.5586c.00489.3105.00587.6113.01515.9219a12.99232,12.99232,0,0,0,.1792,2.0019,6.58756,6.58756,0,0,0,.625,1.9043A6.20778,6.20778,0,0,0,1.99757,38.001a6.27445,6.27445,0,0,0,1.61865,1.1787,6.70082,6.70082,0,0,0,1.90088.6308,13.45514,13.45514,0,0,0,2.0039.1768c.30909.0068.6128.0107.91895.0107C8.80567,40,9.168,40,9.53468,40H99.32227c.3594,0,.7246,0,1.084-.002.3047,0,.6172-.0039.9219-.0107a13.279,13.279,0,0,0,2-.1768,6.80432,6.80432,0,0,0,1.9082-.6308,6.27742,6.27742,0,0,0,1.6172-1.1787,6.39482,6.39482,0,0,0,1.1816-1.6143,6.60413,6.60413,0,0,0,.6191-1.9043,13.50643,13.50643,0,0,0,.1856-2.0019c.0039-.3106.0039-.6114.0039-.9219.0078-.3633.0078-.7246.0078-1.0938V9.53613c0-.36621,0-.72949-.0078-1.09179,0-.30664,0-.61426-.0039-.9209a13.5071,13.5071,0,0,0-.1856-2.002,6.6177,6.6177,0,0,0-.6191-1.90332,6.46619,6.46619,0,0,0-2.7988-2.7998,6.76754,6.76754,0,0,0-1.9082-.627,13.04394,13.04394,0,0,0-2-.17676c-.3047-.00488-.6172-.01074-.9219-.01269C100.04687,0,99.68167,0,99.32227,0Z%22 style=%22fill: %23a6a6a6%22/%3E%3Cpath d=%22M8.44483,39.125c-.30468,0-.602-.0039-.90429-.0107a12.68714,12.68714,0,0,1-1.86914-.1631,5.88381,5.88381,0,0,1-1.65674-.5479,5.40573,5.40573,0,0,1-1.397-1.0166,5.32082,5.32082,0,0,1-1.02051-1.3965,5.72186,5.72186,0,0,1-.543-1.6572,12.41351,12.41351,0,0,1-.1665-1.875c-.00634-.2109-.01464-.9131-.01464-.9131V8.44434S.88185,7.75293.8877,7.5498a12.37039,12.37039,0,0,1,.16553-1.87207,5.7555,5.7555,0,0,1,.54346-1.6621A5.37349,5.37349,0,0,1,2.61183,2.61768,5.56543,5.56543,0,0,1,4.01417,1.59521a5.82309,5.82309,0,0,1,1.65332-.54394A12.58589,12.58589,0,0,1,7.543.88721L8.44532.875h91.956l.9131.0127a12.38493,12.38493,0,0,1,1.8584.16259,5.93833,5.93833,0,0,1,1.6709.54785,5.59374,5.59374,0,0,1,2.415,2.41993A5.76267,5.76267,0,0,1,107.794,5.667a12.995,12.995,0,0,1,.1738,1.88721c.0029.2832.0029.5874.0029.89014.0079.375.0079.73193.0079,1.09179V30.4648c0,.3633,0,.7178-.0079,1.0752,0,.3252,0,.6231-.0039.9297a12.73126,12.73126,0,0,1-.1709,1.8535,5.739,5.739,0,0,1-.54,1.67,5.48029,5.48029,0,0,1-1.0156,1.3857,5.4129,5.4129,0,0,1-1.3994,1.0225,5.86168,5.86168,0,0,1-1.668.5498,12.54218,12.54218,0,0,1-1.8692.1631c-.2929.0068-.5996.0107-.8974.0107l-1.084.002Z%22/%3E%3C/g%3E%3Cg%3E%3Cpath d=%22M41.16742,16.55462H37.11585l-.973,2.873H34.42678L38.26437,8.79837h1.783l3.83759,10.62922H42.13957Zm-3.632-1.32573H40.747l-1.58318-4.66261h-.0443Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M52.1728,15.55322c0,2.40821-1.28895,3.95545-3.23407,3.95545a2.62719,2.62719,0,0,1-2.4383-1.35582h-.03678v3.83842H44.87294V11.678h1.53972V12.967h.02926a2.749,2.749,0,0,1,2.46756-1.37C50.87633,11.59694,52.1728,13.1517,52.1728,15.55322Zm-1.635,0c0-1.569-.81082-2.60046-2.04794-2.60046-1.21539,0-2.03289,1.05323-2.03289,2.60046,0,1.56145.8175,2.60715,2.03289,2.60715C49.727,18.16037,50.53779,17.1364,50.53779,15.55322Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M60.70267,15.55322c0,2.40821-1.28937,3.95545-3.23449,3.95545a2.62719,2.62719,0,0,1-2.4383-1.35582H54.9931v3.83842H53.4024V11.678h1.53972V12.967h.02926a2.749,2.749,0,0,1,2.46756-1.37C59.40578,11.59694,60.70267,13.1517,60.70267,15.55322Zm-1.63543,0c0-1.569-.81082-2.60046-2.04794-2.60046-1.21539,0-2.03289,1.05323-2.03289,2.60046,0,1.56145.8175,2.60715,2.03289,2.60715C58.25643,18.16037,59.06725,17.1364,59.06725,15.55322Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M66.3391,16.466c.11786,1.05406,1.14183,1.74618,2.54112,1.74618,1.34077,0,2.30539-.69212,2.30539-1.64253,0-.825-.58178-1.319-1.95933-1.65758l-1.37755-.33185c-1.95181-.47144-2.85792-1.38424-2.85792-2.86544,0-1.834,1.59823-3.09364,3.86684-3.09364,2.24688,0,3.7866,1.25969,3.83842,3.09364H71.09032c-.09613-1.06075-.973-1.701-2.2544-1.701s-2.15828.64782-2.15828,1.59071c0,.75147.56,1.19366,1.93008,1.53219l1.17109.28755c2.18085.51575,3.08612,1.39176,3.08612,2.94652,0,1.98859-1.58318,3.23407-4.10257,3.23407-2.35722,0-3.94876-1.21623-4.05158-3.13878Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M76.29961,9.84407v1.834h1.47368v1.25969H76.29961V17.21c0,.6637.29507.973.94289.973a4.971,4.971,0,0,0,.52327-.03678v1.25217a4.36838,4.36838,0,0,1-.88354.07356c-1.569,0-2.18085-.5893-2.18085-2.09224V12.93771H73.5746V11.678h1.12678v-1.834Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M78.6259,15.55322c0-2.4383,1.43607-3.97049,3.67542-3.97049,2.24688,0,3.67626,1.53219,3.67626,3.97049,0,2.445-1.42185,3.97049-3.67626,3.97049C80.04776,19.52372,78.6259,17.99821,78.6259,15.55322Zm5.73089,0c0-1.67262-.76651-2.65981-2.05546-2.65981s-2.05546.99471-2.05546,2.65981c0,1.67931.76651,2.659,2.05546,2.659S84.35679,17.23253,84.35679,15.55322Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M87.2891,11.678h1.51715v1.319H88.843a1.84835,1.84835,0,0,1,1.864-1.40012,2.4533,2.4533,0,0,1,.545.05935v1.48789a2.22372,2.22372,0,0,0-.71469-.09613,1.6029,1.6029,0,0,0-1.65758,1.783v4.59658H87.2891Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M98.5862,17.15145a3.11011,3.11011,0,0,1-3.33689,2.37227c-2.2544,0-3.65369-1.51046-3.65369-3.93372,0-2.43078,1.40681-4.00727,3.58682-4.00727,2.14407,0,3.49236,1.47284,3.49236,3.82254v.545H93.20138v.09613a2.01837,2.01837,0,0,0,2.08472,2.19506,1.75329,1.75329,0,0,0,1.78965-1.09Zm-5.3773-2.31292h3.87437a1.86367,1.86367,0,0,0-1.90082-1.96686A1.96188,1.96188,0,0,0,93.2089,14.83853Z%22 style=%22fill: %23fff%22/%3E%3C/g%3E%3Cg%3E%3Cpath d=%22M36.43654,30.81152l.06592-.81934a3.13245,3.13245,0,0,0,.95068.15137c.292,0,.40479-.02832.54639-.22656a4.56512,4.56512,0,0,0,.43262-2.31543c0-.84766-.26318-1.09277-.93164-1.09277-.15088,0-.32031.00977-.50879.01953a13.72712,13.72712,0,0,1-1.76953,4.123l-.78174-.42383a11.0714,11.0714,0,0,0,1.64746-3.61523,13.67658,13.67658,0,0,0-1.53418.25488l-.16943-.8291c.57422-.10352,1.26123-.19727,1.90137-.25391a17.609,17.609,0,0,0,.292-1.89258l.92285.10352c-.085.57422-.18848,1.14941-.32031,1.71387h.36719c1.1958,0,1.77.59277,1.77,1.85449a5.83361,5.83361,0,0,1-.5459,2.7959,1.1565,1.1565,0,0,1-1.12988.60254A5.18145,5.18145,0,0,1,36.43654,30.81152Zm3.03125-5.07422.6875-.46191a5.29872,5.29872,0,0,1,1.60986,3.48438l-.90381.14063A4.39851,4.39851,0,0,0,39.46779,25.7373Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M44.88674,30.94336l-.188-.84766c.23535.01953.5459.02832.73438.02832,1.86377,0,2.56982-.52637,2.56982-1.30859,0-.62109-.40479-.97852-1.30859-.97852a4.03864,4.03864,0,0,0-2.57959,1.26172l-.7251-.32031A5.5238,5.5238,0,0,1,44.19,25.248l.83789.27246a3.6874,3.6874,0,0,0-.71533,2.44824,4.81661,4.81661,0,0,1,2.57031-.876c1.26172,0,2.043.64941,2.043,1.7041,0,1.33691-1.05469,2.15625-3.58691,2.15625C45.21633,30.95313,45.03762,30.94336,44.88674,30.94336Zm-.87549-6.251.23535-.8291a25.88517,25.88517,0,0,1,3.7002.84766l-.22607.81934A21.14206,21.14206,0,0,0,44.01125,24.69238Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M51.65236,30.29395a5.94767,5.94767,0,0,0,2.53223-1.63867,10.69472,10.69472,0,0,0-1.76025-1.18555l.51758-.64941a11.44509,11.44509,0,0,1,1.78857,1.12891,5.95376,5.95376,0,0,0,.92285-2.1748H53.25246a9.70214,9.70214,0,0,1-2.05225,2.36328l-.6875-.59277a8.92365,8.92365,0,0,0,2.61768-3.59668l.90381.2168c-.10352.26367-.207.53613-.32959.791h2.335l.66846.31055a7.141,7.141,0,0,1-4.50977,5.76172ZM55.625,23.72266l.52734-.25488a5.67722,5.67722,0,0,1,.66846,1.1582l-.59326.27344A5.13466,5.13466,0,0,0,55.625,23.72266Zm1.17676-.09473.53662-.25391a6.35614,6.35614,0,0,1,.6875,1.18652l-.59326.25391A5.1684,5.1684,0,0,0,56.80178,23.62793Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M60.92141,30.99023l-.48-.7627a3.94382,3.94382,0,0,0,3.314-4.15137h-3.9541v1.89258h-.95117V25.27539H61.2134V23.8916h.95068v1.38379h1.76074l.86621.24512C64.67775,28.19434,63.78371,30.2373,60.92141,30.99023Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M66.62258,25.3418l.52734-.77246a11.68341,11.68341,0,0,1,2.31543,1.40332l-.60254.80957A11.0534,11.0534,0,0,0,66.62258,25.3418Zm.17871,4.6416a7.31748,7.31748,0,0,0,5.43262-3.917l.62109.69727a7.96352,7.96352,0,0,1-5.69531,4.09473Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M80.57082,30.43555H74.64895V24.833h5.92188Zm-4.98926-4.73633v3.87012h4.04785V25.69922Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M89.04934,27.9209H82.39309v-.96h6.65625Z%22 style=%22fill: %23fff%22/%3E%3Cpath d=%22M91.314,23.91992h.93164v2.41016a29.013,29.013,0,0,1,3.59668,1.79883L95.315,28.957a22.724,22.724,0,0,0-3.06934-1.64746v3.63379H91.314Zm2.21191.50879.55566-.26367a6.19409,6.19409,0,0,1,.66895,1.28027l-.6123.27344A5.5162,5.5162,0,0,0,93.5259,24.42871Zm1.07324-.40527.56543-.26367A6.10514,6.10514,0,0,1,95.87063,25.04l-.6123.27344A6.12723,6.12723,0,0,0,94.59914,24.02344Z%22 style=%22fill: %23fff%22/%3E%3C/g%3E%3Cg id=%22_Group_%22 data-name=%22&lt;Group&gt;%22%3E%3Cg id=%22_Group_2%22 data-name=%22&lt;Group&gt;%22%3E%3Cpath id=%22_Path_%22 data-name=%22&lt;Path&gt;%22 d=%22M24.76888,20.30068a4.94881,4.94881,0,0,1,2.35656-4.15206,5.06566,5.06566,0,0,0-3.99116-2.15768c-1.67924-.17626-3.30719,1.00483-4.1629,1.00483-.87227,0-2.18977-.98733-3.6085-.95814a5.31529,5.31529,0,0,0-4.47292,2.72787c-1.934,3.34842-.49141,8.26947,1.3612,10.97608.9269,1.32535,2.01018,2.8058,3.42763,2.7533,1.38706-.05753,1.9051-.88448,3.5794-.88448,1.65876,0,2.14479.88448,3.591.8511,1.48838-.02416,2.42613-1.33124,3.32051-2.66914a10.962,10.962,0,0,0,1.51842-3.09251A4.78205,4.78205,0,0,1,24.76888,20.30068Z%22 style=%22fill: %23fff%22/%3E%3Cpath id=%22_Path_2%22 data-name=%22&lt;Path&gt;%22 d=%22M22.03725,12.21089a4.87248,4.87248,0,0,0,1.11452-3.49062,4.95746,4.95746,0,0,0-3.20758,1.65961,4.63634,4.63634,0,0,0-1.14371,3.36139A4.09905,4.09905,0,0,0,22.03725,12.21089Z%22 style=%22fill: %23fff%22/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.badge.and{width:calc(var(--bh) * 3.37500);background-image:url("data:image/png;base64,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")}
+@media (max-width:560px){ .badge{--bh:36px} }
+
+/* 視覚的に隠すが読み上げには残す */
+.vh{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
 
 /* ============ CONTACT ============ */
-.contact{padding:clamp(78px,13vh,132px) 0;background:var(--ai);color:#fff}
-.contact .vhead{color:#9DB6CD}
-.contact .msg{
-  font-family:var(--mincho);font-size:clamp(18px,3.4vw,28px);line-height:1.7;
-  letter-spacing:.05em;max-width:22em;
-}
-.contact .sub{font-size:14px;color:#C6D5E2;margin-top:22px;max-width:30em;line-height:1.85}
+.contact{padding:clamp(78px,13vh,132px) 0;background:var(--navy);color:#fff}
+.contact .vhead{color:#93A4C4}
+.contact .msg{font-family:var(--mincho);font-size:clamp(18px,3.4vw,28px);line-height:1.7;letter-spacing:.05em;max-width:22em}
+.contact .sub{font-size:14px;color:#C9D3E6;margin-top:22px;max-width:30em;line-height:1.85}
 .contact dl{margin-top:44px;display:grid;gap:0}
-.contact dt{font-size:10px;letter-spacing:.24em;color:#8FAAC4;padding-top:16px}
+.contact dt{font-size:10px;letter-spacing:.24em;color:#8C9CBC;padding-top:16px}
 .contact dd{font-size:clamp(16px,3vw,22px);padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.16);word-break:break-all}
 .contact dd a{color:#fff;text-decoration:none}
-.contact dd a:hover{color:#C6D5E2}
+.contact dd a:hover{color:#C9D3E6}
 
 footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
 
@@ -199,7 +379,6 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
 .rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
   .rv{opacity:1;transform:none;transition:none}
 }
 @media (max-width:640px){
@@ -216,63 +395,72 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
     <p class="eyebrow">兵庫県姫路市</p>
     <p class="furi">はせがわ　ゆうき</p>
     <h1>長谷川　侑希</h1>
-    <p class="role">PCを使わない現場のための<br>業務アプリ開発</p>
+    <p class="role">かざすと渡せる名刺「tapuda」。<br>現場のための業務アプリ開発。</p>
     <p class="scroll"><i></i>SCROLL</p>
   </div>
 </header>
 
-<!-- PROMISE -->
-<div class="promise">
-  <div class="wrap">
-    <p class="line rv">まず2週間、<br>動くものを無償で<br>おつくりします。</p>
-    <p class="fontnote rv">— この書体は、自作アプリでつくった私の手書き文字です</p>
-    <p class="body rv">いきなりお見積りをお出ししても、判断のしようがないと思います。実際に現場で使っていただいて、それから決めていただく形にしています。</p>
+<!-- ============ オービット ============ -->
+<!-- 8枚の中身は初期HTMLに出力している（JS生成にするとクロールされない） -->
+<div id="track">
+  <div id="stage">
+    <div id="ring"></div>
+    <div id="spoke"></div>
+    <div id="big"></div>
+    <div id="bigwrap"></div>
+    <div id="slot"></div>
+    <div id="orbit"></div>
+    <div id="tb">
+      <div class="tn" id="tbn">01</div>
+      <div class="tl" id="tbl">ABOUT</div>
+      <div class="prog" id="prog"></div>
+    </div>
+    <div class="omark"><b id="omn">01</b> / 08 <span id="oml">ABOUT</span></div>
   </div>
 </div>
+<div id="fallback"></div>
 
-<!-- DIAGRAM -->
-<section class="diagram">
+<!-- ============ TAPUDA（一番の推し） ============ -->
+<section class="tapuda" id="tapuda">
   <div class="wrap grid2">
-    <p class="vhead">紙から、現場のスマホへ</p>
+    <p class="vhead">自分のサービス</p>
     <div>
-      <div class="dwrap rv">
-        <div class="flow">
-          <div class="side before">
-            <p class="cap">BEFORE</p>
-            <h3>紙とExcel</h3>
-            <ul>
-              <li>現場で紙に書く</li>
-              <li>事務所に持ち帰る</li>
-              <li>Excelに打ち直す</li>
-              <li>記入漏れに後から気づく</li>
-            </ul>
-          </div>
-          <div class="arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
-              <path d="M4 12h15M13 6l6 6-6 6"/>
-            </svg>
-          </div>
-          <div class="side after">
-            <p class="cap">AFTER</p>
-            <h3>手元のスマホ</h3>
-            <ul>
-              <li>その場で入力して終わり</li>
-              <li>打ち直しが要らない</li>
-              <li>集計まで自動</li>
-              <li>未入力はその場で分かる</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <p class="tag rv">MY SERVICE</p>
+      <p class="name rv">tapuda</p>
+      <p class="copy rv">かざすと、名刺が渡せる。</p>
+      <p class="desc rv">スマートフォンに近づけるだけで、あなたのページが開くNFCカードです。相手のスマホにはアプリも登録も要りません。ブラウザで開くだけ。裏面のQRコードでも同じように渡せます。</p>
+      <ul class="feat">
+        <li class="rv"><p class="fn">01</p><p class="ft">かざすだけ</p><p class="fd">近づけるだけで、あなたのページが開きます。</p></li>
+        <li class="rv"><p class="fn">02</p><p class="ft">ブラウザで開くだけ</p><p class="fd">アプリ不要。相手のスマホには何も入りません。</p></li>
+        <li class="rv"><p class="fn">03</p><p class="ft">渡したあとも、直せます</p><p class="fd">配ったカードはそのままで、中身だけ更新できます。</p></li>
+        <li class="rv"><p class="fn">04</p><p class="ft">受け取った名刺が五十音で並ぶ</p><p class="fd">日本の氏名は、書かれた文字のままでは並びません。</p></li>
+        <li class="rv"><p class="fn">05</p><p class="ft">会社でまとめて配れます</p><p class="fd">辞めるときに失効。交換の記録は本人のもので、会社には見えません。</p></li>
+        <li class="rv"><p class="fn">06</p><p class="ft">国内で製造・検品</p><p class="fd">カードは1枚ずつ固有の番号を持っています。</p></li>
+      </ul>
+      <ul class="price">
+        <li class="rv"><span class="pn">tapuda Card（ロゴ版）</span><span class="pv">3,480円</span></li>
+        <li class="rv"><span class="pn">tapuda Card（氏名入り）</span><span class="pv">4,280円</span></li>
+        <li class="rv"><span class="pn">tapuda Card（名刺版）</span><span class="pv">4,980円</span></li>
+      </ul>
+      <p class="pricenote">いずれも税込・送料込み。1枚から購入できます。</p>
+      <p class="users">美容師・ネイリスト／作家・カメラマン／趣味・サークル／イベント出店／営業／個人事業主／飲食店／学生の方にお使いいただいています。</p>
+      <p class="cta-row rv">
+        <a class="btn fill" href="https://tapuda.app/" target="_blank" rel="noopener">tapuda を見る</a>
+        <a class="badge ios" href="https://apps.apple.com/jp/app/id6805284204" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a>
+        <a class="badge and" href="https://play.google.com/store/apps/details?id=app.tapuda.android" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a>
+        <a class="btn" href="#contact">法人での導入を相談する</a>
+      </p>
     </div>
   </div>
 </section>
 
-<!-- STEPS -->
-<section class="steps-sec">
+<!-- ============ 受託の進め方 ============ -->
+<section class="dense" id="process">
   <div class="wrap grid2">
-    <p class="vhead">進め方</p>
+    <p class="vhead">受託の進め方</p>
     <div>
+      <p class="lead rv">着手前に、作るべきかどうかを<br>一緒に判断します。</p>
+      <p class="lead-sub rv">いきなりお見積りをお出ししても、判断のしようがないと思います。実際に現場で使っていただいて、それから決めていただく形にしています。</p>
       <ol class="steps">
         <li class="rv"><span class="n">01</span>
           <div><h3>お話を聞く<span class="dur">約1週間</span></h3>
@@ -299,8 +487,8 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
   </div>
 </section>
 
-<!-- WORKS -->
-<section class="dense">
+<!-- ============ これまでの仕事 ============ -->
+<section class="dense shade" id="works">
   <div class="wrap grid2">
     <p class="vhead">これまでの仕事</p>
     <div>
@@ -331,35 +519,36 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
   </div>
 </section>
 
-<!-- APPS -->
-<section class="dense" style="background:var(--washi)">
+<!-- ============ つくったもの ============ -->
+<section class="dense" id="apps">
   <div class="wrap grid2">
-    <p class="vhead">つくったアプリ</p>
+    <p class="vhead">つくったもの</p>
     <div>
-      <ul class="apps">
-        <li><a href="https://apps.apple.com/jp/app/id6785926739" target="_blank" rel="noopener"><span class="n">Pokory</span><span class="s">家族で共有する育児記録</span></a></li>
-        <li><a href="https://apps.apple.com/jp/app/id6781990488" target="_blank" rel="noopener"><span class="n">Omry</span><span class="s">犬猫の記録手帳</span></a></li>
-        <li><a href="https://apps.apple.com/jp/app/id6781115517" target="_blank" rel="noopener"><span class="n">ぽこナビ</span><span class="s">出産・育児の手続きナビ</span></a></li>
-        <li><a href="https://apps.apple.com/jp/app/id6794361869" target="_blank" rel="noopener"><span class="n">KARARI</span><span class="s">コスメの使い切り管理</span></a></li>
-        <li><a href="https://apps.apple.com/jp/app/id6786967194" target="_blank" rel="noopener"><span class="n">カベメーター</span><span class="s">扶養の壁を1つの数字で</span></a></li>
-        <li><a href="https://apps.apple.com/jp/app/id6789184486" target="_blank" rel="noopener"><span class="n">余白と、あじ。</span><span class="s">手書きフォントの作成・販売</span></a></li>
-        <li><a href="https://apps.apple.com/jp/app/id6787623874" target="_blank" rel="noopener"><span class="n">Wakuru</span><span class="s">縦型動画エディタ</span></a></li>
-        <li><a href="https://apps.apple.com/jp/app/id6792430378" target="_blank" rel="noopener"><span class="n">TAMURO</span><span class="s">集まるかどうかを決める</span></a></li>
+      <p class="lead rv">企画から審査、その後の運用まで、<br>ひとりで出しています。</p>
+      <p class="lead-sub rv">受託でつくるものも、同じ手でつくっています。QRコードはパソコンでご覧の方向けです。スマートフォンからはリンクをお使いください。</p>
+      <ul class="prods">
+        <li class="rv"><div class="pmain"><p class="pn">tapuda<span class="pbadge">MY SERVICE</span></p><p class="ps">かざすと渡せるNFCカード。カードは1枚ずつ固有の番号を持ち、国内で製造・検品しています。アプリは、そのカードにどの名刺を出させるかを決める場所です。</p><p class="plinks"><a href="https://tapuda.app/" target="_blank" rel="noopener">Web ↗</a><a class="badge ios" href="https://apps.apple.com/jp/app/id6805284204" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=app.tapuda.android" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><svg class="qr" viewBox="0 0 29 29" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR"><rect width="29" height="29" fill="#fff"/><g transform="translate(2 2)" fill="#2C2C2A"><path d="M0 0h7v1h-7zM9 0h5v1h-5zM18 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM10 1h2v1h-2zM13 1h2v1h-2zM18 1h1v1h-1zM24 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM12 2h2v1h-2zM15 2h2v1h-2zM18 2h1v1h-1zM20 2h3v1h-3zM24 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h3v1h-3zM12 3h3v1h-3zM18 3h1v1h-1zM20 3h3v1h-3zM24 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h3v1h-3zM13 4h2v1h-2zM16 4h1v1h-1zM18 4h1v1h-1zM20 4h3v1h-3zM24 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h1v1h-1zM13 5h2v1h-2zM18 5h1v1h-1zM24 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h7v1h-7zM8 7h3v1h-3zM12 7h2v1h-2zM1 8h1v1h-1zM3 8h4v1h-4zM8 8h1v1h-1zM12 8h2v1h-2zM15 8h4v1h-4zM20 8h2v1h-2zM23 8h1v1h-1zM0 9h5v1h-5zM7 9h2v1h-2zM10 9h2v1h-2zM14 9h2v1h-2zM19 9h5v1h-5zM2 10h1v1h-1zM5 10h4v1h-4zM11 10h2v1h-2zM14 10h2v1h-2zM17 10h2v1h-2zM20 10h2v1h-2zM24 10h1v1h-1zM2 11h4v1h-4zM10 11h3v1h-3zM15 11h1v1h-1zM18 11h2v1h-2zM21 11h4v1h-4zM1 12h6v1h-6zM10 12h1v1h-1zM12 12h3v1h-3zM16 12h1v1h-1zM18 12h1v1h-1zM24 12h1v1h-1zM0 13h1v1h-1zM2 13h1v1h-1zM5 13h1v1h-1zM7 13h2v1h-2zM10 13h1v1h-1zM12 13h4v1h-4zM17 13h1v1h-1zM20 13h1v1h-1zM23 13h1v1h-1zM0 14h3v1h-3zM4 14h4v1h-4zM9 14h1v1h-1zM11 14h1v1h-1zM13 14h1v1h-1zM15 14h1v1h-1zM18 14h1v1h-1zM20 14h5v1h-5zM0 15h1v1h-1zM3 15h3v1h-3zM7 15h3v1h-3zM13 15h2v1h-2zM16 15h1v1h-1zM18 15h2v1h-2zM21 15h2v1h-2zM24 15h1v1h-1zM0 16h1v1h-1zM2 16h2v1h-2zM6 16h1v1h-1zM9 16h1v1h-1zM15 16h6v1h-6zM22 16h2v1h-2zM8 17h1v1h-1zM11 17h2v1h-2zM14 17h1v1h-1zM16 17h1v1h-1zM20 17h1v1h-1zM22 17h2v1h-2zM0 18h7v1h-7zM9 18h2v1h-2zM16 18h1v1h-1zM18 18h1v1h-1zM20 18h1v1h-1zM24 18h1v1h-1zM0 19h1v1h-1zM6 19h1v1h-1zM8 19h1v1h-1zM11 19h1v1h-1zM13 19h1v1h-1zM15 19h2v1h-2zM20 19h1v1h-1zM23 19h1v1h-1zM0 20h1v1h-1zM2 20h3v1h-3zM6 20h1v1h-1zM8 20h1v1h-1zM11 20h1v1h-1zM13 20h1v1h-1zM15 20h6v1h-6zM24 20h1v1h-1zM0 21h1v1h-1zM2 21h3v1h-3zM6 21h1v1h-1zM8 21h1v1h-1zM12 21h1v1h-1zM16 21h3v1h-3zM23 21h2v1h-2zM0 22h1v1h-1zM2 22h3v1h-3zM6 22h1v1h-1zM12 22h3v1h-3zM20 22h5v1h-5zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h2v1h-2zM13 23h2v1h-2zM18 23h3v1h-3zM22 23h3v1h-3zM0 24h7v1h-7zM9 24h4v1h-4zM16 24h1v1h-1zM18 24h1v1h-1zM21 24h1v1h-1zM24 24h1v1h-1z"/></g></svg><figcaption>Web</figcaption></figure><figure><svg class="qr" viewBox="0 0 33 33" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR"><rect width="33" height="33" fill="#fff"/><g transform="translate(2 2)" fill="#2C2C2A"><path d="M0 0h7v1h-7zM9 0h2v1h-2zM15 0h6v1h-6zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM11 1h3v1h-3zM15 1h1v1h-1zM18 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM17 2h1v1h-1zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM11 3h1v1h-1zM15 3h2v1h-2zM18 3h1v1h-1zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM15 4h1v1h-1zM17 4h2v1h-2zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h4v1h-4zM13 5h3v1h-3zM17 5h1v1h-1zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM11 7h1v1h-1zM15 7h3v1h-3zM19 7h2v1h-2zM0 8h1v1h-1zM3 8h1v1h-1zM5 8h2v1h-2zM8 8h3v1h-3zM13 8h1v1h-1zM19 8h1v1h-1zM21 8h1v1h-1zM23 8h1v1h-1zM0 9h2v1h-2zM4 9h2v1h-2zM8 9h7v1h-7zM17 9h2v1h-2zM20 9h4v1h-4zM25 9h1v1h-1zM28 9h1v1h-1zM0 10h1v1h-1zM3 10h4v1h-4zM8 10h3v1h-3zM13 10h1v1h-1zM18 10h2v1h-2zM21 10h3v1h-3zM25 10h3v1h-3zM2 11h2v1h-2zM7 11h1v1h-1zM9 11h2v1h-2zM12 11h4v1h-4zM20 11h3v1h-3zM26 11h2v1h-2zM3 12h1v1h-1zM6 12h1v1h-1zM9 12h1v1h-1zM13 12h3v1h-3zM17 12h2v1h-2zM20 12h4v1h-4zM25 12h1v1h-1zM27 12h2v1h-2zM0 13h6v1h-6zM9 13h4v1h-4zM14 13h1v1h-1zM16 13h1v1h-1zM19 13h3v1h-3zM0 14h1v1h-1zM4 14h1v1h-1zM6 14h2v1h-2zM10 14h2v1h-2zM13 14h1v1h-1zM16 14h1v1h-1zM22 14h7v1h-7zM0 15h1v1h-1zM2 15h1v1h-1zM4 15h2v1h-2zM8 15h6v1h-6zM16 15h3v1h-3zM20 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM27 15h1v1h-1zM0 16h2v1h-2zM6 16h3v1h-3zM11 16h1v1h-1zM14 16h1v1h-1zM16 16h2v1h-2zM20 16h2v1h-2zM23 16h1v1h-1zM27 16h1v1h-1zM2 17h1v1h-1zM4 17h2v1h-2zM7 17h3v1h-3zM12 17h2v1h-2zM20 17h1v1h-1zM22 17h2v1h-2zM25 17h1v1h-1zM28 17h1v1h-1zM0 18h1v1h-1zM2 18h2v1h-2zM5 18h4v1h-4zM10 18h1v1h-1zM14 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM22 18h1v1h-1zM24 18h1v1h-1zM27 18h2v1h-2zM5 19h1v1h-1zM11 19h1v1h-1zM15 19h1v1h-1zM17 19h2v1h-2zM20 19h4v1h-4zM27 19h2v1h-2zM0 20h1v1h-1zM3 20h4v1h-4zM11 20h1v1h-1zM13 20h1v1h-1zM16 20h1v1h-1zM20 20h5v1h-5zM26 20h1v1h-1zM8 21h2v1h-2zM11 21h1v1h-1zM13 21h2v1h-2zM16 21h5v1h-5zM24 21h1v1h-1zM26 21h3v1h-3zM0 22h7v1h-7zM10 22h1v1h-1zM13 22h1v1h-1zM16 22h1v1h-1zM18 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM12 23h4v1h-4zM20 23h1v1h-1zM24 23h5v1h-5zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM9 24h1v1h-1zM12 24h1v1h-1zM14 24h4v1h-4zM20 24h5v1h-5zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM10 25h1v1h-1zM17 25h2v1h-2zM22 25h1v1h-1zM24 25h4v1h-4zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM10 26h2v1h-2zM13 26h1v1h-1zM17 26h5v1h-5zM24 26h3v1h-3zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM12 27h3v1h-3zM16 27h2v1h-2zM19 27h3v1h-3zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h1v1h-1zM11 28h3v1h-3zM15 28h1v1h-1zM17 28h2v1h-2zM20 28h1v1h-1zM24 28h2v1h-2zM27 28h1v1h-1z"/></g></svg><figcaption>App Store</figcaption></figure><figure><svg class="qr" viewBox="0 0 37 37" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR"><rect width="37" height="37" fill="#fff"/><g transform="translate(2 2)" fill="#2C2C2A"><path d="M0 0h7v1h-7zM10 0h1v1h-1zM12 0h1v1h-1zM16 0h8v1h-8zM26 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM10 1h1v1h-1zM14 1h2v1h-2zM18 1h1v1h-1zM20 1h1v1h-1zM26 1h1v1h-1zM32 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM12 2h1v1h-1zM16 2h1v1h-1zM19 2h3v1h-3zM23 2h1v1h-1zM26 2h1v1h-1zM28 2h3v1h-3zM32 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h3v1h-3zM12 3h3v1h-3zM17 3h1v1h-1zM19 3h2v1h-2zM22 3h3v1h-3zM26 3h1v1h-1zM28 3h3v1h-3zM32 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM9 4h1v1h-1zM14 4h1v1h-1zM16 4h1v1h-1zM18 4h2v1h-2zM21 4h1v1h-1zM23 4h1v1h-1zM26 4h1v1h-1zM28 4h3v1h-3zM32 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h2v1h-2zM11 5h3v1h-3zM15 5h2v1h-2zM20 5h3v1h-3zM24 5h1v1h-1zM26 5h1v1h-1zM32 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM24 6h1v1h-1zM26 6h7v1h-7zM9 7h3v1h-3zM15 7h1v1h-1zM18 7h2v1h-2zM21 7h2v1h-2zM0 8h5v1h-5zM6 8h4v1h-4zM11 8h1v1h-1zM13 8h3v1h-3zM17 8h2v1h-2zM20 8h1v1h-1zM25 8h1v1h-1zM27 8h1v1h-1zM29 8h1v1h-1zM31 8h1v1h-1zM0 9h1v1h-1zM4 9h1v1h-1zM10 9h1v1h-1zM12 9h2v1h-2zM16 9h2v1h-2zM19 9h2v1h-2zM23 9h1v1h-1zM26 9h1v1h-1zM30 9h3v1h-3zM5 10h3v1h-3zM10 10h1v1h-1zM13 10h3v1h-3zM22 10h1v1h-1zM25 10h2v1h-2zM28 10h2v1h-2zM31 10h1v1h-1zM3 11h1v1h-1zM5 11h1v1h-1zM8 11h1v1h-1zM12 11h1v1h-1zM14 11h1v1h-1zM16 11h1v1h-1zM20 11h7v1h-7zM28 11h1v1h-1zM30 11h1v1h-1zM1 12h6v1h-6zM9 12h2v1h-2zM12 12h3v1h-3zM17 12h1v1h-1zM19 12h1v1h-1zM22 12h1v1h-1zM25 12h1v1h-1zM27 12h3v1h-3zM0 13h1v1h-1zM4 13h2v1h-2zM7 13h3v1h-3zM13 13h1v1h-1zM18 13h4v1h-4zM23 13h1v1h-1zM26 13h1v1h-1zM31 13h2v1h-2zM0 14h1v1h-1zM6 14h2v1h-2zM11 14h2v1h-2zM15 14h2v1h-2zM18 14h1v1h-1zM20 14h2v1h-2zM25 14h1v1h-1zM28 14h1v1h-1zM31 14h1v1h-1zM0 15h3v1h-3zM5 15h1v1h-1zM7 15h1v1h-1zM9 15h3v1h-3zM14 15h2v1h-2zM21 15h3v1h-3zM25 15h2v1h-2zM30 15h1v1h-1zM0 16h1v1h-1zM4 16h8v1h-8zM13 16h3v1h-3zM17 16h1v1h-1zM19 16h1v1h-1zM22 16h4v1h-4zM27 16h2v1h-2zM31 16h1v1h-1zM4 17h1v1h-1zM7 17h1v1h-1zM9 17h1v1h-1zM12 17h1v1h-1zM16 17h1v1h-1zM19 17h6v1h-6zM26 17h1v1h-1zM29 17h1v1h-1zM31 17h2v1h-2zM2 18h2v1h-2zM5 18h3v1h-3zM9 18h2v1h-2zM14 18h2v1h-2zM18 18h1v1h-1zM20 18h2v1h-2zM25 18h5v1h-5zM31 18h1v1h-1zM3 19h2v1h-2zM7 19h1v1h-1zM9 19h2v1h-2zM12 19h1v1h-1zM15 19h2v1h-2zM18 19h1v1h-1zM21 19h1v1h-1zM28 19h1v1h-1zM30 19h1v1h-1zM1 20h3v1h-3zM5 20h2v1h-2zM9 20h1v1h-1zM12 20h1v1h-1zM15 20h1v1h-1zM17 20h1v1h-1zM22 20h4v1h-4zM27 20h2v1h-2zM31 20h1v1h-1zM0 21h1v1h-1zM4 21h2v1h-2zM7 21h1v1h-1zM16 21h1v1h-1zM19 21h5v1h-5zM26 21h2v1h-2zM29 21h1v1h-1zM31 21h2v1h-2zM0 22h1v1h-1zM3 22h4v1h-4zM8 22h2v1h-2zM11 22h2v1h-2zM15 22h2v1h-2zM18 22h1v1h-1zM21 22h1v1h-1zM25 22h1v1h-1zM29 22h1v1h-1zM31 22h1v1h-1zM0 23h1v1h-1zM3 23h3v1h-3zM7 23h5v1h-5zM15 23h2v1h-2zM18 23h1v1h-1zM20 23h2v1h-2zM23 23h1v1h-1zM25 23h1v1h-1zM27 23h4v1h-4zM0 24h1v1h-1zM4 24h4v1h-4zM10 24h2v1h-2zM15 24h4v1h-4zM20 24h1v1h-1zM22 24h8v1h-8zM32 24h1v1h-1zM8 25h1v1h-1zM10 25h1v1h-1zM12 25h2v1h-2zM16 25h7v1h-7zM24 25h1v1h-1zM28 25h1v1h-1zM30 25h1v1h-1zM32 25h1v1h-1zM0 26h7v1h-7zM8 26h3v1h-3zM13 26h3v1h-3zM17 26h1v1h-1zM20 26h1v1h-1zM23 26h2v1h-2zM26 26h1v1h-1zM28 26h1v1h-1zM30 26h2v1h-2zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h1v1h-1zM12 27h2v1h-2zM15 27h1v1h-1zM18 27h1v1h-1zM20 27h5v1h-5zM28 27h3v1h-3zM0 28h1v1h-1zM2 28h3v1h-3zM6 28h1v1h-1zM8 28h3v1h-3zM12 28h1v1h-1zM14 28h4v1h-4zM24 28h5v1h-5zM0 29h1v1h-1zM2 29h3v1h-3zM6 29h1v1h-1zM8 29h1v1h-1zM10 29h1v1h-1zM16 29h1v1h-1zM19 29h2v1h-2zM23 29h1v1h-1zM28 29h2v1h-2zM0 30h1v1h-1zM2 30h3v1h-3zM6 30h1v1h-1zM8 30h1v1h-1zM10 30h3v1h-3zM15 30h2v1h-2zM22 30h1v1h-1zM24 30h1v1h-1zM26 30h1v1h-1zM30 30h2v1h-2zM0 31h1v1h-1zM6 31h1v1h-1zM8 31h1v1h-1zM10 31h2v1h-2zM14 31h2v1h-2zM18 31h1v1h-1zM20 31h3v1h-3zM25 31h2v1h-2zM29 31h2v1h-2zM0 32h7v1h-7zM8 32h1v1h-1zM11 32h1v1h-1zM15 32h1v1h-1zM17 32h1v1h-1zM22 32h3v1h-3zM26 32h2v1h-2zM31 32h1v1h-1z"/></g></svg><figcaption>Google Play</figcaption></figure></div></li>
+        <li class="rv"><div class="pmain"><p class="pn">ひとまわり<span class="pbadge">NEW</span></p><p class="ps">毎日ひとつ、全国に同じお題が配られる散歩アプリ。歩いている間は何も要求しません。いいね数もフォロワー数もありません。</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6799991379" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=com.hitomawari.app" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><svg class="qr" viewBox="0 0 33 33" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR"><rect width="33" height="33" fill="#fff"/><g transform="translate(2 2)" fill="#2C2C2A"><path d="M0 0h7v1h-7zM11 0h1v1h-1zM13 0h1v1h-1zM15 0h6v1h-6zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM10 1h1v1h-1zM15 1h1v1h-1zM18 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM9 2h1v1h-1zM11 2h1v1h-1zM14 2h1v1h-1zM16 2h2v1h-2zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM11 3h1v1h-1zM16 3h1v1h-1zM18 3h1v1h-1zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM10 4h2v1h-2zM15 4h1v1h-1zM17 4h2v1h-2zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h2v1h-2zM11 5h7v1h-7zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM10 7h2v1h-2zM14 7h4v1h-4zM19 7h2v1h-2zM0 8h1v1h-1zM3 8h1v1h-1zM5 8h2v1h-2zM8 8h6v1h-6zM15 8h1v1h-1zM19 8h1v1h-1zM21 8h1v1h-1zM23 8h1v1h-1zM0 9h2v1h-2zM3 9h1v1h-1zM7 9h8v1h-8zM17 9h2v1h-2zM20 9h4v1h-4zM25 9h1v1h-1zM28 9h1v1h-1zM0 10h1v1h-1zM3 10h2v1h-2zM6 10h2v1h-2zM10 10h5v1h-5zM16 10h1v1h-1zM18 10h2v1h-2zM21 10h3v1h-3zM25 10h3v1h-3zM0 11h3v1h-3zM9 11h1v1h-1zM12 11h2v1h-2zM16 11h1v1h-1zM20 11h3v1h-3zM26 11h2v1h-2zM0 12h3v1h-3zM5 12h2v1h-2zM8 12h2v1h-2zM13 12h2v1h-2zM17 12h2v1h-2zM20 12h4v1h-4zM25 12h1v1h-1zM27 12h2v1h-2zM1 13h4v1h-4zM7 13h4v1h-4zM12 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM19 13h3v1h-3zM1 14h1v1h-1zM5 14h4v1h-4zM10 14h2v1h-2zM13 14h1v1h-1zM16 14h1v1h-1zM22 14h7v1h-7zM3 15h1v1h-1zM11 15h1v1h-1zM13 15h2v1h-2zM16 15h3v1h-3zM20 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM27 15h1v1h-1zM1 16h4v1h-4zM6 16h2v1h-2zM11 16h2v1h-2zM14 16h1v1h-1zM16 16h2v1h-2zM20 16h2v1h-2zM23 16h1v1h-1zM27 16h1v1h-1zM1 17h1v1h-1zM5 17h1v1h-1zM8 17h1v1h-1zM10 17h1v1h-1zM13 17h1v1h-1zM20 17h1v1h-1zM22 17h2v1h-2zM25 17h1v1h-1zM28 17h1v1h-1zM0 18h1v1h-1zM5 18h2v1h-2zM8 18h1v1h-1zM10 18h1v1h-1zM13 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM22 18h1v1h-1zM24 18h1v1h-1zM27 18h2v1h-2zM2 19h2v1h-2zM7 19h3v1h-3zM11 19h2v1h-2zM14 19h2v1h-2zM17 19h2v1h-2zM20 19h4v1h-4zM27 19h2v1h-2zM0 20h1v1h-1zM2 20h5v1h-5zM8 20h2v1h-2zM11 20h3v1h-3zM16 20h1v1h-1zM20 20h5v1h-5zM26 20h1v1h-1zM8 21h1v1h-1zM10 21h1v1h-1zM12 21h1v1h-1zM14 21h1v1h-1zM16 21h5v1h-5zM24 21h1v1h-1zM26 21h3v1h-3zM0 22h7v1h-7zM9 22h1v1h-1zM11 22h4v1h-4zM16 22h1v1h-1zM18 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h1v1h-1zM13 23h1v1h-1zM15 23h1v1h-1zM20 23h1v1h-1zM24 23h5v1h-5zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM9 24h3v1h-3zM14 24h4v1h-4zM20 24h5v1h-5zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM11 25h3v1h-3zM17 25h2v1h-2zM22 25h1v1h-1zM24 25h4v1h-4zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM9 26h1v1h-1zM11 26h4v1h-4zM17 26h5v1h-5zM24 26h3v1h-3zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h3v1h-3zM14 27h1v1h-1zM16 27h2v1h-2zM19 27h3v1h-3zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h1v1h-1zM15 28h1v1h-1zM17 28h2v1h-2zM20 28h1v1h-1zM24 28h2v1h-2zM27 28h1v1h-1z"/></g></svg><figcaption>App Store</figcaption></figure><figure><svg class="qr" viewBox="0 0 37 37" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR"><rect width="37" height="37" fill="#fff"/><g transform="translate(2 2)" fill="#2C2C2A"><path d="M0 0h7v1h-7zM8 0h1v1h-1zM11 0h2v1h-2zM14 0h1v1h-1zM18 0h1v1h-1zM21 0h1v1h-1zM26 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM9 1h2v1h-2zM13 1h2v1h-2zM18 1h2v1h-2zM21 1h1v1h-1zM26 1h1v1h-1zM32 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM10 2h1v1h-1zM12 2h3v1h-3zM16 2h1v1h-1zM20 2h4v1h-4zM26 2h1v1h-1zM28 2h3v1h-3zM32 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM12 3h3v1h-3zM17 3h1v1h-1zM19 3h1v1h-1zM21 3h1v1h-1zM23 3h2v1h-2zM26 3h1v1h-1zM28 3h3v1h-3zM32 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM9 4h1v1h-1zM11 4h1v1h-1zM13 4h2v1h-2zM16 4h6v1h-6zM26 4h1v1h-1zM28 4h3v1h-3zM32 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM10 5h1v1h-1zM12 5h3v1h-3zM17 5h1v1h-1zM20 5h1v1h-1zM23 5h2v1h-2zM26 5h1v1h-1zM32 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM24 6h1v1h-1zM26 6h7v1h-7zM8 7h1v1h-1zM10 7h2v1h-2zM13 7h2v1h-2zM18 7h1v1h-1zM20 7h1v1h-1zM22 7h1v1h-1zM0 8h2v1h-2zM3 8h2v1h-2zM6 8h1v1h-1zM9 8h3v1h-3zM14 8h7v1h-7zM22 8h1v1h-1zM26 8h1v1h-1zM32 8h1v1h-1zM1 9h3v1h-3zM5 9h1v1h-1zM7 9h3v1h-3zM12 9h1v1h-1zM14 9h2v1h-2zM17 9h1v1h-1zM19 9h1v1h-1zM21 9h3v1h-3zM27 9h2v1h-2zM30 9h2v1h-2zM6 10h1v1h-1zM10 10h2v1h-2zM14 10h4v1h-4zM20 10h1v1h-1zM22 10h2v1h-2zM25 10h1v1h-1zM28 10h1v1h-1zM31 10h2v1h-2zM2 11h3v1h-3zM9 11h4v1h-4zM14 11h2v1h-2zM17 11h1v1h-1zM20 11h1v1h-1zM24 11h4v1h-4zM29 11h2v1h-2zM0 12h3v1h-3zM4 12h4v1h-4zM9 12h1v1h-1zM11 12h2v1h-2zM15 12h1v1h-1zM20 12h1v1h-1zM23 12h1v1h-1zM26 12h2v1h-2zM31 12h2v1h-2zM0 13h2v1h-2zM8 13h2v1h-2zM13 13h1v1h-1zM15 13h2v1h-2zM18 13h1v1h-1zM23 13h1v1h-1zM25 13h1v1h-1zM27 13h1v1h-1zM0 14h3v1h-3zM4 14h1v1h-1zM6 14h8v1h-8zM15 14h1v1h-1zM17 14h6v1h-6zM0 15h1v1h-1zM4 15h1v1h-1zM7 15h1v1h-1zM10 15h2v1h-2zM14 15h1v1h-1zM16 15h1v1h-1zM20 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM27 15h2v1h-2zM30 15h1v1h-1zM32 15h1v1h-1zM1 16h1v1h-1zM6 16h2v1h-2zM10 16h1v1h-1zM13 16h1v1h-1zM15 16h1v1h-1zM19 16h2v1h-2zM22 16h1v1h-1zM24 16h6v1h-6zM31 16h2v1h-2zM0 17h1v1h-1zM2 17h1v1h-1zM4 17h1v1h-1zM9 17h1v1h-1zM11 17h2v1h-2zM14 17h2v1h-2zM18 17h3v1h-3zM24 17h1v1h-1zM26 17h3v1h-3zM31 17h2v1h-2zM3 18h4v1h-4zM9 18h3v1h-3zM13 18h3v1h-3zM19 18h1v1h-1zM21 18h3v1h-3zM27 18h1v1h-1zM32 18h1v1h-1zM0 19h1v1h-1zM2 19h2v1h-2zM5 19h1v1h-1zM8 19h1v1h-1zM12 19h3v1h-3zM16 19h1v1h-1zM19 19h2v1h-2zM25 19h4v1h-4zM30 19h3v1h-3zM2 20h3v1h-3zM6 20h2v1h-2zM9 20h2v1h-2zM12 20h2v1h-2zM16 20h2v1h-2zM19 20h1v1h-1zM23 20h2v1h-2zM27 20h1v1h-1zM0 21h1v1h-1zM8 21h1v1h-1zM10 21h1v1h-1zM14 21h2v1h-2zM17 21h3v1h-3zM23 21h1v1h-1zM28 21h2v1h-2zM31 21h1v1h-1zM0 22h1v1h-1zM5 22h3v1h-3zM10 22h1v1h-1zM12 22h1v1h-1zM14 22h4v1h-4zM20 22h2v1h-2zM23 22h1v1h-1zM25 22h2v1h-2zM31 22h2v1h-2zM0 23h1v1h-1zM3 23h1v1h-1zM8 23h3v1h-3zM15 23h1v1h-1zM17 23h1v1h-1zM20 23h1v1h-1zM22 23h1v1h-1zM25 23h1v1h-1zM30 23h1v1h-1zM0 24h2v1h-2zM3 24h2v1h-2zM6 24h1v1h-1zM9 24h2v1h-2zM13 24h2v1h-2zM16 24h1v1h-1zM18 24h2v1h-2zM24 24h5v1h-5zM31 24h1v1h-1zM8 25h2v1h-2zM12 25h1v1h-1zM14 25h5v1h-5zM22 25h1v1h-1zM24 25h1v1h-1zM28 25h1v1h-1zM30 25h2v1h-2zM0 26h7v1h-7zM9 26h2v1h-2zM14 26h4v1h-4zM19 26h2v1h-2zM22 26h3v1h-3zM26 26h1v1h-1zM28 26h1v1h-1zM30 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h1v1h-1zM12 27h3v1h-3zM18 27h1v1h-1zM23 27h2v1h-2zM28 27h3v1h-3zM32 27h1v1h-1zM0 28h1v1h-1zM2 28h3v1h-3zM6 28h1v1h-1zM8 28h1v1h-1zM10 28h3v1h-3zM15 28h2v1h-2zM20 28h1v1h-1zM23 28h7v1h-7zM32 28h1v1h-1zM0 29h1v1h-1zM2 29h3v1h-3zM6 29h1v1h-1zM8 29h2v1h-2zM11 29h1v1h-1zM15 29h1v1h-1zM18 29h5v1h-5zM27 29h1v1h-1zM0 30h1v1h-1zM2 30h3v1h-3zM6 30h1v1h-1zM9 30h2v1h-2zM12 30h4v1h-4zM17 30h4v1h-4zM23 30h3v1h-3zM28 30h3v1h-3zM32 30h1v1h-1zM0 31h1v1h-1zM6 31h1v1h-1zM8 31h4v1h-4zM13 31h1v1h-1zM18 31h2v1h-2zM22 31h1v1h-1zM27 31h1v1h-1zM29 31h4v1h-4zM0 32h7v1h-7zM8 32h1v1h-1zM11 32h1v1h-1zM13 32h1v1h-1zM16 32h2v1h-2zM19 32h1v1h-1zM23 32h6v1h-6z"/></g></svg><figcaption>Google Play</figcaption></figure></div></li>
+        <li class="rv"><div class="pmain"><p class="pn">Pokory</p><p class="ps">家族で共有する育児記録</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6785926739" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=com.pokopoko.pokory" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><svg class="qr" viewBox="0 0 33 33" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR"><rect width="33" height="33" fill="#fff"/><g transform="translate(2 2)" fill="#2C2C2A"><path d="M0 0h7v1h-7zM8 0h1v1h-1zM10 0h1v1h-1zM12 0h3v1h-3zM17 0h3v1h-3zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM12 1h1v1h-1zM14 1h1v1h-1zM16 1h1v1h-1zM18 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM9 2h1v1h-1zM12 2h3v1h-3zM18 2h3v1h-3zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h1v1h-1zM10 3h2v1h-2zM13 3h1v1h-1zM15 3h3v1h-3zM19 3h1v1h-1zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM9 4h1v1h-1zM11 4h2v1h-2zM15 4h1v1h-1zM19 4h1v1h-1zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h2v1h-2zM12 5h1v1h-1zM16 5h2v1h-2zM19 5h2v1h-2zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM8 7h2v1h-2zM11 7h1v1h-1zM14 7h1v1h-1zM17 7h1v1h-1zM19 7h1v1h-1zM0 8h1v1h-1zM2 8h2v1h-2zM5 8h3v1h-3zM9 8h1v1h-1zM11 8h2v1h-2zM15 8h1v1h-1zM17 8h2v1h-2zM22 8h1v1h-1zM25 8h1v1h-1zM27 8h2v1h-2zM0 9h1v1h-1zM2 9h1v1h-1zM8 9h2v1h-2zM11 9h2v1h-2zM14 9h1v1h-1zM19 9h4v1h-4zM24 9h1v1h-1zM28 9h1v1h-1zM2 10h5v1h-5zM9 10h2v1h-2zM12 10h2v1h-2zM16 10h2v1h-2zM21 10h2v1h-2zM24 10h1v1h-1zM26 10h2v1h-2zM0 11h1v1h-1zM2 11h2v1h-2zM11 11h1v1h-1zM13 11h1v1h-1zM15 11h1v1h-1zM28 11h1v1h-1zM1 12h1v1h-1zM5 12h3v1h-3zM9 12h2v1h-2zM13 12h1v1h-1zM15 12h4v1h-4zM23 12h1v1h-1zM25 12h2v1h-2zM1 13h1v1h-1zM3 13h3v1h-3zM8 13h2v1h-2zM11 13h2v1h-2zM15 13h1v1h-1zM19 13h1v1h-1zM22 13h1v1h-1zM26 13h3v1h-3zM0 14h1v1h-1zM2 14h2v1h-2zM6 14h1v1h-1zM8 14h3v1h-3zM12 14h1v1h-1zM14 14h1v1h-1zM16 14h4v1h-4zM22 14h1v1h-1zM26 14h3v1h-3zM4 15h1v1h-1zM8 15h2v1h-2zM11 15h2v1h-2zM14 15h1v1h-1zM16 15h1v1h-1zM19 15h2v1h-2zM24 15h1v1h-1zM27 15h1v1h-1zM1 16h2v1h-2zM6 16h4v1h-4zM13 16h2v1h-2zM16 16h1v1h-1zM18 16h4v1h-4zM24 16h2v1h-2zM27 16h1v1h-1zM2 17h2v1h-2zM7 17h2v1h-2zM10 17h7v1h-7zM21 17h1v1h-1zM23 17h1v1h-1zM25 17h3v1h-3zM0 18h1v1h-1zM2 18h2v1h-2zM5 18h3v1h-3zM12 18h2v1h-2zM15 18h1v1h-1zM18 18h1v1h-1zM20 18h2v1h-2zM24 18h1v1h-1zM26 18h1v1h-1zM2 19h2v1h-2zM7 19h3v1h-3zM12 19h1v1h-1zM16 19h3v1h-3zM23 19h1v1h-1zM26 19h1v1h-1zM1 20h1v1h-1zM4 20h1v1h-1zM6 20h1v1h-1zM8 20h1v1h-1zM10 20h1v1h-1zM12 20h1v1h-1zM16 20h11v1h-11zM8 21h1v1h-1zM13 21h2v1h-2zM16 21h1v1h-1zM20 21h1v1h-1zM24 21h5v1h-5zM0 22h7v1h-7zM8 22h1v1h-1zM10 22h2v1h-2zM14 22h1v1h-1zM16 22h2v1h-2zM19 22h2v1h-2zM22 22h1v1h-1zM24 22h2v1h-2zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h5v1h-5zM16 23h1v1h-1zM20 23h1v1h-1zM24 23h2v1h-2zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM10 24h2v1h-2zM17 24h1v1h-1zM20 24h5v1h-5zM26 24h3v1h-3zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM10 25h1v1h-1zM14 25h5v1h-5zM20 25h2v1h-2zM24 25h2v1h-2zM28 25h1v1h-1zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM8 26h1v1h-1zM10 26h2v1h-2zM14 26h1v1h-1zM20 26h2v1h-2zM23 26h1v1h-1zM26 26h1v1h-1zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM11 27h4v1h-4zM16 27h1v1h-1zM18 27h1v1h-1zM20 27h2v1h-2zM23 27h3v1h-3zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h1v1h-1zM10 28h1v1h-1zM14 28h2v1h-2zM19 28h2v1h-2zM23 28h1v1h-1zM27 28h1v1h-1z"/></g></svg><figcaption>App Store</figcaption></figure><figure><svg class="qr" viewBox="0 0 37 37" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR"><rect width="37" height="37" fill="#fff"/><g transform="translate(2 2)" fill="#2C2C2A"><path d="M0 0h7v1h-7zM9 0h1v1h-1zM14 0h1v1h-1zM16 0h8v1h-8zM26 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h2v1h-2zM11 1h2v1h-2zM15 1h1v1h-1zM18 1h1v1h-1zM20 1h1v1h-1zM26 1h1v1h-1zM32 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM9 2h3v1h-3zM16 2h1v1h-1zM19 2h3v1h-3zM23 2h1v1h-1zM26 2h1v1h-1zM28 2h3v1h-3zM32 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h2v1h-2zM11 3h1v1h-1zM13 3h2v1h-2zM17 3h1v1h-1zM19 3h2v1h-2zM22 3h3v1h-3zM26 3h1v1h-1zM28 3h3v1h-3zM32 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM10 4h1v1h-1zM12 4h2v1h-2zM18 4h2v1h-2zM21 4h1v1h-1zM23 4h1v1h-1zM26 4h1v1h-1zM28 4h3v1h-3zM32 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM10 5h1v1h-1zM13 5h4v1h-4zM20 5h3v1h-3zM24 5h1v1h-1zM26 5h1v1h-1zM32 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM24 6h1v1h-1zM26 6h7v1h-7zM12 7h1v1h-1zM14 7h1v1h-1zM16 7h1v1h-1zM18 7h2v1h-2zM21 7h2v1h-2zM0 8h5v1h-5zM6 8h5v1h-5zM12 8h3v1h-3zM17 8h2v1h-2zM20 8h1v1h-1zM25 8h1v1h-1zM27 8h1v1h-1zM29 8h1v1h-1zM31 8h1v1h-1zM0 9h2v1h-2zM4 9h1v1h-1zM8 9h2v1h-2zM13 9h1v1h-1zM16 9h2v1h-2zM19 9h2v1h-2zM23 9h1v1h-1zM26 9h1v1h-1zM30 9h3v1h-3zM0 10h1v1h-1zM2 10h6v1h-6zM9 10h1v1h-1zM11 10h3v1h-3zM15 10h2v1h-2zM22 10h1v1h-1zM25 10h2v1h-2zM28 10h2v1h-2zM31 10h1v1h-1zM0 11h5v1h-5zM8 11h4v1h-4zM14 11h1v1h-1zM20 11h7v1h-7zM28 11h1v1h-1zM30 11h1v1h-1zM2 12h2v1h-2zM6 12h2v1h-2zM9 12h1v1h-1zM11 12h1v1h-1zM13 12h2v1h-2zM17 12h1v1h-1zM19 12h1v1h-1zM22 12h1v1h-1zM25 12h1v1h-1zM27 12h3v1h-3zM0 13h1v1h-1zM2 13h1v1h-1zM5 13h1v1h-1zM8 13h3v1h-3zM12 13h2v1h-2zM16 13h1v1h-1zM18 13h4v1h-4zM23 13h1v1h-1zM26 13h1v1h-1zM31 13h2v1h-2zM0 14h1v1h-1zM2 14h6v1h-6zM9 14h2v1h-2zM13 14h6v1h-6zM20 14h2v1h-2zM25 14h1v1h-1zM28 14h1v1h-1zM31 14h1v1h-1zM0 15h1v1h-1zM5 15h1v1h-1zM9 15h1v1h-1zM12 15h1v1h-1zM14 15h1v1h-1zM16 15h1v1h-1zM21 15h3v1h-3zM25 15h2v1h-2zM30 15h1v1h-1zM0 16h1v1h-1zM2 16h1v1h-1zM5 16h4v1h-4zM10 16h1v1h-1zM12 16h3v1h-3zM17 16h1v1h-1zM19 16h1v1h-1zM22 16h4v1h-4zM27 16h2v1h-2zM31 16h1v1h-1zM1 17h1v1h-1zM4 17h1v1h-1zM7 17h4v1h-4zM14 17h1v1h-1zM16 17h9v1h-9zM26 17h1v1h-1zM29 17h1v1h-1zM31 17h2v1h-2zM1 18h4v1h-4zM6 18h1v1h-1zM8 18h1v1h-1zM11 18h3v1h-3zM15 18h1v1h-1zM17 18h1v1h-1zM20 18h2v1h-2zM25 18h5v1h-5zM31 18h1v1h-1zM0 19h3v1h-3zM9 19h1v1h-1zM11 19h1v1h-1zM15 19h1v1h-1zM21 19h1v1h-1zM28 19h1v1h-1zM30 19h1v1h-1zM0 20h1v1h-1zM2 20h1v1h-1zM4 20h3v1h-3zM11 20h1v1h-1zM13 20h5v1h-5zM22 20h4v1h-4zM27 20h2v1h-2zM31 20h1v1h-1zM0 21h2v1h-2zM5 21h1v1h-1zM7 21h4v1h-4zM12 21h3v1h-3zM16 21h8v1h-8zM26 21h2v1h-2zM29 21h1v1h-1zM31 21h2v1h-2zM0 22h1v1h-1zM4 22h3v1h-3zM8 22h3v1h-3zM15 22h2v1h-2zM21 22h1v1h-1zM25 22h1v1h-1zM29 22h1v1h-1zM31 22h1v1h-1zM0 23h1v1h-1zM3 23h1v1h-1zM5 23h1v1h-1zM12 23h1v1h-1zM14 23h1v1h-1zM16 23h1v1h-1zM20 23h2v1h-2zM23 23h1v1h-1zM25 23h1v1h-1zM27 23h4v1h-4zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h3v1h-3zM12 24h1v1h-1zM17 24h2v1h-2zM20 24h1v1h-1zM22 24h8v1h-8zM32 24h1v1h-1zM8 25h2v1h-2zM16 25h7v1h-7zM24 25h1v1h-1zM28 25h1v1h-1zM30 25h1v1h-1zM32 25h1v1h-1zM0 26h7v1h-7zM8 26h1v1h-1zM10 26h3v1h-3zM15 26h3v1h-3zM20 26h1v1h-1zM23 26h2v1h-2zM26 26h1v1h-1zM28 26h1v1h-1zM30 26h2v1h-2zM0 27h1v1h-1zM6 27h1v1h-1zM10 27h2v1h-2zM18 27h1v1h-1zM20 27h5v1h-5zM28 27h4v1h-4zM0 28h1v1h-1zM2 28h3v1h-3zM6 28h1v1h-1zM8 28h1v1h-1zM11 28h1v1h-1zM17 28h1v1h-1zM24 28h5v1h-5zM0 29h1v1h-1zM2 29h3v1h-3zM6 29h1v1h-1zM8 29h3v1h-3zM12 29h2v1h-2zM16 29h1v1h-1zM19 29h2v1h-2zM23 29h1v1h-1zM28 29h2v1h-2zM0 30h1v1h-1zM2 30h3v1h-3zM6 30h1v1h-1zM8 30h3v1h-3zM13 30h4v1h-4zM18 30h1v1h-1zM22 30h1v1h-1zM24 30h1v1h-1zM26 30h1v1h-1zM30 30h2v1h-2zM0 31h1v1h-1zM6 31h1v1h-1zM8 31h2v1h-2zM12 31h2v1h-2zM16 31h1v1h-1zM18 31h1v1h-1zM20 31h3v1h-3zM25 31h2v1h-2zM29 31h2v1h-2zM0 32h7v1h-7zM8 32h1v1h-1zM10 32h1v1h-1zM12 32h1v1h-1zM14 32h1v1h-1zM17 32h1v1h-1zM22 32h3v1h-3zM26 32h2v1h-2zM31 32h1v1h-1z"/></g></svg><figcaption>Google Play</figcaption></figure></div></li>
+        <li class="rv"><div class="pmain"><p class="pn">Omry</p><p class="ps">犬猫の記録手帳</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6781990488" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a></p></div><div class="pqr" aria-hidden="true"><figure><svg class="qr" viewBox="0 0 33 33" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR"><rect width="33" height="33" fill="#fff"/><g transform="translate(2 2)" fill="#2C2C2A"><path d="M0 0h7v1h-7zM10 0h1v1h-1zM13 0h1v1h-1zM15 0h6v1h-6zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM10 1h1v1h-1zM15 1h1v1h-1zM18 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM10 2h3v1h-3zM14 2h1v1h-1zM16 2h2v1h-2zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM10 3h1v1h-1zM12 3h1v1h-1zM15 3h2v1h-2zM18 3h1v1h-1zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM10 4h3v1h-3zM15 4h1v1h-1zM17 4h2v1h-2zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h2v1h-2zM11 5h5v1h-5zM17 5h1v1h-1zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM9 7h1v1h-1zM11 7h2v1h-2zM14 7h4v1h-4zM19 7h2v1h-2zM0 8h1v1h-1zM3 8h1v1h-1zM5 8h2v1h-2zM8 8h3v1h-3zM12 8h2v1h-2zM15 8h1v1h-1zM19 8h1v1h-1zM21 8h1v1h-1zM23 8h1v1h-1zM3 9h2v1h-2zM7 9h3v1h-3zM11 9h4v1h-4zM17 9h2v1h-2zM20 9h4v1h-4zM25 9h1v1h-1zM28 9h1v1h-1zM2 10h2v1h-2zM5 10h2v1h-2zM8 10h2v1h-2zM13 10h2v1h-2zM16 10h1v1h-1zM18 10h2v1h-2zM21 10h3v1h-3zM25 10h3v1h-3zM1 11h1v1h-1zM3 11h2v1h-2zM7 11h1v1h-1zM9 11h1v1h-1zM12 11h3v1h-3zM16 11h1v1h-1zM20 11h3v1h-3zM26 11h2v1h-2zM0 12h1v1h-1zM2 12h3v1h-3zM6 12h1v1h-1zM8 12h4v1h-4zM13 12h2v1h-2zM17 12h2v1h-2zM20 12h4v1h-4zM25 12h1v1h-1zM27 12h2v1h-2zM0 13h1v1h-1zM2 13h1v1h-1zM4 13h2v1h-2zM7 13h1v1h-1zM9 13h1v1h-1zM11 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM19 13h3v1h-3zM3 14h6v1h-6zM10 14h1v1h-1zM14 14h1v1h-1zM16 14h1v1h-1zM22 14h7v1h-7zM0 15h3v1h-3zM8 15h3v1h-3zM12 15h2v1h-2zM16 15h3v1h-3zM20 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM27 15h1v1h-1zM1 16h1v1h-1zM6 16h1v1h-1zM9 16h1v1h-1zM14 16h1v1h-1zM16 16h2v1h-2zM20 16h2v1h-2zM23 16h1v1h-1zM27 16h1v1h-1zM3 17h1v1h-1zM5 17h1v1h-1zM9 17h4v1h-4zM20 17h1v1h-1zM22 17h2v1h-2zM25 17h1v1h-1zM28 17h1v1h-1zM0 18h1v1h-1zM3 18h4v1h-4zM8 18h2v1h-2zM11 18h2v1h-2zM14 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM22 18h1v1h-1zM24 18h1v1h-1zM27 18h2v1h-2zM5 19h1v1h-1zM7 19h4v1h-4zM12 19h1v1h-1zM15 19h1v1h-1zM17 19h2v1h-2zM20 19h4v1h-4zM27 19h2v1h-2zM0 20h1v1h-1zM2 20h2v1h-2zM6 20h1v1h-1zM9 20h1v1h-1zM11 20h1v1h-1zM13 20h1v1h-1zM16 20h1v1h-1zM20 20h5v1h-5zM26 20h1v1h-1zM8 21h2v1h-2zM11 21h2v1h-2zM14 21h1v1h-1zM16 21h5v1h-5zM24 21h1v1h-1zM26 21h3v1h-3zM0 22h7v1h-7zM9 22h2v1h-2zM13 22h2v1h-2zM16 22h1v1h-1zM18 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM11 23h1v1h-1zM13 23h3v1h-3zM20 23h1v1h-1zM24 23h5v1h-5zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM10 24h3v1h-3zM14 24h4v1h-4zM20 24h5v1h-5zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h3v1h-3zM12 25h2v1h-2zM17 25h2v1h-2zM22 25h1v1h-1zM24 25h4v1h-4zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM12 26h1v1h-1zM14 26h1v1h-1zM17 26h5v1h-5zM24 26h3v1h-3zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM10 27h1v1h-1zM14 27h1v1h-1zM16 27h2v1h-2zM19 27h3v1h-3zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h3v1h-3zM13 28h3v1h-3zM17 28h2v1h-2zM20 28h1v1h-1zM24 28h2v1h-2zM27 28h1v1h-1z"/></g></svg><figcaption>App Store</figcaption></figure></div></li>
+        <li class="rv"><div class="pmain"><p class="pn">カベメーター</p><p class="ps">扶養の壁を1つの数字で</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6786967194" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a></p></div><div class="pqr" aria-hidden="true"><figure><svg class="qr" viewBox="0 0 33 33" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR"><rect width="33" height="33" fill="#fff"/><g transform="translate(2 2)" fill="#2C2C2A"><path d="M0 0h7v1h-7zM11 0h3v1h-3zM15 0h6v1h-6zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM11 1h1v1h-1zM15 1h2v1h-2zM18 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM12 2h1v1h-1zM14 2h2v1h-2zM17 2h1v1h-1zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM9 3h1v1h-1zM15 3h2v1h-2zM18 3h1v1h-1zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM11 4h1v1h-1zM13 4h1v1h-1zM15 4h1v1h-1zM17 4h2v1h-2zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM12 5h1v1h-1zM15 5h1v1h-1zM17 5h1v1h-1zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM9 7h2v1h-2zM12 7h1v1h-1zM15 7h3v1h-3zM19 7h2v1h-2zM0 8h1v1h-1zM3 8h1v1h-1zM5 8h2v1h-2zM8 8h4v1h-4zM13 8h1v1h-1zM15 8h1v1h-1zM19 8h1v1h-1zM21 8h1v1h-1zM23 8h1v1h-1zM0 9h3v1h-3zM4 9h1v1h-1zM8 9h2v1h-2zM13 9h2v1h-2zM17 9h2v1h-2zM20 9h4v1h-4zM25 9h1v1h-1zM28 9h1v1h-1zM1 10h3v1h-3zM5 10h2v1h-2zM8 10h1v1h-1zM10 10h2v1h-2zM16 10h1v1h-1zM18 10h2v1h-2zM21 10h3v1h-3zM25 10h3v1h-3zM2 11h1v1h-1zM5 11h1v1h-1zM7 11h1v1h-1zM9 11h1v1h-1zM12 11h2v1h-2zM16 11h1v1h-1zM20 11h3v1h-3zM26 11h2v1h-2zM1 12h2v1h-2zM6 12h2v1h-2zM9 12h1v1h-1zM11 12h4v1h-4zM17 12h2v1h-2zM20 12h4v1h-4zM25 12h1v1h-1zM27 12h2v1h-2zM4 13h1v1h-1zM10 13h1v1h-1zM12 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM19 13h3v1h-3zM1 14h3v1h-3zM6 14h1v1h-1zM9 14h1v1h-1zM11 14h2v1h-2zM16 14h1v1h-1zM22 14h7v1h-7zM0 15h2v1h-2zM3 15h1v1h-1zM5 15h1v1h-1zM8 15h1v1h-1zM13 15h2v1h-2zM16 15h3v1h-3zM20 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM27 15h1v1h-1zM0 16h1v1h-1zM2 16h3v1h-3zM6 16h2v1h-2zM9 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM16 16h2v1h-2zM20 16h2v1h-2zM23 16h1v1h-1zM27 16h1v1h-1zM2 17h1v1h-1zM8 17h3v1h-3zM20 17h1v1h-1zM22 17h2v1h-2zM25 17h1v1h-1zM28 17h1v1h-1zM0 18h1v1h-1zM2 18h1v1h-1zM4 18h1v1h-1zM6 18h2v1h-2zM9 18h1v1h-1zM12 18h1v1h-1zM14 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM22 18h1v1h-1zM24 18h1v1h-1zM27 18h2v1h-2zM4 19h2v1h-2zM11 19h1v1h-1zM14 19h2v1h-2zM17 19h2v1h-2zM20 19h4v1h-4zM27 19h2v1h-2zM0 20h1v1h-1zM3 20h2v1h-2zM6 20h1v1h-1zM8 20h4v1h-4zM13 20h1v1h-1zM16 20h1v1h-1zM20 20h5v1h-5zM26 20h1v1h-1zM8 21h2v1h-2zM12 21h3v1h-3zM16 21h5v1h-5zM24 21h1v1h-1zM26 21h3v1h-3zM0 22h7v1h-7zM9 22h2v1h-2zM13 22h1v1h-1zM16 22h1v1h-1zM18 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h2v1h-2zM11 23h1v1h-1zM13 23h3v1h-3zM20 23h1v1h-1zM24 23h5v1h-5zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM9 24h4v1h-4zM14 24h4v1h-4zM20 24h5v1h-5zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM17 25h2v1h-2zM22 25h1v1h-1zM24 25h4v1h-4zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM11 26h2v1h-2zM14 26h1v1h-1zM17 26h5v1h-5zM24 26h3v1h-3zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h2v1h-2zM12 27h1v1h-1zM14 27h1v1h-1zM16 27h2v1h-2zM19 27h3v1h-3zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h3v1h-3zM12 28h1v1h-1zM14 28h2v1h-2zM17 28h2v1h-2zM20 28h1v1h-1zM24 28h2v1h-2zM27 28h1v1h-1z"/></g></svg><figcaption>App Store</figcaption></figure></div></li>
+        <li class="rv"><div class="pmain"><p class="pn">余白と、あじ。</p><p class="ps">手書きフォントの作成・販売</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6789184486" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a></p></div><div class="pqr" aria-hidden="true"><figure><svg class="qr" viewBox="0 0 33 33" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QR"><rect width="33" height="33" fill="#fff"/><g transform="translate(2 2)" fill="#2C2C2A"><path d="M0 0h7v1h-7zM9 0h1v1h-1zM12 0h1v1h-1zM15 0h6v1h-6zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM10 1h1v1h-1zM12 1h1v1h-1zM15 1h1v1h-1zM18 1h1v1h-1zM20 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM9 2h1v1h-1zM11 2h1v1h-1zM14 2h1v1h-1zM16 2h2v1h-2zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM9 3h3v1h-3zM16 3h1v1h-1zM18 3h1v1h-1zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM12 4h1v1h-1zM15 4h1v1h-1zM17 4h2v1h-2zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h4v1h-4zM13 5h3v1h-3zM17 5h1v1h-1zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM10 7h1v1h-1zM12 7h1v1h-1zM15 7h3v1h-3zM19 7h2v1h-2zM0 8h1v1h-1zM3 8h1v1h-1zM5 8h2v1h-2zM8 8h1v1h-1zM10 8h4v1h-4zM15 8h1v1h-1zM19 8h1v1h-1zM21 8h1v1h-1zM23 8h1v1h-1zM2 9h1v1h-1zM4 9h1v1h-1zM10 9h5v1h-5zM17 9h2v1h-2zM20 9h4v1h-4zM25 9h1v1h-1zM28 9h1v1h-1zM0 10h2v1h-2zM4 10h1v1h-1zM6 10h2v1h-2zM9 10h1v1h-1zM11 10h1v1h-1zM13 10h1v1h-1zM16 10h1v1h-1zM18 10h2v1h-2zM21 10h3v1h-3zM25 10h3v1h-3zM0 11h2v1h-2zM3 11h1v1h-1zM8 11h3v1h-3zM13 11h2v1h-2zM16 11h1v1h-1zM20 11h3v1h-3zM26 11h2v1h-2zM0 12h1v1h-1zM5 12h2v1h-2zM8 12h1v1h-1zM12 12h3v1h-3zM17 12h2v1h-2zM20 12h4v1h-4zM25 12h1v1h-1zM27 12h2v1h-2zM0 13h2v1h-2zM4 13h2v1h-2zM12 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM19 13h3v1h-3zM0 14h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM10 14h1v1h-1zM14 14h1v1h-1zM16 14h1v1h-1zM22 14h7v1h-7zM1 15h4v1h-4zM7 15h2v1h-2zM11 15h3v1h-3zM16 15h3v1h-3zM20 15h1v1h-1zM23 15h1v1h-1zM25 15h1v1h-1zM27 15h1v1h-1zM1 16h6v1h-6zM11 16h2v1h-2zM14 16h1v1h-1zM16 16h2v1h-2zM20 16h2v1h-2zM23 16h1v1h-1zM27 16h1v1h-1zM1 17h2v1h-2zM8 17h1v1h-1zM11 17h2v1h-2zM20 17h1v1h-1zM22 17h2v1h-2zM25 17h1v1h-1zM28 17h1v1h-1zM0 18h1v1h-1zM3 18h1v1h-1zM6 18h1v1h-1zM9 18h2v1h-2zM12 18h1v1h-1zM14 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM22 18h1v1h-1zM24 18h1v1h-1zM27 18h2v1h-2zM10 19h1v1h-1zM15 19h1v1h-1zM17 19h2v1h-2zM20 19h4v1h-4zM27 19h2v1h-2zM0 20h1v1h-1zM4 20h3v1h-3zM8 20h3v1h-3zM12 20h2v1h-2zM16 20h1v1h-1zM20 20h5v1h-5zM26 20h1v1h-1zM8 21h1v1h-1zM11 21h1v1h-1zM13 21h2v1h-2zM16 21h5v1h-5zM24 21h1v1h-1zM26 21h3v1h-3zM0 22h7v1h-7zM11 22h1v1h-1zM16 22h1v1h-1zM18 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h6v1h-6zM20 23h1v1h-1zM24 23h5v1h-5zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM10 24h3v1h-3zM14 24h4v1h-4zM20 24h5v1h-5zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h2v1h-2zM11 25h1v1h-1zM13 25h1v1h-1zM17 25h2v1h-2zM22 25h1v1h-1zM24 25h4v1h-4zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM12 26h3v1h-3zM17 26h5v1h-5zM24 26h3v1h-3zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM16 27h2v1h-2zM19 27h3v1h-3zM27 27h1v1h-1zM0 28h7v1h-7zM8 28h1v1h-1zM10 28h1v1h-1zM13 28h1v1h-1zM15 28h1v1h-1zM17 28h2v1h-2zM20 28h1v1h-1zM24 28h2v1h-2zM27 28h1v1h-1z"/></g></svg><figcaption>App Store</figcaption></figure></div></li>
       </ul>
+      <p class="fontnote rv">サイトのなかで使っているこの書体は、「余白と、あじ。」でつくった私の手書き文字です</p>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section class="contact">
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
   <div class="wrap grid2">
     <p class="vhead">ご相談</p>
     <div>
       <p class="msg rv">「これはアプリで解決することなのか」<br>という段階のご相談で構いません。</p>
-      <p class="sub rv">作らないほうがいい、というお返事をすることもあります。まずは現場を見せてください。</p>
+      <p class="sub rv">作らないほうがいい、というお返事をすることもあります。まずは現場を見せてください。tapuda の法人導入についてのお問い合わせも、同じ窓口で承ります。</p>
       <dl>
         <dt>TEL</dt><dd><a href="tel:08062061245">080-6206-1245</a></dd>
-        <dt>MAIL</dt><dd><a href="mailto:sakamotoyuki.develop@gmail.com">sakamotoyuki.develop@gmail.com</a></dd>
+        <dt>MAIL</dt><dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
       </dl>
     </div>
   </div>
@@ -368,18 +557,337 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
 <footer><div class="wrap">© 長谷川 侑希</div></footer>
 
 <script>
+/* ==================================================================
+   1. コンテンツ
+   円の中は「見出し＋1文」を基本とする。一覧を置く枚は4行までに抑える。
+   並びは tapuda を先頭に寄せ、受託をその後ろに置いている。
+================================================================== */
+const ITEMS = [
+ {no:'01', key:'ABOUT', short:'私のこと',
+  title:'姫路で、<br>アプリをつくっています',
+  body:'自分のサービスを出しながら、現場のための業務アプリを受託でつくっています。どちらも一人です。'},
+
+ /* ---- tapuda（一番の推し） ---- */
+ {no:'02', key:'TAPUDA', short:'tapuda',
+  title:'かざすと、<br>名刺が渡せる。',
+  body:'スマートフォンに近づけるだけで、あなたのページが開くNFCカード。自分でつくって運営しています。',
+  cta:[{label:'tapuda を見る', href:'https://tapuda.app/', fill:true, ext:true}]},
+
+ {no:'03', key:'NO APP', short:'アプリ不要',
+  title:'相手のスマホには<br>何も入りません',
+  lst:[{n:'かざすだけ', s:'近づけるだけで開く'},
+       {n:'ブラウザだけ', s:'アプリも登録も不要'},
+       {n:'あとから直せる', s:'配ったカードはそのまま'},
+       {n:'法人はまとめて', s:'辞めるときに失効できる'}],
+  cta:[{label:'くわしく', href:'#tapuda'}]},
+
+ /* ---- 受託 ---- */
+ {no:'04', key:'CONTRACT', short:'受託',
+  title:'PCを使わない<br>現場のために',
+  body:'紙やExcelでの記録作業を、現場のスマートフォンで完結させます。'},
+
+ {no:'05', key:'CHANGE', short:'変わること',
+  title:'紙から、<br>手元のスマホへ',
+  ba:{before:['現場で紙に書く','事務所に持ち帰る','Excelに打ち直す','記入漏れに後から気づく'],
+      after:['その場で入力して終わり','打ち直しが要らない','集計まで自動','未入力はその場で分かる']}},
+
+ {no:'06', key:'FREE', short:'まず無償で',
+  title:'まず2週間、<br><em>動くものを無償で</em><br>おつくりします。',
+  body:'お見積りだけでは判断のしようがないと思います。現場で使ってから決めてください。',
+  cta:[{label:'進め方を見る', href:'#process'}]},
+
+ {no:'07', key:'WORKS', short:'これまで',
+  title:'これまでの仕事',
+  lst:[{n:'食品商社グループ', s:'製造記録アプリ（iPad）'},
+       {n:'大手銀行', s:'公式スマホアプリ'},
+       {n:'大手家電量販店', s:'公式スマホアプリ'},
+       {n:'公共インフラ企業', s:'待ち番号表示システム'}],
+  body:'受託開発会社に所属していた期間の担当分。企業名は伏せています。',
+  cta:[{label:'詳しく見る', href:'#works'}]},
+
+ {no:'08', key:'CONTACT', short:'ご相談',
+  title:'自分のサービスも受託も、<br>同じ手でつくっています。',
+  body:'「これはアプリで解決することなのか」という段階のご相談で構いません。',
+  cta:[{label:'ご相談する', href:'#contact', fill:true}]}
+];
+const N = ITEMS.length;
+
+const track=document.getElementById('track'),
+      orbit=document.getElementById('orbit'),   big=document.getElementById('big'),
+      bigwrap=document.getElementById('bigwrap'), ring=document.getElementById('ring'),
+      spoke=document.getElementById('spoke'),   slot=document.getElementById('slot'),
+      prog=document.getElementById('prog'),     fallback=document.getElementById('fallback'),
+      tbn=document.getElementById('tbn'), tbl=document.getElementById('tbl'),
+      omn=document.getElementById('omn'), oml=document.getElementById('oml');
+
+/* ==================================================================
+   2. DOM 生成
+================================================================== */
+function plain(s){ return s.replace(/<br>/g,'').replace(/<\/?em>/g,''); }
+
+function lstHtml(lst){
+  return '<ul class="lst">' + lst.map(function(x){
+    var inner = '<span class="n">'+x.n+'</span><span class="s">'+x.s+'</span>';
+    return '<li>' + (x.href
+      ? '<a href="'+x.href+'" target="_blank" rel="noopener">'+inner+'</a>'
+      : inner) + '</li>';
+  }).join('') + '</ul>';
+}
+function baHtml(ba){
+  return '<div class="lba">'
+    + '<div class="col"><p class="cap">BEFORE</p><ul>'
+    + ba.before.map(function(t){return '<li>'+t+'</li>';}).join('') + '</ul></div>'
+    + '<div class="sep" aria-hidden="true"></div>'
+    + '<div class="col aft"><p class="cap">AFTER</p><ul>'
+    + ba.after.map(function(t){return '<li>'+t+'</li>';}).join('') + '</ul></div>'
+    + '</div>';
+}
+function ctaHtml(list){
+  return '<div class="lb">' + list.map(function(c){
+    return '<a class="btn'+(c.fill?' fill':'')+'" href="'+c.href+'"'
+         + (c.ext?' target="_blank" rel="noopener"':'') + '>'+c.label+'</a>';
+  }).join('') + '</div>';
+}
+function bodyHtml(it){
+  return (it.ba  ? baHtml(it.ba)   : '')
+       + (it.lst ? lstHtml(it.lst) : '')
+       + (it.body? '<p class="lp">'+it.body+'</p>' : '')
+       + (it.cta ? ctaHtml(it.cta) : '');
+}
+
+const minis=[], layers=[];
+ITEMS.forEach(function(it,i){
+  var m=document.createElement('button');
+  m.className='mini'; m.type='button';
+  m.setAttribute('aria-label', it.no+' '+plain(it.title));
+  m.innerHTML='<span class="mn">'+it.no+'</span><span class="ml">'+it.short+'</span>';
+  m.addEventListener('click', function(){ snapTo(i); });
+  orbit.appendChild(m); minis.push(m);
+
+  var l=document.createElement('div');
+  l.className='layer';
+  l.innerHTML='<div class="lk">'+it.no+' &nbsp;'+it.key+'</div>'
+            + '<div class="lt">'+it.title+'</div>'
+            + bodyHtml(it);
+  bigwrap.appendChild(l); layers.push(l);
+
+  prog.appendChild(document.createElement('i'));
+
+  var f=document.createElement('section');
+  f.className='fb';
+  f.innerHTML='<p class="lk">'+it.no+' &nbsp;'+it.key+'</p>'
+            + '<h2 class="lt">'+it.title+'</h2>'
+            + bodyHtml(it);
+  fallback.appendChild(f);
+});
+const progEls=[].slice.call(prog.children);
+
+/* ==================================================================
+   3. レイアウト
+   ここが移植でいちばん壊れやすい。数値は変更しないこと。
+================================================================== */
+let CX=0, CY=0, R=0, BD=0, SD=0, A0=0;
+
+function layout(){
+  const vw=window.innerWidth, vh=window.innerHeight, sp=vw<=680;
+  document.body.dataset.lay = sp ? 'sp' : 'pc';
+
+  if(sp){
+    /* SP：大円を画面幅より大きくして左上へはみ出させる。
+       小円は 右 → 右下 → 左下 のアークを通り、起点は大円の右下(55°)。
+       同時に見えるのは3つ前後。残りが画面外にあるのは正しい状態。 */
+    BD = Math.min(vw*1.22, vh*0.70);
+    CX = vw*0.26;  CY = vh*0.31;
+    SD = Math.max(58, vw*0.20);
+    R  = BD/2 + SD/2 + vw*0.055;
+    A0 = 55 * Math.PI/180;
+  }else{
+    /* PC：大円を左中央へはみ出させる。横長なので上寄せにすると下半分が死ぬ。
+       小円は 右上 → 右 → 右下 の縦アークを通り、起点はほぼ真横(14°)。 */
+    BD = Math.min(vh*1.16, vw*0.72);
+    CX = vw*0.22;  CY = vh*0.50;
+    SD = Math.max(64, Math.min(112, Math.min(vw,vh)*0.135));
+    R  = BD/2 + SD/2 + Math.min(vw,vh)*0.05;
+    A0 = 14 * Math.PI/180;
+  }
+
+  big.style.width = big.style.height = BD+'px';
+  big.style.left  = (CX-BD/2)+'px';
+  big.style.top   = (CY-BD/2)+'px';
+
+  ring.style.width = ring.style.height = (R*2)+'px';
+  ring.style.left  = (CX-R)+'px';
+  ring.style.top   = (CY-R)+'px';
+
+  spoke.style.width = R+'px';
+  spoke.style.left  = CX+'px';
+  spoke.style.top   = CY+'px';
+  spoke.style.transform = 'rotate('+A0+'rad)';
+
+  const sw = SD*1.40;
+  slot.style.width = slot.style.height = sw+'px';
+  slot.style.left  = (CX + Math.cos(A0)*R - sw/2)+'px';
+  slot.style.top   = (CY + Math.sin(A0)*R - sw/2)+'px';
+
+  /* --- 大円の中身：左上寄せ ---------------------------------------
+     中央に置くと内接正方形(直径の0.707倍)しか使えず幅が足りない。
+     ブロックの上端を中心より上にずらし、その高さの半弦 √(r²-dy²) から
+     使える幅を出す。円の左側は画面外なので、画面左端まで円の内側。
+     結果、中央置きより3割以上広い幅が取れる。
+     右下に残る大きな余白は意図的。埋めないこと。 */
+  const r     = BD/2;
+  const dyTop = -BD * (sp ? 0.26 : 0.28);
+  const half  = Math.sqrt(Math.max(1, r*r - dyTop*dyTop));
+  const inset = BD * 0.05;
+  const vpad  = vw * (sp ? 0.05 : 0.045);
+  const left  = Math.max(vpad,      CX - half + inset);
+  const right = Math.min(vw - vpad, CX + half - inset);
+  const W     = Math.min(right - left, 540);
+
+  bigwrap.style.width = W+'px';
+  bigwrap.style.left  = left+'px';
+  bigwrap.style.top   = (CY + dyTop)+'px';
+
+  /* 文字サイズはブロック幅ではなく円の直径に追従させる。
+     幅基準にすると、上の計算で幅が広がったとき見出しが過大になる。
+     明朝は同じ px でもゴシックより大きく見えるため、上限で抑えている。 */
+  bigwrap.style.setProperty('--t', Math.max(19, Math.min(48, BD*0.052))+'px');
+  bigwrap.style.setProperty('--b', Math.max(12, Math.min(16, BD*0.028))+'px');
+  bigwrap.style.setProperty('--l', Math.max(11, Math.min(14, BD*0.024))+'px');
+  bigwrap.style.setProperty('--k', Math.max(9,  Math.min(11, BD*0.019))+'px');
+  bigwrap.style.setProperty('--g', Math.max(8,  Math.min(20, BD*0.022))+'px');
+  layers.forEach(function(l){ l.style.width = W+'px'; });
+
+  minis.forEach(function(m){
+    m.style.width = m.style.height = SD+'px';
+    /* 位置は left/top ではなく transform で動かす。ここは中心に置くだけ。 */
+    m.style.left = (CX-SD/2)+'px';
+    m.style.top  = (CY-SD/2)+'px';
+    m.style.setProperty('--mn', Math.max(9, SD*0.20)+'px');
+    m.style.setProperty('--ml', Math.max(8, SD*0.125)+'px');
+  });
+
+  track.style.height = ((N-1)*vh*0.8 + vh)+'px';
+  read(); render();
+}
+
+/* ==================================================================
+   4. スクロール → 回転、および吸着
+================================================================== */
+const SNAP = {idle:3, dur:290, stop:1.4};
+let target=0, cur=0, snapping=false, needSnap=false, idle=0, prevY=0;
+
+function range(){ return Math.max(1, track.offsetHeight - window.innerHeight); }
+function posOf(i){ return Math.round(track.offsetTop + range()*i/(N-1)); }
+
+/* 【必須】吸着はオービット区間の内側でだけ動かす。
+   ページ全体で有効にすると、区間の入口で下へ引きずり込まれ、
+   出ようとすると引き戻される。 */
+function inZone(){
+  const y = window.scrollY;
+  return y > track.offsetTop - 6 && y < track.offsetTop + range() + 6;
+}
+
+function read(){
+  target = Math.min(N-1, Math.max(0,
+    (window.scrollY - track.offsetTop) / range() * (N-1)));
+}
+function onScroll(){ read(); needSnap = true; }
+
+function snapTo(i){
+  i = Math.min(N-1, Math.max(0, i));
+  needSnap = false; idle = 0;
+  const from = window.scrollY, dif = posOf(i) - from;
+  if(Math.abs(dif) < 1.5) return;
+  const dur = 110 + SNAP.dur * Math.min(1, Math.abs(dif)/(range()/(N-1)));
+  const t0 = performance.now();
+  snapping = true;
+  (function anim(now){
+    if(!snapping) return;               // 途中でキャンセルされたら止める
+    const p = Math.min(1, (now-t0)/dur);
+    window.scrollTo(0, from + dif * (1 - Math.pow(1-p, 3)));   // easeOutCubic
+    if(p < 1) requestAnimationFrame(anim);
+    else { snapping = false; prevY = window.scrollY; }
+  })(t0);
+}
+
+/* 【必須】wheel を無条件にキャンセル扱いしないこと。
+   慣性スクロールの余韻も wheel を鳴らすため、始まった吸着が
+   自分の惰性で即座に打ち消される。一定以上の入力だけを操作とみなす。 */
+window.addEventListener('wheel', function(e){ if(Math.abs(e.deltaY) > 6) snapping = false; }, {passive:true});
+window.addEventListener('touchstart', function(){ snapping = false; }, {passive:true});
+window.addEventListener('keydown',    function(){ snapping = false; });
+
+/* ==================================================================
+   5. 描画
+================================================================== */
+function render(){
+  const step = (Math.PI*2)/N;
+  minis.forEach(function(m,i){
+    const d = i - cur, th = A0 + d*step, ad = Math.abs(d);
+    /* 位置は transform のみで更新する（left/top を毎フレーム書き換えない） */
+    m.style.transform = 'translate('+(Math.cos(th)*R)+'px,'+(Math.sin(th)*R)+'px) '
+                      + 'scale('+(1 + Math.max(0,1-ad)*0.15)+')';
+    m.style.opacity = 0.34 + Math.max(0, 1-ad*0.5)*0.66;
+    m.classList.toggle('on', ad < 0.5);
+  });
+  layers.forEach(function(l,i){
+    const o = Math.max(0, 1 - Math.abs(i-cur)*1.5);
+    l.style.opacity = o;
+    /* 非表示の層は display:none にしない（SEO）。クリックだけ無効化する。 */
+    l.style.pointerEvents = o > 0.9 ? 'auto' : 'none';
+  });
+  const act = Math.min(N-1, Math.max(0, Math.round(cur)));
+  tbn.textContent = ITEMS[act].no;  tbl.textContent = ITEMS[act].key;
+  omn.textContent = ITEMS[act].no;  oml.textContent = ITEMS[act].key;
+  progEls.forEach(function(p,i){ p.classList.toggle('on', i===act); });
+}
+
+/* requestAnimationFrame は 1本にまとめる */
+function loop(){
+  const y = window.scrollY;
+  if(!snapping && inZone()){
+    /* 【必須】タイマー(debounce)で待たないこと。
+       慣性スクロール中も scroll は鳴り続けるため、惰性が尽きるまで
+       発動できず体感1秒近く待たされる。毎フレームの移動量＝速度を見て、
+       十分落ちた瞬間に発動する。 */
+    if(Math.abs(y - prevY) < SNAP.stop) idle++; else idle = 0;
+    if(needSnap && idle >= SNAP.idle) snapTo(Math.round(target));
+  }
+  prevY = y;
+
+  cur += (target - cur) * 0.17;                  // 追従の慣性
+  if(Math.abs(target-cur) < 0.0004) cur = target;
+  render();
+  requestAnimationFrame(loop);
+}
+
+/* ==================================================================
+   6. 起動
+================================================================== */
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!reduce){
+  document.body.dataset.orbit = 'on';           // ここで初めてオービットを出す
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', layout);
+  layout(); read(); cur = target; prevY = window.scrollY; loop();
+}
+/* reduce の場合は何もしない → 縦積みのフォールバックがそのまま表示される */
+
+/* ==================================================================
+   7. reveal（オービット外のセクション用）
+================================================================== */
 (function(){
   var els = document.querySelectorAll('.rv');
-  if (!('IntersectionObserver' in window) ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    els.forEach(function(el){ el.classList.add('in'); }); return;
+  if (!('IntersectionObserver' in window) || reduce){
+    [].forEach.call(els, function(el){ el.classList.add('in'); }); return;
   }
   var io = new IntersectionObserver(function(es){
     es.forEach(function(e){
       if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
     });
   }, { rootMargin:'0px 0px -6% 0px' });
-  els.forEach(function(el){ io.observe(el); });
+  [].forEach.call(els, function(el){ io.observe(el); });
 })();
 </script>
 
