@@ -324,7 +324,16 @@ body[data-orbit="on"] #fallback{display:none}
 .contact dd a{color:#fff;text-decoration:none}
 .contact dd a:hover{color:#C9D3E6}
 
-footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
+footer{padding:34px 0 48px;font-size:12.5px;color:var(--hai);line-height:1.9;border-top:1px solid var(--line)}
+footer .info{display:grid;grid-template-columns:auto 1fr;gap:2px 20px;max-width:48em}
+footer .info dt{letter-spacing:.14em;color:#A49E92;white-space:nowrap}
+footer .cr{margin-top:22px;color:#A49E92;letter-spacing:.06em}
+@media (max-width:560px){
+  /* 1カラムに落とす。住所が長いので、項目名の下に送る */
+  footer .info{grid-template-columns:1fr;gap:0}
+  footer .info dt{margin-top:13px;font-size:11px;letter-spacing:.2em}
+  footer .info dt:first-child{margin-top:0}
+}
 
 
 /* ==================================================================
@@ -701,7 +710,10 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
         <dd class="rv">月額5万円です。OSの更新対応、不具合対応、軽微な改修が入ります。長期の縛りはなく、いつでも解約できます。</dd>
 
         <dt class="rv">契約はどのような形になりますか</dt>
-        <dd class="rv">業務委託契約を結びます。ソースコードの納品、検収の条件、保守の範囲を書面にします。インボイス登録番号は見積りのときにお伝えします。</dd>
+        <dd class="rv">業務委託契約を結びます。ソースコードの納品、検収の条件、保守の範囲を書面にします。</dd>
+
+        <dt class="rv">インボイスの登録番号はありますか</dt>
+        <dd class="rv">いまは未登録です。見積りは税込の総額で出します。登録事業者でないと発注できない決まりの会社もあるので、その場合は早めに教えてください。こちらで登録を進めることもできます。</dd>
 
         <dt class="rv">姫路以外でも対応できますか</dt>
         <dd class="rv">現場を直接見るので、日帰りで行ける範囲が基本です。兵庫・大阪・岡山あたり。それ以外はご相談ください。</dd>
@@ -744,10 +756,17 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
 </section>
 
 <footer><div class="wrap">
-  <!-- TODO 事業形態が決まったら、屋号・所在地・インボイス登録番号をここに入れる。
-       法人が発注前に必ず確認する項目で、無いと与信の段階で止まることがある。 -->
-  長谷川 侑希｜兵庫県姫路市｜現場の業務アプリ開発<br>
-  © 長谷川 侑希
+  <!-- 連絡先は #contact にあるので、ここでは繰り返さない。
+       所在地はバーチャルオフィス。「事務所」「本社」とは書かないこと。
+       実際に動いているのは姫路なので、活動拠点を併記して差を説明している。
+       TODO インボイス登録をしたら、ここに <dt>登録番号</dt> を足し、
+       #faq の「いまは未登録です」を書き換えること。 -->
+  <dl class="info">
+    <dt>氏名</dt><dd>長谷川　侑希</dd>
+    <dt>所在地</dt><dd>〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室</dd>
+    <dt>活動拠点</dt><dd>兵庫県姫路市（播磨エリアを中心に現場へ伺います）</dd>
+  </dl>
+  <p class="cr">© 長谷川 侑希</p>
 </div></footer>
 
 <script>
