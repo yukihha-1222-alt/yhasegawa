@@ -417,6 +417,20 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
 </head>
 <body>
 
+<!-- ==================================================================
+     金額を変えるときに触る場所（ここ以外には無い）
+
+       現場診断     15〜25万円      #process の01 / #faq / オービット03
+       プロトタイプ 50〜80万円      #process の02
+       本開発       初期150〜400万円 #process の03
+       保守         月額2〜5万円    #process の03 / #faq
+       ついでに <meta name="description"> と og:description にも入っている
+
+     読み手のために同じ金額を複数回出している（意図的な重複）。
+     1箇所だけ直すと、金額を公開しているページで数字が食い違う。
+     必ず上の全部を直すこと。
+================================================================== -->
+
 <!-- 細いヘッダー。名前と、常設のひとつ目のCTA -->
 <header class="bar">
   <div class="wrap">
@@ -426,7 +440,6 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
 </header>
 
 <!-- ============ オービット（3枚。ここがヒーローを兼ねる） ============ -->
-<!-- 3枚の中身は初期HTMLにも出力している（JS生成だけにするとクロールされない） -->
 <div id="track">
   <div id="stage">
     <div id="ring"></div>
@@ -443,7 +456,43 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
     <div class="omark"><b id="omn">01</b> / 03 <span id="oml">GENBA</span></div>
   </div>
 </div>
-<div id="fallback"></div>
+<!-- ============ オービット3枚の中身（このHTMLが唯一の原本） ============
+     ここがサーバーの返すHTMLに載る実体で、JS はこれを読んで
+     大円と小円を組み立てる。JS が動かない環境ではこのまま縦に並ぶ。
+     文言を直すときは、ここだけを触ること。
+     section.fb を足し引きすれば枚数も変わる（JS は数えている）。 -->
+<div id="fallback">
+  <section class="fb" data-no="01" data-key="GENBA" data-short="現場">
+    <p class="lk">01 &nbsp;GENBA</p>
+    <h1 class="lt">紙の記録を、<br>現場のスマホで<br><em>終わらせる</em>。</h1>
+    <p class="lp">兵庫県姫路市。製造・物流・建設の現場向けの業務アプリを、設計から申請・運用まで一人でつくっています。</p>
+    <div class="lb"><a class="btn" href="#genba">対象の現場を見る</a></div>
+  </section>
+
+  <section class="fb" data-no="02" data-key="CHANGE" data-short="変わること">
+    <p class="lk">02 &nbsp;CHANGE</p>
+    <h2 class="lt">打ち直しが、<br>なくなります</h2>
+    <div class="lba">
+      <div class="col"><p class="cap">BEFORE</p>
+        <ul><li>現場で紙に書く</li><li>事務所に持ち帰る</li><li>Excelに打ち直す</li><li>記入漏れに後から気づく</li></ul>
+      </div>
+      <div class="sep" aria-hidden="true"></div>
+      <div class="col aft"><p class="cap">AFTER</p>
+        <ul><li>その場で入力して終わり</li><li>打ち直しが要らない</li><li>集計まで自動</li><li>未入力はその場で分かる</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="fb" data-no="03" data-key="PRICE" data-short="費用">
+    <p class="lk">03 &nbsp;PRICE</p>
+    <h2 class="lt">現場診断<br>15万円から。</h2>
+    <p class="lp">3段階に分け、それぞれの段階で止められるようにしています。金額は最初から公開しています。</p>
+    <div class="lb">
+      <a class="btn fill" href="#process">進め方と費用</a>
+      <a class="btn" href="#contact">現場を見てもらう</a>
+    </div>
+  </section>
+</div>
 
 <!-- ============ 対象の現場 ============ -->
 <section class="dense" id="genba">
@@ -687,27 +736,13 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
 <script>
 /* ==================================================================
    1. コンテンツ
-   円の中は「見出し＋1文」を基本とする。一覧を置く枚は4行までに抑える。
-   並びは tapuda を先頭に寄せ、受託をその後ろに置いている。
+   中身はこのJSではなく #fallback の HTML が持っている。
+   JS側にも同じ文言を置くと、片方だけ直す事故が必ず起きる。
+   ここは読むだけ。円の中は「見出し＋1文」を基本とし、
+   一覧を置く枚は4行までに抑える。
 ================================================================== */
-const ITEMS = [
- {no:'01', key:'GENBA', short:'現場',
-  title:'紙の記録を、<br>現場のスマホで<br><em>終わらせる</em>。',
-  body:'兵庫県姫路市。製造・物流・建設の現場向けの業務アプリを、設計から申請・運用まで一人でつくっています。',
-  cta:[{label:'対象の現場を見る', href:'#genba'}]},
-
- {no:'02', key:'CHANGE', short:'変わること',
-  title:'打ち直しが、<br>なくなります',
-  ba:{before:['現場で紙に書く','事務所に持ち帰る','Excelに打ち直す','記入漏れに後から気づく'],
-      after:['その場で入力して終わり','打ち直しが要らない','集計まで自動','未入力はその場で分かる']}},
-
- {no:'03', key:'PRICE', short:'費用',
-  title:'現場診断<br>15万円から。',
-  body:'3段階に分け、それぞれの段階で止められるようにしています。金額は最初から公開しています。',
-  cta:[{label:'進め方と費用', href:'#process', fill:true},
-       {label:'現場を見てもらう', href:'#contact'}]}
-];
-const N = ITEMS.length;
+const SRC = [].slice.call(document.querySelectorAll('#fallback .fb'));
+const N = SRC.length;
 
 const track=document.getElementById('track'),
       orbit=document.getElementById('orbit'),   big=document.getElementById('big'),
@@ -719,63 +754,37 @@ const track=document.getElementById('track'),
 
 /* ==================================================================
    2. DOM 生成
+   #fallback の各 section を複製して、大円の中身（.layer）と
+   小円（.mini）を作る。原本はHTML側なので、ここでは文言を持たない。
 ================================================================== */
-function plain(s){ return s.replace(/<br>/g,'').replace(/<\/?em>/g,''); }
-
-function lstHtml(lst){
-  return '<ul class="lst">' + lst.map(function(x){
-    var inner = '<span class="n">'+x.n+'</span><span class="s">'+x.s+'</span>';
-    return '<li>' + (x.href
-      ? '<a href="'+x.href+'" target="_blank" rel="noopener">'+inner+'</a>'
-      : inner) + '</li>';
-  }).join('') + '</ul>';
-}
-function baHtml(ba){
-  return '<div class="lba">'
-    + '<div class="col"><p class="cap">BEFORE</p><ul>'
-    + ba.before.map(function(t){return '<li>'+t+'</li>';}).join('') + '</ul></div>'
-    + '<div class="sep" aria-hidden="true"></div>'
-    + '<div class="col aft"><p class="cap">AFTER</p><ul>'
-    + ba.after.map(function(t){return '<li>'+t+'</li>';}).join('') + '</ul></div>'
-    + '</div>';
-}
-function ctaHtml(list){
-  return '<div class="lb">' + list.map(function(c){
-    return '<a class="btn'+(c.fill?' fill':'')+'" href="'+c.href+'"'
-         + (c.ext?' target="_blank" rel="noopener"':'') + '>'+c.label+'</a>';
-  }).join('') + '</div>';
-}
-function bodyHtml(it){
-  return (it.ba  ? baHtml(it.ba)   : '')
-       + (it.lst ? lstHtml(it.lst) : '')
-       + (it.body? '<p class="lp">'+it.body+'</p>' : '')
-       + (it.cta ? ctaHtml(it.cta) : '');
-}
-
 const minis=[], layers=[];
-ITEMS.forEach(function(it,i){
+SRC.forEach(function(sec,i){
+  const no = sec.dataset.no, key = sec.dataset.key, short = sec.dataset.short;
+  const head = sec.querySelector('.lt');
+
   var m=document.createElement('button');
   m.className='mini'; m.type='button';
-  m.setAttribute('aria-label', it.no+' '+plain(it.title));
-  m.innerHTML='<span class="mn">'+it.no+'</span><span class="ml">'+it.short+'</span>';
+  m.setAttribute('aria-label', no+' '+(head ? head.textContent : key));
+  m.innerHTML='<span class="mn">'+no+'</span><span class="ml">'+short+'</span>';
   m.addEventListener('click', function(){ snapTo(i); });
   orbit.appendChild(m); minis.push(m);
 
+  /* 見出しは h1/h2 のまま複製しないこと。
+     #fallback 側は display:none になるだけでDOMには残るため、
+     同じ見出しが文書内に二重に出る。複製側は div に落とす。 */
+  var c = sec.cloneNode(true);
+  var ch = c.querySelector('.lt');
+  if(ch){
+    var d=document.createElement('div');
+    d.className='lt'; d.innerHTML=ch.innerHTML;
+    ch.parentNode.replaceChild(d,ch);
+  }
   var l=document.createElement('div');
   l.className='layer';
-  l.innerHTML='<div class="lk">'+it.no+' &nbsp;'+it.key+'</div>'
-            + '<div class="lt">'+it.title+'</div>'
-            + bodyHtml(it);
+  l.innerHTML=c.innerHTML;
   bigwrap.appendChild(l); layers.push(l);
 
   prog.appendChild(document.createElement('i'));
-
-  var f=document.createElement('section');
-  f.className='fb';
-  f.innerHTML='<p class="lk">'+it.no+' &nbsp;'+it.key+'</p>'
-            + '<h2 class="lt">'+it.title+'</h2>'
-            + bodyHtml(it);
-  fallback.appendChild(f);
 });
 const progEls=[].slice.call(prog.children);
 
@@ -948,9 +957,10 @@ function render(){
   /* 小円の間隔。2π/N のままだと3枚で120°開き、軌道上に1つしか乗らない。
      枚数から切り離して固定角にする。
      45°（元の8枚と同じ）だと R が vh に対して大きいぶん、隣の円が
-     画面の下に落ちる。32°まで詰めると中央と前後が画面に残る。
+     画面の下に落ちる。PCの初期表示(cur=0)で隣が丸ごと画面に乗る
+     上限が 25.7° なので、そこを取って25°にしている。
      枚数を増減しても、この値は触らなくてよい。 */
-  const step = 32 * Math.PI/180;
+  const step = 25 * Math.PI/180;
   minis.forEach(function(m,i){
     const d = i - cur, th = A0 + d*step, ad = Math.abs(d);
     /* 位置は transform のみで更新する（left/top を毎フレーム書き換えない） */
@@ -971,8 +981,8 @@ function render(){
   /* 番号・見出し・進捗は、実際に枚が変わったときだけ触る */
   const act = Math.min(N-1, Math.max(0, Math.round(cur)));
   if(act !== lastAct){
-    tbn.textContent = ITEMS[act].no;  tbl.textContent = ITEMS[act].key;
-    omn.textContent = ITEMS[act].no;  oml.textContent = ITEMS[act].key;
+    tbn.textContent = SRC[act].dataset.no;  tbl.textContent = SRC[act].dataset.key;
+    omn.textContent = SRC[act].dataset.no;  oml.textContent = SRC[act].dataset.key;
     progEls.forEach(function(p,i){ p.classList.toggle('on', i===act); });
     lastAct = act;
   }
@@ -1055,7 +1065,10 @@ if(!reduce){
 (function(){
   var f = document.getElementById('cform');
   if(!f) return;
-  var TO = 'pokonavi.info@gmail.com';
+  /* 宛先はページ上の mailto リンクが原本。ここに書き写さない。 */
+  var link = document.querySelector('a[href^="mailto:"]');
+  if(!link) return;
+  var TO = link.getAttribute('href').replace(/^mailto:/,'');
   f.addEventListener('submit', function(e){
     e.preventDefault();
     var v = function(n){ var el = f.elements[n]; return el ? el.value.trim() : ''; };
