@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>現場の業務アプリ開発｜長谷川侑希（兵庫県姫路市）</title>
-<meta name="description" content="紙とExcelの記録作業を、現場のスマートフォンで終わらせます。兵庫県姫路市。製造・物流・建設の現場向け業務アプリを、設計から申請・運用まで一人で担当。現場診断15万円から、費用のレンジを公開しています。">
+<meta name="description" content="紙とExcelの記録作業を、現場のスマートフォンで終わらせます。兵庫県姫路市。製造・物流・建設の現場向け業務アプリを、設計から開発、運用まで一人で担当。現場診断10万円から、費用を公開しています。">
 <meta property="og:title" content="現場の業務アプリ開発｜長谷川侑希（兵庫県姫路市）">
-<meta property="og:description" content="紙とExcelの記録作業を、現場のスマートフォンで終わらせます。現場診断15万円から。費用のレンジを公開しています。">
+<meta property="og:description" content="紙とExcelの記録作業を、現場のスマートフォンで終わらせます。現場診断10万円から。費用を公開しています。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yhasegawa.com">
 <meta name="theme-color" content="#E8380D">
@@ -40,7 +40,7 @@
   --pad:clamp(22px,5vw,56px);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}  /* ここに overflow を足さないこと。#stage の sticky が死ぬ */
+html{-webkit-text-size-adjust:100%;scroll-padding-top:84px}  /* .bar の高さ＋余白。バーを変えたらここも */  /* ここに overflow を足さないこと。#stage の sticky が死ぬ */
 body{
   font-family:var(--gothic);color:var(--sumi);background:var(--kami);
   line-height:1.9;font-size:16px;letter-spacing:.02em;overflow-x:hidden;
@@ -328,19 +328,35 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
 
 
 /* ==================================================================
-   細いヘッダー
-   #stage が position:sticky なので、ここを sticky/fixed にすると
-   オービットと重なって競合する。静的に置き、スクロールで流す。
-   常設CTAの代わりに、各セクションの末尾でボタンを繰り返している。
+   細いヘッダー（常時表示）
+   #stage も position:sticky なので、同じ土俵に乗せると競合する。
+   こちらは position:fixed にして流れから完全に抜き、オービットは
+   その下を通す。だから #track の offsetTop は 0 のままで、
+   スクロール量を回転に変換する計算に手を入れなくて済む。
+   背景は半透明＋blur。小円が下を通り抜けるのが見えるのは、
+   隠し損ねではなくそう見せている。
+   【注意】高さを変えたら html の scroll-padding-top も合わせること。
+   合っていないと、ページ内リンクの飛び先がバーの裏に潜る。
 ================================================================== */
-.bar{border-bottom:1px solid var(--line);background:var(--kami);position:relative;z-index:7}
-.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px}
-.bar .who b{display:block;font-family:var(--mincho);font-size:17px;font-weight:600;letter-spacing:.08em;color:var(--sumi)}
-.bar .who span{display:block;font-size:11.5px;letter-spacing:.06em;color:var(--hai);margin-top:3px}
-.bar .btn{white-space:nowrap;flex:none}
+.bar{
+  position:fixed;top:0;left:0;right:0;z-index:20;
+  border-bottom:1px solid var(--line);
+  background:rgba(251,249,244,.86);
+}
+@supports (backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px)){
+  .bar{-webkit-backdrop-filter:blur(12px) saturate(140%);backdrop-filter:blur(12px) saturate(140%)}
+}
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .bar{background:var(--kami)}
+}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px;padding-bottom:12px}
+/* 行の高さを詰める。body の line-height:1.9 のままだとバーが85pxになる */
+.bar .who b{display:block;font-family:var(--mincho);font-size:17px;font-weight:600;letter-spacing:.08em;color:var(--sumi);line-height:1.3}
+.bar .who span{display:block;font-size:11.5px;letter-spacing:.06em;color:var(--hai);margin-top:2px;line-height:1.3}
+.bar .btn{white-space:nowrap;flex:none;padding:9px 16px;line-height:1.5}
 @media (max-width:420px){
   .bar .who span{display:none}
-  .bar .btn{font-size:12px;padding:9px 13px}
+  .bar .btn{font-size:12px;padding:8px 12px}
 }
 
 /* ============ 対象の現場 ============ */
@@ -420,10 +436,10 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
 <!-- ==================================================================
      金額を変えるときに触る場所（ここ以外には無い）
 
-       現場診断     15〜25万円      #process の01 / #faq / オービット03
-       プロトタイプ 50〜80万円      #process の02
-       本開発       初期150〜400万円 #process の03
-       保守         月額2〜5万円    #process の03 / #faq
+       現場診断     10万円          #process の01 / #faq / オービット03
+       プロトタイプ 30万円          #process の02
+       本開発       100〜200万円    #process の03
+       保守         月額5万円       #process の03 / #faq
        ついでに <meta name="description"> と og:description にも入っている
 
      読み手のために同じ金額を複数回出している（意図的な重複）。
@@ -431,7 +447,8 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
      必ず上の全部を直すこと。
 ================================================================== -->
 
-<!-- 細いヘッダー。名前と、常設のひとつ目のCTA -->
+<!-- 細いヘッダー。position:fixed で常時表示。高さを変えるときは
+     CSS の .bar と html の scroll-padding-top をセットで直すこと。 -->
 <header class="bar">
   <div class="wrap">
     <p class="who"><b>長谷川　侑希</b><span>現場の業務アプリ開発｜兵庫県姫路市</span></p>
@@ -464,29 +481,29 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
 <div id="fallback">
   <section class="fb" data-no="01" data-key="GENBA" data-short="現場">
     <p class="lk">01 &nbsp;GENBA</p>
-    <h1 class="lt">紙の記録を、<br>現場のスマホで<br><em>終わらせる</em>。</h1>
-    <p class="lp">兵庫県姫路市。製造・物流・建設の現場向けの業務アプリを、設計から申請・運用まで一人でつくっています。</p>
+    <h1 class="lt">紙の記録を<br>現場のスマホで<br><em>終わらせる</em></h1>
+    <p class="lp">兵庫県姫路市。製造・物流・建設の現場で使う業務アプリをつくっています。設計から開発、運用まで一人で担当します。</p>
     <div class="lb"><a class="btn" href="#genba">対象の現場を見る</a></div>
   </section>
 
   <section class="fb" data-no="02" data-key="CHANGE" data-short="変わること">
     <p class="lk">02 &nbsp;CHANGE</p>
-    <h2 class="lt">打ち直しが、<br>なくなります</h2>
+    <h2 class="lt">事務所での打ち直しが<br>なくなります</h2>
     <div class="lba">
       <div class="col"><p class="cap">BEFORE</p>
-        <ul><li>現場で紙に書く</li><li>事務所に持ち帰る</li><li>Excelに打ち直す</li><li>記入漏れに後から気づく</li></ul>
+        <ul><li>現場で紙に書く</li><li>事務所へ持ち帰る</li><li>Excelに打ち直す</li><li>記入漏れは翌日わかる</li></ul>
       </div>
       <div class="sep" aria-hidden="true"></div>
       <div class="col aft"><p class="cap">AFTER</p>
-        <ul><li>その場で入力して終わり</li><li>打ち直しが要らない</li><li>集計まで自動</li><li>未入力はその場で分かる</li></ul>
+        <ul><li>その場で入力する</li><li>持ち帰るものがない</li><li>打ち直しがない</li><li>未入力はその場で出る</li></ul>
       </div>
     </div>
   </section>
 
   <section class="fb" data-no="03" data-key="PRICE" data-short="費用">
     <p class="lk">03 &nbsp;PRICE</p>
-    <h2 class="lt">現場診断<br>15万円から。</h2>
-    <p class="lp">3段階に分け、それぞれの段階で止められるようにしています。金額は最初から公開しています。</p>
+    <h2 class="lt">現場診断<br>10万円から</h2>
+    <p class="lp">3段階に分けています。どこでも止められます。金額は先に出します。</p>
     <div class="lb">
       <a class="btn fill" href="#process">進め方と費用</a>
       <a class="btn" href="#contact">現場を見てもらう</a>
@@ -499,26 +516,26 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
   <div class="wrap grid2">
     <p class="vhead">こういう現場の話です</p>
     <div>
-      <p class="lead rv">パソコンの前に座らない人たちの、<br>記録の話です。</p>
-      <p class="lead-sub rv">事務所のシステムは、たいてい足りています。足りていないのは、現場で紙に書いて、あとから誰かが打ち直している部分です。そこだけを、現場の手元で終わらせます。</p>
+      <p class="lead rv">パソコンの前に座らない人が<br>書く記録の話です。</p>
+      <p class="lead-sub rv">事務所のシステムはたいてい足りています。足りないのは現場です。紙に書いて、あとから誰かが打ち直している。その部分だけを現場の手元で終わらせます。</p>
       <ul class="cases">
         <li class="rv">
           <span class="ct">製造</span>
           <span class="cb">製造記録・検査記録</span>
-          <span class="cd">帳票に手書きし、事務所でExcelに転記。記入漏れは翌日以降に見つかり、誰に聞いても覚えていない。</span>
+          <span class="cd">帳票に手書きして、事務所でExcelに転記。記入漏れが見つかるのは翌日以降。もう誰も覚えていない。</span>
         </li>
         <li class="rv">
           <span class="ct">物流・配送</span>
           <span class="cb">積込記録・配送日報</span>
-          <span class="cd">ドライバーが紙で提出し、事務が集計する。戻ってくるまで何が起きたか分からない。</span>
+          <span class="cd">ドライバーが紙で出して、事務所で集計。帰ってくるまで現場で何があったか分からない。</span>
         </li>
         <li class="rv">
           <span class="ct">建設・保守</span>
           <span class="cb">点検記録・作業報告</span>
-          <span class="cd">現場で写真を撮り、帰ってから報告書に貼り直す。写真とどの現場かの紐付けを手でやっている。</span>
+          <span class="cd">現場で写真を撮って、戻ってから報告書に貼る。どの写真がどの現場かは、記憶を頼りに合わせている。</span>
         </li>
       </ul>
-      <p class="note rv">業種が違っても、「現場で紙 → 事務所で打ち直し」の形が残っていれば、同じ話です。まずはその作業に何分かかっているかを測るところから始めます。</p>
+      <p class="note rv">業種は違っても「現場で紙 → 事務所で打ち直し」が残っていれば同じ話です。まずその作業に何分かかっているかを測ります。</p>
       <p class="cta-row rv">
         <a class="btn fill" href="#process">進め方と費用を見る</a>
         <a class="btn" href="#contact">現場を見てもらう</a>
@@ -532,39 +549,39 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
   <div class="wrap grid2">
     <p class="vhead">進め方と費用</p>
     <div>
-      <p class="lead rv">小さく始めて、<br>途中でやめられる形にしています。</p>
-      <p class="lead-sub rv">いきなり数百万円のお見積りをお出ししても、判断のしようがないと思います。3段階に分け、それぞれの段階で止められるようにしました。金額は最初から公開しています。</p>
+      <p class="lead rv">10万円から始めて、<br>いつでもやめられます。</p>
+      <p class="lead-sub rv">いきなり数百万円の見積りを出されても、判断のしようがありません。3段階に分けて、どの段階でも止められるようにしました。金額は先に公開します。</p>
       <ol class="steps">
         <li class="rv"><span class="n">01</span>
           <div>
             <h3>現場診断</h3>
-            <p class="meta"><span class="dur">1〜2日</span><span class="amt">15〜25万円</span></p>
-            <p>現場に同行し、どの作業に何分かかっているかを実際に測ります。思い込みではなく数字で見るところから始めます。</p>
-            <span class="deliver">納品物：年間で何時間・いくら失われているかのレポートと、アプリで解くべきかどうかの結論</span>
+            <p class="meta"><span class="dur">1〜2日</span><span class="amt">10万円</span></p>
+            <p>現場に半日から一日つきます。どの作業に何分かかっているかを実際に測ります。感覚ではなく数字にします。</p>
+            <span class="deliver">納品物：年間で何時間・いくら消えているかのレポートと、アプリで解くべきかどうかの結論</span>
           </div>
         </li>
         <li class="rv"><span class="n">02</span>
           <div>
             <h3>プロトタイプ</h3>
-            <p class="meta"><span class="dur">2〜3週間</span><span class="amt">50〜80万円</span></p>
-            <p>現場で実際に動くものをお作りし、2週間ほど使っていただきます。着手前に「何ができれば合格か」を文書で決めておきます。</p>
-            <span class="deliver">合格条件を満たさなかった場合は、請求しません</span>
+            <p class="meta"><span class="dur">2〜3週間</span><span class="amt">30万円</span></p>
+            <p>現場で実際に動くものを作ります。2週間ほど使ってみてください。着手前に「何ができれば合格か」を書面で決めます。</p>
+            <span class="deliver">合格条件を満たさなければ請求しません</span>
           </div>
         </li>
         <li class="rv"><span class="n">03</span>
           <div>
             <h3>本開発・運用</h3>
-            <p class="meta"><span class="dur">2〜4か月</span><span class="amt">初期 150〜400万円</span><span class="amt">月額 2〜5万円</span></p>
-            <p>プロトタイプで確かめたうえで、正式にお見積りします。初期費用と月額を、最初から両方お出しします。月額にはOSの更新対応・不具合対応・軽微な改修が含まれます。</p>
-            <span class="deliver">ソースコード・設計書・運用手順を納品物に含めます</span>
+            <p class="meta"><span class="dur">2〜4か月</span><span class="amt">初期 100〜200万円</span><span class="amt">月額 5万円</span></p>
+            <p>プロトタイプで確かめてから、正式に見積ります。規模によりますが、150万円前後になることが多いです。月額にはOSの更新対応と不具合対応、軽微な改修が入ります。</p>
+            <span class="deliver">納品物：ソースコード、設計書、運用手順</span>
           </div>
         </li>
       </ol>
       <div class="freebox rv">
-        <strong>02 は、合格条件を満たさなければ<br>請求しません。</strong>
-        <span>「何ができれば合格か」を着手前に書面で合意します。基準を先に決めておくことで、なんとなく良かった・悪かったで終わらないようにしています。判断していただくのは、現場で2週間使ったあとです。</span>
+        <strong>合格条件を満たさなければ<br>プロトタイプ代はいただきません。</strong>
+        <span>何ができれば合格かを、着手前に書面で決めます。基準が先にあれば「なんとなく良かった」で終わりません。判断するのは、現場で2週間使ったあとです。</span>
       </div>
-      <p class="pricenote rv">金額はいずれも税別の目安で、規模により前後します。補助金が使える場合は、申請用の資料づくりもお手伝いします。なお、01 の段階で「作らないほうがいい」という結論になることもあります。その場合もレポートはお渡しし、そこで終わりにしていただいて構いません。</p>
+      <p class="pricenote rv">金額は税別の目安です。規模によって前後します。01で「作らないほうがいい」という結論になることもあります。その場合もレポートは渡します。そこで終わりで構いません。補助金が使えそうなときは、申請用の資料もつくります。</p>
       <p class="cta-row rv">
         <a class="btn fill" href="#contact">現場診断を相談する</a>
       </p>
@@ -577,13 +594,13 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
   <div class="wrap grid2">
     <p class="vhead">これまでの仕事</p>
     <div>
-      <p class="lead rv">誰もが知っている会社の、<br>公式アプリをつくってきました。</p>
-      <p class="lead-sub rv">受託開発会社に所属していた期間に、チームの一員として担当したものです。守秘義務のため企業名は伏せています。</p>
+      <p class="lead rv">誰もが知っている会社の<br>公式アプリをつくってきました。</p>
+      <p class="lead-sub rv">受託開発会社にいたころ、チームの一員として担当したものです。守秘義務のため社名は伏せます。</p>
       <ul class="works">
         <li class="rv">
           <span class="t">食品商社グループ｜製造記録アプリ（iPad）</span>
           <span class="r">要件設計・開発リーダー</span>
-          <span class="d">製造現場で紙に記入していた記録を、iPad上で入力・保存できるようにしたアプリ。電子化により作業が効率化され、記入漏れが発生しなくなりました。いま受託でお受けしているのは、これと同じ種類の仕事です。</span>
+          <span class="d">製造現場で紙に書いていた記録を、iPadで入力・保存できるようにしました。転記がなくなり、記入漏れも出なくなりました。いまお受けしているのは、これと同じ仕事です。</span>
         </li>
         <li class="rv">
           <span class="t">大手銀行｜公式スマートフォンアプリ</span>
@@ -610,15 +627,15 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
   <div class="wrap grid2">
     <p class="vhead">一人であること</p>
     <div>
-      <p class="lead rv">一人です。<br>その前提で、守ることを決めています。</p>
-      <p class="lead-sub rv">数百万円の仕事を個人に預けるのは、不安があって当然だと思います。「この人がいなくなったらどうなるのか」への答えを、契約の時点で先に決めておきます。</p>
+      <p class="lead rv">一人です。<br>いなくなったときの話を<br>先にしておきます。</p>
+      <p class="lead-sub rv">数百万円の仕事を個人に預けるのは不安です。当然だと思います。だから「この人がいなくなったらどうなるのか」の答えを、契約の時点で決めておきます。</p>
       <ul class="promise">
-        <li class="rv"><span class="pi">01</span><span class="ph">ソースコードをお渡しします</span><span class="pd">納品物に含めます。私以外の会社に引き継ぐことができます。囲い込みません。</span></li>
-        <li class="rv"><span class="pi">02</span><span class="ph">設計書と運用手順を残します</span><span class="pd">口頭でしか存在しない仕様をつくりません。引き継ぎのときに必要になるのは、動くものではなく書かれたものです。</span></li>
-        <li class="rv"><span class="pi">03</span><span class="ph">一般的な技術で作ります</span><span class="pd">私しか読めない書き方をしません。iOS・Android・Webとも、他の開発者が引き継げる標準的な構成にします。</span></li>
-        <li class="rv"><span class="pi">04</span><span class="ph">保守は月額で、解約できます</span><span class="pd">長期の縛りを設けません。続ける理由がなくなったときに、止められるようにしておきます。</span></li>
+        <li class="rv"><span class="pi">01</span><span class="ph">ソースコードをお渡しします</span><span class="pd">納品物に含めます。別の会社へそのまま引き継げます。囲い込みません。</span></li>
+        <li class="rv"><span class="pi">02</span><span class="ph">設計書と運用手順を残します</span><span class="pd">口頭だけの仕様をつくりません。引き継ぐときに要るのは、動くものより書かれたものです。</span></li>
+        <li class="rv"><span class="pi">03</span><span class="ph">一般的な技術で作ります</span><span class="pd">私しか読めない書き方をしません。iOS・Android・Webとも、他の人が読める標準的な構成にします。</span></li>
+        <li class="rv"><span class="pi">04</span><span class="ph">保守はいつでも解約できます</span><span class="pd">長期の縛りはありません。続ける理由がなくなったら止めてください。</span></li>
       </ul>
-      <p class="note rv">そのうえで、企画・設計・開発・審査・運用まで一人で回しています。下の「つくったもの」は、出して終わりにせず動かし続けている記録です。</p>
+      <p class="note rv">そのうえで、企画から審査、運用まで一人で回しています。下の「つくったもの」は、出して終わりにしていない記録です。</p>
     </div>
   </div>
 </section>
@@ -628,10 +645,10 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
   <div class="wrap grid2">
     <p class="vhead">つくったもの</p>
     <div>
-      <p class="lead rv">企画から審査、その後の運用まで、<br>ひとりで出しています。</p>
-      <p class="lead-sub rv">受託でつくるものも、同じ手でつくっています。QRコードはパソコンでご覧の方向けです。スマートフォンからはリンクをお使いください。</p>
+      <p class="lead rv">企画から審査、運用まで<br>ひとりで出しています。</p>
+      <p class="lead-sub rv">受託でつくるものも同じ手です。QRコードはパソコン用です。スマートフォンからはリンクをどうぞ。</p>
       <ul class="prods">
-        <li class="rv"><div class="pmain"><p class="pn">tapuda<span class="pbadge">MY SERVICE</span></p><p class="ps">かざすと渡せるNFCカード。カードは1枚ずつ固有の番号を持ち、国内で製造・検品しています。企画・製造・アプリ・サーバーまで自分で運営しています。</p><p class="plinks"><a href="https://tapuda.app/" target="_blank" rel="noopener">Web ↗</a><a class="badge ios" href="https://apps.apple.com/jp/app/id6805284204" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=app.tapuda.android" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-tapuda-web"></span><figcaption>Web</figcaption></figure><figure><span class="qr qr-tapuda-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-tapuda-and"></span><figcaption>Google Play</figcaption></figure></div></li>
+        <li class="rv"><div class="pmain"><p class="pn">tapuda<span class="pbadge">MY SERVICE</span></p><p class="ps">かざすと渡せるNFCカード。1枚ずつ固有の番号を持たせ、国内で製造・検品しています。企画から製造、アプリ、サーバーまで自分で回しています。</p><p class="plinks"><a href="https://tapuda.app/" target="_blank" rel="noopener">Web ↗</a><a class="badge ios" href="https://apps.apple.com/jp/app/id6805284204" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=app.tapuda.android" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-tapuda-web"></span><figcaption>Web</figcaption></figure><figure><span class="qr qr-tapuda-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-tapuda-and"></span><figcaption>Google Play</figcaption></figure></div></li>
         <li class="rv"><div class="pmain"><p class="pn">ひとまわり</p><p class="ps">毎日ひとつ、全国に同じお題が配られる散歩アプリ。</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6799991379" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=com.hitomawari.app" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-hitomawari-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-hitomawari-and"></span><figcaption>Google Play</figcaption></figure></div></li>
         <li class="rv"><div class="pmain"><p class="pn">Pokory</p><p class="ps">家族で共有する育児記録</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6785926739" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=com.pokopoko.pokory" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-pokory-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-pokory-and"></span><figcaption>Google Play</figcaption></figure></div></li>
         <li class="rv"><div class="pmain"><p class="pn">Omry</p><p class="ps">犬猫の記録手帳</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6781990488" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-omry-ios"></span><figcaption>App Store</figcaption></figure></div></li>
@@ -650,13 +667,13 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
       <p class="tag rv">MY SERVICE</p>
       <p class="tpname rv">tapuda</p>
       <p class="lead rv" style="margin-top:20px">かざすと、名刺が渡せる。</p>
-      <p class="lead-sub rv">スマートフォンに近づけるだけで、あなたのページが開くNFCカードです。相手のスマホにはアプリも登録も要りません。ブラウザで開くだけ。企画・製造・アプリ・サーバーまで自分で運営しています。</p>
+      <p class="lead-sub rv">スマートフォンに近づけるだけで、あなたのページが開きます。相手のスマホにアプリも登録も要りません。ブラウザが開くだけです。企画から製造、アプリ、サーバーまで自分で回しています。</p>
       <ul class="promise">
-        <li class="rv"><span class="pi">01</span><span class="ph">会社でまとめて配れます</span><span class="pd">人数分をまとめて発行し、管理できます。</span></li>
+        <li class="rv"><span class="pi">01</span><span class="ph">会社でまとめて配れます</span><span class="pd">人数分をまとめて発行して、管理できます。</span></li>
         <li class="rv"><span class="pi">02</span><span class="ph">退職時に失効できます</span><span class="pd">カードを回収できなくても、中身を止められます。</span></li>
-        <li class="rv"><span class="pi">03</span><span class="ph">交換の記録は本人のものです</span><span class="pd">誰と名刺を交換したかは、会社からは見えません。</span></li>
+        <li class="rv"><span class="pi">03</span><span class="ph">交換の記録は本人のものです</span><span class="pd">誰と交換したかは会社から見えません。</span></li>
       </ul>
-      <p class="note rv">個人のお客様向けの価格・ご購入は、tapuda のサイトをご覧ください。</p>
+      <p class="note rv">個人向けの価格と購入は tapuda のサイトにあります。</p>
       <p class="cta-row rv">
         <a class="btn fill" href="#contact">法人での導入を相談する</a>
         <a class="btn" href="https://tapuda.app/" target="_blank" rel="noopener">tapuda を見る ↗</a>
@@ -672,25 +689,25 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
     <div>
       <dl class="faq">
         <dt class="rv">いくらから頼めますか</dt>
-        <dd class="rv">現場診断の15万円からです。その先へ進むかどうかは、診断のレポートをご覧になってから決めていただけます。診断だけで終わっても構いません。</dd>
+        <dd class="rv">現場診断の10万円からです。先へ進むかどうかは、レポートを見てから決めてください。診断だけで終わっても構いません。</dd>
 
         <dt class="rv">うちは小さい会社ですが、相手にしてもらえますか</dt>
-        <dd class="rv">従業員10人ほどの会社が中心です。大きな会社向けの仕組みをそのまま入れても合わないことが多いので、むしろ小さい現場のほうが向いています。</dd>
+        <dd class="rv">従業員10人ほどの会社が中心です。大きな会社向けの仕組みは、そのまま入れても合いません。小さい現場のほうが向いています。</dd>
 
         <dt class="rv">「作らないほうがいい」と言われることはありますか</dt>
-        <dd class="rv">あります。Excelの使い方を変えれば済むこと、市販のソフトで足りることは、そう申し上げます。現場診断の納品物は、その判断そのものです。</dd>
+        <dd class="rv">あります。Excelの使い方を変えれば済むこと、市販のソフトで足りることは、そう言います。現場診断で納めるのは、その判断そのものです。</dd>
 
         <dt class="rv">作ったあとの保守はどうなりますか</dt>
-        <dd class="rv">月額2〜5万円です。OSの更新対応、不具合対応、軽微な改修を含みます。長期の縛りはなく、解約できます。</dd>
+        <dd class="rv">月額5万円です。OSの更新対応、不具合対応、軽微な改修が入ります。長期の縛りはなく、いつでも解約できます。</dd>
 
         <dt class="rv">契約はどのような形になりますか</dt>
-        <dd class="rv">業務委託契約を結びます。ソースコードの納品、検収の条件、保守の範囲を書面で定めます。インボイス登録番号はお見積り時にお伝えします。</dd>
+        <dd class="rv">業務委託契約を結びます。ソースコードの納品、検収の条件、保守の範囲を書面にします。インボイス登録番号は見積りのときにお伝えします。</dd>
 
         <dt class="rv">姫路以外でも対応できますか</dt>
-        <dd class="rv">現場を直接見る必要があるため、日帰りで伺える範囲（兵庫・大阪・岡山あたり）を基本にしています。それ以外の地域はご相談ください。</dd>
+        <dd class="rv">現場を直接見るので、日帰りで行ける範囲が基本です。兵庫・大阪・岡山あたり。それ以外はご相談ください。</dd>
 
         <dt class="rv">補助金は使えますか</dt>
-        <dd class="rv">制度によっては対象になる場合があります。使える可能性がありそうなときは、申請用の資料づくりもお手伝いします。可否は制度の要件によりますので、現場診断の段階で一緒に確認します。</dd>
+        <dd class="rv">制度によります。使えそうなときは申請用の資料もつくります。可否は要件次第なので、現場診断の段階で一緒に確認します。</dd>
       </dl>
     </div>
   </div>
@@ -702,7 +719,7 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
     <p class="vhead">ご相談</p>
     <div>
       <p class="msg rv">「これはアプリで解決することなのか」<br>という段階で構いません。</p>
-      <p class="sub rv">作らないほうがいい、というお返事をすることもあります。まずは現場を見せてください。tapuda の法人導入についても、同じ窓口で承ります。</p>
+      <p class="sub rv">作らないほうがいい、と返すこともあります。まず現場を見せてください。tapuda の法人導入も同じ窓口です。</p>
 
       <form class="cform rv" id="cform">
         <label>業種・会社名
@@ -715,7 +732,7 @@ footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
           <input type="text" name="contact" placeholder="例：山田太郎／090-0000-0000／yamada@example.com">
         </label>
         <button type="submit">この内容で相談する</button>
-        <p class="fnote">ボタンを押すとメールソフトが開き、入力した内容が本文に入ります。お急ぎの場合はお電話ください。</p>
+        <p class="fnote">ボタンを押すとメールソフトが開きます。入力した内容が本文に入ります。急ぎなら電話が早いです。</p>
       </form>
 
       <dl>
