@@ -1125,11 +1125,14 @@ if(!reduce){
 </script>
 
 <!-- Cloudflare Web Analytics。
-     TODO: dash.cloudflare.com → Analytics & Logs → Web Analytics で
-     yhasegawa.com を追加し、発行されたトークンを下の YOUR_TOKEN_HERE に貼る。
-     貼るまで計測は始まらない。Cookie を使わないので同意バナーは不要。 -->
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
-        data-cf-beacon='{"token": "YOUR_TOKEN_HERE"}'></script>
+     Cookie を使わないので同意バナーは不要。トークンはクライアントに
+     埋まる公開の識別子で、秘密情報ではない（公開リポジトリで問題ない）。
+     【注意】ダッシュボード側は「Enable with JS Snippet installation」のまま
+     にしておくこと。自動挿入モードに切り替わると、Cloudflare は自分で
+     beacon を入れるつもりになり、このスニペットから送ったデータを
+     無言で捨てる。エラーは出ないので気づけない。 -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
 
 </body>
 </html>
