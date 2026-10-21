@@ -3,16 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>長谷川 侑希｜tapuda（かざすと渡せる名刺）と、現場のための業務アプリ開発</title>
-<meta name="description" content="兵庫県姫路市。かざすと渡せるNFC名刺「tapuda」を運営しています。あわせて、PCを使わない現場のための業務アプリを受託で開発。受託はまず2週間、動くものを無償で。">
-<meta property="og:title" content="長谷川 侑希｜tapuda と、現場のための業務アプリ開発">
-<meta property="og:description" content="かざすと渡せる名刺「tapuda」。現場の記録作業を手元のスマホへ。受託はまず2週間、動くものを無償で。">
+<title>現場の業務アプリ開発｜長谷川侑希（兵庫県姫路市）</title>
+<meta name="description" content="紙とExcelの記録作業を、現場のスマートフォンで終わらせます。兵庫県姫路市。製造・物流・建設の現場向け業務アプリを、設計から申請・運用まで一人で担当。現場診断15万円から、費用のレンジを公開しています。">
+<meta property="og:title" content="現場の業務アプリ開発｜長谷川侑希（兵庫県姫路市）">
+<meta property="og:description" content="紙とExcelの記録作業を、現場のスマートフォンで終わらせます。現場診断15万円から。費用のレンジを公開しています。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yhasegawa.com">
 <meta name="theme-color" content="#E8380D">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Yomogi&display=swap" rel="stylesheet">
 <style>
 :root{
   /* tapuda のブランドカラー #E8380D を基調にする。
@@ -39,7 +36,6 @@
   --wash-pop:rgba(212,50,11,.07);
   --mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","MS Mincho",serif;
   --gothic:"Hiragino Kaku Gothic ProN","Yu Gothic","YuGothic","Noto Sans JP","Meiryo",sans-serif;
-  --tegaki:"Yomogi","Klee One","Hiragino Maru Gothic ProN",var(--mincho);
   --wrap:1040px;
   --pad:clamp(22px,5vw,56px);
 }
@@ -47,7 +43,7 @@
 html{-webkit-text-size-adjust:100%}  /* ここに overflow を足さないこと。#stage の sticky が死ぬ */
 body{
   font-family:var(--gothic);color:var(--sumi);background:var(--kami);
-  line-height:1.9;font-size:15px;letter-spacing:.02em;overflow-x:hidden;
+  line-height:1.9;font-size:16px;letter-spacing:.02em;overflow-x:hidden;
 }
 a{color:var(--hi-text)}
 a:focus-visible{outline:2px solid var(--hi);outline-offset:3px}
@@ -62,43 +58,10 @@ a:focus-visible{outline:2px solid var(--hi);outline-offset:3px}
 
 .btn{
   display:inline-block;border:1px solid var(--hi);color:var(--hi-text);
-  font-size:12px;letter-spacing:.08em;padding:9px 18px;border-radius:2px;
+  font-size:13px;letter-spacing:.08em;padding:11px 20px;border-radius:2px;
   text-decoration:none;background:transparent;
 }
 .btn.fill{background:var(--hi-deep);color:#fff}
-
-/* ============ HERO ============ */
-.hero{
-  min-height:92vh;display:flex;flex-direction:column;justify-content:center;
-  padding:70px 0 56px;position:relative;
-}
-.hero::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--line)}
-/* 頁の光。inset を横 -50vw に伸ばすことで、上の左右の角へ白が回って薄くなる。
-   色を塗って隠すのではなく、白を被せる形にしている（継ぎ目が出ないため）。
-   body に overflow-x:hidden があるので -50vw でも横スクロールは出ない。 */
-.hero{z-index:0;overflow:hidden}
-.hero::before{
-  content:"";position:absolute;inset:-6rem -50vw 30%;z-index:-1;pointer-events:none;
-  background:
-    radial-gradient(60% 70% at 30% 30%, var(--wash-pop) 0%, transparent 70%),
-    radial-gradient(90% 80% at 50% 20%, var(--wash) 0%, transparent 72%);
-}
-.hero .eyebrow{font-size:11px;letter-spacing:.34em;color:var(--hai);margin-bottom:clamp(26px,6vh,54px)}
-.hero .furi{font-size:11px;letter-spacing:.44em;color:var(--hai);margin-bottom:10px}
-.hero h1{
-  font-family:var(--mincho);font-weight:600;
-  font-size:clamp(52px,13vw,132px);line-height:.98;letter-spacing:.05em;color:var(--sumi);
-}
-.hero .role{
-  margin-top:clamp(30px,6vh,58px);
-  font-size:clamp(15px,2.6vw,20px);font-weight:700;color:var(--hi-text);
-  line-height:1.7;letter-spacing:.03em;padding-left:18px;border-left:2px solid var(--hi);
-}
-.scroll{
-  margin-top:clamp(34px,7vh,64px);font-size:10px;letter-spacing:.3em;color:var(--hai);
-  display:flex;align-items:center;gap:12px;
-}
-.scroll i{display:block;width:34px;height:1px;background:var(--hi);opacity:.45}
 
 /* ==================================================================
    オービット
@@ -132,7 +95,7 @@ a:focus-visible{outline:2px solid var(--hi);outline-offset:3px}
   font-family:var(--mincho);font-size:var(--t);font-weight:600;
   color:var(--sumi);line-height:1.4;letter-spacing:.04em;
 }
-.layer .lt em{font-style:normal;font-family:var(--tegaki);color:var(--hi);letter-spacing:0}
+.layer .lt em{font-style:normal;color:var(--hi)}
 .layer .lp{font-size:var(--b);color:#4A4845;line-height:1.85}
 .layer .lb{margin-top:calc(var(--g) * .2);display:flex;flex-wrap:wrap;gap:.6em}
 .layer .lb a{font-size:var(--b);padding:.5em 1.3em}
@@ -210,7 +173,7 @@ body[data-orbit="on"] #fallback{display:none}
 #fallback .fb:first-child{border-top:0}
 #fallback .fb .lk{font-size:10.5px;letter-spacing:.24em;color:var(--hai)}
 #fallback .fb .lt{font-family:var(--mincho);font-size:clamp(21px,4.4vw,30px);font-weight:600;line-height:1.45;letter-spacing:.05em;margin-top:12px}
-#fallback .fb .lt em{font-style:normal;font-family:var(--tegaki);color:var(--hi)}
+#fallback .fb .lt em{font-style:normal;color:var(--hi)}
 #fallback .fb .lp{font-size:14px;color:#4A4845;margin-top:14px}
 #fallback .fb .lba{display:flex;gap:26px;margin-top:18px}
 #fallback .fb .lba .sep{display:none}
@@ -229,51 +192,10 @@ body[data-orbit="on"] #fallback{display:none}
 .dense{padding:clamp(70px,11vh,112px) 0;border-top:1px solid var(--line)}
 .dense.shade{background:var(--washi)}
 .lead{font-family:var(--mincho);font-size:clamp(18px,3.2vw,26px);font-weight:600;line-height:1.6;letter-spacing:.05em}
-.lead-sub{font-size:14px;color:#4A4845;margin-top:16px;max-width:34em}
+.lead-sub{font-size:15px;color:#4A4845;margin-top:16px;max-width:34em}
 .cta-row{margin-top:30px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .cta-row .btn{min-height:40px;display:inline-flex;align-items:center}
 
-/* ============ TAPUDA（一番の推し） ============ */
-.tapuda{
-  padding:clamp(80px,14vh,140px) 0;border-top:1px solid var(--line);
-  background:var(--washi);position:relative;z-index:0;overflow:hidden;
-}
-.tapuda::before{
-  content:"";position:absolute;inset:-4rem -50vw 40%;z-index:-1;pointer-events:none;
-  background:
-    radial-gradient(60% 70% at 30% 30%, var(--wash-pop) 0%, transparent 70%),
-    radial-gradient(90% 80% at 50% 20%, var(--wash) 0%, transparent 72%);
-}
-.tapuda .tag{
-  display:inline-block;font-size:10px;letter-spacing:.24em;color:#fff;
-  background:var(--hi-deep);padding:4px 11px;border-radius:2px;
-}
-.tapuda .name{
-  font-family:var(--mincho);font-size:clamp(40px,9vw,88px);font-weight:600;
-  line-height:1;letter-spacing:.02em;color:var(--hi);margin-top:22px;
-}
-.tapuda .copy{
-  font-family:var(--mincho);font-size:clamp(20px,4vw,34px);font-weight:600;
-  line-height:1.55;letter-spacing:.05em;margin-top:24px;
-}
-.tapuda .desc{font-size:14.5px;color:#4A4845;margin-top:22px;max-width:32em;line-height:1.9}
-.feat{
-  list-style:none;margin-top:40px;display:grid;gap:1px;
-  grid-template-columns:repeat(3,1fr);   /* 6項目なので 3/2/1 のいずれかで必ず埋まる */
-  background:var(--line);border:1px solid var(--line);
-}
-@media (max-width:860px){ .feat{grid-template-columns:repeat(2,1fr)} }
-@media (max-width:520px){ .feat{grid-template-columns:1fr} }
-.feat li{background:#fff;padding:20px 20px 22px}
-.feat .fn{font-size:10.5px;letter-spacing:.2em;color:var(--hai)}
-.feat .ft{font-size:14px;font-weight:700;color:var(--hi-text);margin-top:9px;line-height:1.55}
-.feat .fd{font-size:12.5px;color:#6E6B63;margin-top:6px;line-height:1.75}
-.price{list-style:none;margin-top:34px;border-top:1px solid var(--line)}
-.price li{display:flex;justify-content:space-between;align-items:baseline;gap:18px;padding:13px 0;border-bottom:1px solid var(--line)}
-.price .pn{font-size:13.5px;font-weight:700}
-.price .pv{font-family:var(--mincho);font-size:clamp(16px,3vw,21px);color:var(--hi-text);white-space:nowrap}
-.pricenote{font-size:11.5px;color:var(--hai);margin-top:14px}
-.users{font-size:12.5px;color:#6E6B63;margin-top:26px;line-height:1.9;max-width:40em}
 
 /* ============ STEPS ============ */
 .steps{list-style:none;margin-top:34px;display:flex;flex-direction:column}
@@ -290,18 +212,18 @@ body[data-orbit="on"] #fallback{display:none}
   background:var(--hi-tint);padding:3px 9px;border-radius:2px;margin-left:11px;
   vertical-align:2px;font-weight:700;
 }
-.steps p{font-size:13.5px;color:#4A4845;margin-top:7px;max-width:38em}
+.steps p{font-size:14.5px;color:#4A4845;margin-top:9px;max-width:38em;line-height:1.85}
 .freebox{margin-top:38px;padding:clamp(24px,4vw,38px);background:var(--hi-deep);color:#fff}
 .freebox strong{display:block;font-family:var(--mincho);font-weight:600;font-size:clamp(18px,3.4vw,28px);line-height:1.55;letter-spacing:.05em}
-.freebox span{display:block;font-size:13.5px;color:#F7DAD2;margin-top:13px;line-height:1.8}
+.freebox span{display:block;font-size:14.5px;color:#F7DAD2;margin-top:13px;line-height:1.85}
 
 /* ============ WORKS ============ */
 .works{list-style:none;margin-top:32px;border-top:1px solid var(--line)}
 .works li{padding:15px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:6px 22px;align-items:baseline}
-.works .t{font-size:14px;font-weight:700;letter-spacing:.02em}
-.works .r{font-size:11.5px;color:var(--hai);letter-spacing:.03em;text-align:right;white-space:nowrap}
-.works .d{grid-column:1/-1;font-size:12.5px;color:#6E6B63;line-height:1.72;max-width:44em}
-.nda{font-size:11.5px;color:var(--hai);margin-top:16px}
+.works .t{font-size:15px;font-weight:700;letter-spacing:.02em}
+.works .r{font-size:12.5px;color:var(--hai);letter-spacing:.03em;text-align:right;white-space:nowrap}
+.works .d{grid-column:1/-1;font-size:13.5px;color:#6E6B63;line-height:1.8;max-width:44em}
+.nda{font-size:12.5px;color:var(--hai);margin-top:16px;line-height:1.8}
 @media (max-width:560px){
   .works li{grid-template-columns:1fr}
   .works .r{text-align:left;white-space:normal}
@@ -319,9 +241,9 @@ body[data-orbit="on"] #fallback{display:none}
   font-size:9.5px;letter-spacing:.2em;font-weight:700;color:#fff;
   background:var(--hi-deep);padding:3px 8px;border-radius:2px;white-space:nowrap;
 }
-.prods .ps{font-size:13.5px;color:#4A4845;margin-top:7px;line-height:1.8;max-width:34em}
+.prods .ps{font-size:14px;color:#4A4845;margin-top:7px;line-height:1.8;max-width:34em}
 .prods .plinks{margin-top:14px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.prods .plinks a{font-size:12.5px;letter-spacing:.04em;color:var(--hi-text);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
+.prods .plinks a{font-size:13.5px;letter-spacing:.04em;color:var(--hi-text);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
 .prods .plinks a:hover{border-bottom-color:var(--hi)}
 
 /* QR。スマホで見ている人には意味がないので SP では出さない。
@@ -395,14 +317,91 @@ body[data-orbit="on"] #fallback{display:none}
 .contact{padding:clamp(78px,13vh,132px) 0;background:var(--navy);color:#fff}
 .contact .vhead{color:#93A4C4}
 .contact .msg{font-family:var(--mincho);font-size:clamp(18px,3.4vw,28px);line-height:1.7;letter-spacing:.05em;max-width:22em}
-.contact .sub{font-size:14px;color:#C9D3E6;margin-top:22px;max-width:30em;line-height:1.85}
+.contact .sub{font-size:15px;color:#C9D3E6;margin-top:22px;max-width:32em;line-height:1.85}
 .contact dl{margin-top:44px;display:grid;gap:0}
 .contact dt{font-size:10px;letter-spacing:.24em;color:#8C9CBC;padding-top:16px}
 .contact dd{font-size:clamp(16px,3vw,22px);padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.16);word-break:break-all}
 .contact dd a{color:#fff;text-decoration:none}
 .contact dd a:hover{color:#C9D3E6}
 
-footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
+footer{padding:26px 0 42px;font-size:12.5px;color:var(--hai);line-height:1.9}
+
+
+/* ==================================================================
+   細いヘッダー
+   #stage が position:sticky なので、ここを sticky/fixed にすると
+   オービットと重なって競合する。静的に置き、スクロールで流す。
+   常設CTAの代わりに、各セクションの末尾でボタンを繰り返している。
+================================================================== */
+.bar{border-bottom:1px solid var(--line);background:var(--kami);position:relative;z-index:7}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px}
+.bar .who b{display:block;font-family:var(--mincho);font-size:17px;font-weight:600;letter-spacing:.08em;color:var(--sumi)}
+.bar .who span{display:block;font-size:11.5px;letter-spacing:.06em;color:var(--hai);margin-top:3px}
+.bar .btn{white-space:nowrap;flex:none}
+@media (max-width:420px){
+  .bar .who span{display:none}
+  .bar .btn{font-size:12px;padding:9px 13px}
+}
+
+/* ============ 対象の現場 ============ */
+.cases{list-style:none;margin-top:34px;display:grid;gap:1px;grid-template-columns:repeat(3,1fr);background:var(--line);border:1px solid var(--line)}
+@media (max-width:820px){ .cases{grid-template-columns:1fr} }
+.cases li{background:#fff;padding:22px 22px 24px}
+.cases .ct{display:inline-block;font-size:10.5px;letter-spacing:.2em;color:#fff;background:var(--hi-deep);padding:3px 10px;border-radius:2px}
+.cases .cb{display:block;font-size:15px;font-weight:700;color:var(--sumi);margin-top:13px;line-height:1.55}
+.cases .cd{display:block;font-size:13.5px;color:#6E6B63;margin-top:9px;line-height:1.85}
+.note{font-size:13px;color:var(--hai);margin-top:20px;line-height:1.85;max-width:40em}
+
+/* ============ 費用（STEPS に金額バッジを足す） ============ */
+.steps .amt{
+  display:inline-block;font-size:11.5px;letter-spacing:.06em;color:#fff;
+  background:var(--hi-deep);padding:4px 11px;border-radius:2px;margin-left:9px;
+  vertical-align:2px;font-weight:700;white-space:nowrap;
+}
+.steps .meta{margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.steps .meta .dur,.steps .meta .amt{margin-left:0}
+.deliver{display:block;font-size:13px;color:var(--hi-text);margin-top:10px;font-weight:700;line-height:1.75}
+
+/* ============ 一人であることへの答え ============ */
+.promise{list-style:none;margin-top:32px;border-top:1px solid var(--line)}
+.promise li{padding:17px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:34px 1fr;gap:4px 14px;align-items:baseline}
+.promise .pi{font-family:var(--mincho);font-size:15px;color:var(--hi);opacity:.5;letter-spacing:.04em}
+.promise .ph{font-size:15px;font-weight:700;color:var(--sumi);line-height:1.55}
+.promise .pd{grid-column:2;font-size:13.5px;color:#6E6B63;line-height:1.85;max-width:40em}
+
+/* ============ tapuda（法人導入の1ブロック） ============ */
+.tag{display:inline-block;font-size:10px;letter-spacing:.24em;color:#fff;background:var(--hi-deep);padding:4px 11px;border-radius:2px}
+.tpname{font-family:var(--mincho);font-size:clamp(30px,6vw,52px);font-weight:600;line-height:1.1;letter-spacing:.02em;color:var(--hi);margin-top:18px}
+
+/* ============ よくあるご質問 ============ */
+.faq{margin-top:30px;border-top:1px solid var(--line)}
+.faq dt{font-size:15px;font-weight:700;color:var(--sumi);line-height:1.6;padding:20px 0 0;position:relative;padding-left:26px}
+.faq dt::before{content:"Q";position:absolute;left:0;top:20px;font-family:var(--mincho);color:var(--hi);font-weight:600}
+.faq dd{font-size:14px;color:#4A4845;line-height:1.9;padding:9px 0 20px 26px;border-bottom:1px solid var(--line);max-width:44em}
+
+/* ============ ご相談フォーム ============
+   バックエンドを持たない（Workers Static Assets）ので、送信は
+   入力内容を本文に入れたメールを立ち上げる形にしている。
+   外部フォームを使う場合は #cform の submit を差し替えること。 */
+.cform{margin-top:40px;display:flex;flex-direction:column;gap:18px;max-width:34em}
+.cform label{display:flex;flex-direction:column;gap:7px;font-size:12.5px;letter-spacing:.1em;color:#A9B7D2}
+.cform input,.cform textarea{
+  font:inherit;font-size:16px;              /* 16px 未満だと iOS が勝手に拡大する */
+  color:#fff;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.22);border-radius:2px;padding:12px 14px;width:100%;
+}
+.cform textarea{min-height:104px;resize:vertical;line-height:1.8}
+.cform input:focus,.cform textarea:focus{outline:2px solid var(--hi-mid);outline-offset:1px;background:rgba(255,255,255,.11)}
+.cform button{
+  font:inherit;font-size:14px;font-weight:700;letter-spacing:.08em;cursor:pointer;
+  background:var(--hi-deep);color:#fff;border:1px solid var(--hi);border-radius:2px;
+  padding:14px 22px;align-self:flex-start;
+}
+.cform button:hover{background:var(--hi)}
+.fnote{font-size:12px;color:#93A4C4;line-height:1.85}
+.contact .cta-row .btn{color:#fff;border-color:rgba(255,255,255,.5)}
+.contact .cta-row .btn.fill{background:var(--hi-deep);border-color:var(--hi)}
+
 
 /* reveal */
 .rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
@@ -418,19 +417,16 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
 </head>
 <body>
 
-<!-- HERO -->
-<header class="hero">
+<!-- 細いヘッダー。名前と、常設のひとつ目のCTA -->
+<header class="bar">
   <div class="wrap">
-    <p class="eyebrow">兵庫県姫路市</p>
-    <p class="furi">はせがわ　ゆうき</p>
-    <h1>長谷川　侑希</h1>
-    <p class="role">かざすと渡せる名刺「tapuda」。<br>現場のための業務アプリ開発。</p>
-    <p class="scroll"><i></i>SCROLL</p>
+    <p class="who"><b>長谷川　侑希</b><span>現場の業務アプリ開発｜兵庫県姫路市</span></p>
+    <a class="btn fill" href="#contact">現場を見てもらう</a>
   </div>
 </header>
 
-<!-- ============ オービット ============ -->
-<!-- 8枚の中身は初期HTMLに出力している（JS生成にするとクロールされない） -->
+<!-- ============ オービット（3枚。ここがヒーローを兼ねる） ============ -->
+<!-- 3枚の中身は初期HTMLにも出力している（JS生成だけにするとクロールされない） -->
 <div id="track">
   <div id="stage">
     <div id="ring"></div>
@@ -441,91 +437,104 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
     <div id="orbit"></div>
     <div id="tb">
       <div class="tn" id="tbn">01</div>
-      <div class="tl" id="tbl">ABOUT</div>
+      <div class="tl" id="tbl">GENBA</div>
       <div class="prog" id="prog"></div>
     </div>
-    <div class="omark"><b id="omn">01</b> / 08 <span id="oml">ABOUT</span></div>
+    <div class="omark"><b id="omn">01</b> / 03 <span id="oml">GENBA</span></div>
   </div>
 </div>
 <div id="fallback"></div>
 
-<!-- ============ TAPUDA（一番の推し） ============ -->
-<section class="tapuda" id="tapuda">
+<!-- ============ 対象の現場 ============ -->
+<section class="dense" id="genba">
   <div class="wrap grid2">
-    <p class="vhead">自分のサービス</p>
+    <p class="vhead">こういう現場の話です</p>
     <div>
-      <p class="tag rv">MY SERVICE</p>
-      <p class="name rv">tapuda</p>
-      <p class="copy rv">かざすと、名刺が渡せる。</p>
-      <p class="desc rv">スマートフォンに近づけるだけで、あなたのページが開くNFCカードです。相手のスマホにはアプリも登録も要りません。ブラウザで開くだけ。裏面のQRコードでも同じように渡せます。</p>
-      <ul class="feat">
-        <li class="rv"><p class="fn">01</p><p class="ft">かざすだけ</p><p class="fd">近づけるだけで、あなたのページが開きます。</p></li>
-        <li class="rv"><p class="fn">02</p><p class="ft">ブラウザで開くだけ</p><p class="fd">アプリ不要。相手のスマホには何も入りません。</p></li>
-        <li class="rv"><p class="fn">03</p><p class="ft">渡したあとも、直せます</p><p class="fd">配ったカードはそのままで、中身だけ更新できます。</p></li>
-        <li class="rv"><p class="fn">04</p><p class="ft">受け取った名刺が五十音で並ぶ</p><p class="fd">日本の氏名は、書かれた文字のままでは並びません。</p></li>
-        <li class="rv"><p class="fn">05</p><p class="ft">会社でまとめて配れます</p><p class="fd">辞めるときに失効。交換の記録は本人のもので、会社には見えません。</p></li>
-        <li class="rv"><p class="fn">06</p><p class="ft">国内で製造・検品</p><p class="fd">カードは1枚ずつ固有の番号を持っています。</p></li>
+      <p class="lead rv">パソコンの前に座らない人たちの、<br>記録の話です。</p>
+      <p class="lead-sub rv">事務所のシステムは、たいてい足りています。足りていないのは、現場で紙に書いて、あとから誰かが打ち直している部分です。そこだけを、現場の手元で終わらせます。</p>
+      <ul class="cases">
+        <li class="rv">
+          <span class="ct">製造</span>
+          <span class="cb">製造記録・検査記録</span>
+          <span class="cd">帳票に手書きし、事務所でExcelに転記。記入漏れは翌日以降に見つかり、誰に聞いても覚えていない。</span>
+        </li>
+        <li class="rv">
+          <span class="ct">物流・配送</span>
+          <span class="cb">積込記録・配送日報</span>
+          <span class="cd">ドライバーが紙で提出し、事務が集計する。戻ってくるまで何が起きたか分からない。</span>
+        </li>
+        <li class="rv">
+          <span class="ct">建設・保守</span>
+          <span class="cb">点検記録・作業報告</span>
+          <span class="cd">現場で写真を撮り、帰ってから報告書に貼り直す。写真とどの現場かの紐付けを手でやっている。</span>
+        </li>
       </ul>
-      <ul class="price">
-        <li class="rv"><span class="pn">tapuda Card（ロゴ版）</span><span class="pv">3,480円</span></li>
-        <li class="rv"><span class="pn">tapuda Card（氏名入り）</span><span class="pv">4,280円</span></li>
-        <li class="rv"><span class="pn">tapuda Card（名刺版）</span><span class="pv">4,980円</span></li>
-      </ul>
-      <p class="pricenote">いずれも税込・送料込み。1枚から購入できます。</p>
-      <p class="users">美容師・ネイリスト／作家・カメラマン／趣味・サークル／イベント出店／営業／個人事業主／飲食店／学生の方にお使いいただいています。</p>
+      <p class="note rv">業種が違っても、「現場で紙 → 事務所で打ち直し」の形が残っていれば、同じ話です。まずはその作業に何分かかっているかを測るところから始めます。</p>
       <p class="cta-row rv">
-        <a class="btn fill" href="https://tapuda.app/" target="_blank" rel="noopener">tapuda を見る</a>
-        <a class="badge ios" href="https://apps.apple.com/jp/app/id6805284204" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a>
-        <a class="badge and" href="https://play.google.com/store/apps/details?id=app.tapuda.android" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a>
-        <a class="btn" href="#contact">法人での導入を相談する</a>
+        <a class="btn fill" href="#process">進め方と費用を見る</a>
+        <a class="btn" href="#contact">現場を見てもらう</a>
       </p>
     </div>
   </div>
 </section>
 
-<!-- ============ 受託の進め方 ============ -->
-<section class="dense" id="process">
+<!-- ============ 進め方と費用（このページで最も重要） ============ -->
+<section class="dense shade" id="process">
   <div class="wrap grid2">
-    <p class="vhead">受託の進め方</p>
+    <p class="vhead">進め方と費用</p>
     <div>
-      <p class="lead rv">着手前に、作るべきかどうかを<br>一緒に判断します。</p>
-      <p class="lead-sub rv">いきなりお見積りをお出ししても、判断のしようがないと思います。実際に現場で使っていただいて、それから決めていただく形にしています。</p>
+      <p class="lead rv">小さく始めて、<br>途中でやめられる形にしています。</p>
+      <p class="lead-sub rv">いきなり数百万円のお見積りをお出ししても、判断のしようがないと思います。3段階に分け、それぞれの段階で止められるようにしました。金額は最初から公開しています。</p>
       <ol class="steps">
         <li class="rv"><span class="n">01</span>
-          <div><h3>お話を聞く<span class="dur">約1週間</span></h3>
-          <p>現場を見せていただき、どの作業に何分かかっているかを確認します。作る前に、そもそも作るべきかを一緒に判断します。</p></div>
+          <div>
+            <h3>現場診断</h3>
+            <p class="meta"><span class="dur">1〜2日</span><span class="amt">15〜25万円</span></p>
+            <p>現場に同行し、どの作業に何分かかっているかを実際に測ります。思い込みではなく数字で見るところから始めます。</p>
+            <span class="deliver">納品物：年間で何時間・いくら失われているかのレポートと、アプリで解くべきかどうかの結論</span>
+          </div>
         </li>
         <li class="rv"><span class="n">02</span>
-          <div><h3>プロトタイプをつくる<span class="dur">約2週間</span></h3>
-          <p>実際に動くものをお作りします。この段階の費用はいただきません。</p></div>
+          <div>
+            <h3>プロトタイプ</h3>
+            <p class="meta"><span class="dur">2〜3週間</span><span class="amt">50〜80万円</span></p>
+            <p>現場で実際に動くものをお作りし、2週間ほど使っていただきます。着手前に「何ができれば合格か」を文書で決めておきます。</p>
+            <span class="deliver">合格条件を満たさなかった場合は、請求しません</span>
+          </div>
         </li>
         <li class="rv"><span class="n">03</span>
-          <div><h3>現場で試していただく<span class="dur">約2週間</span></h3>
-          <p>着手前に決めた条件を満たすか、現場の方に使っていただいて確認します。</p></div>
-        </li>
-        <li class="rv"><span class="n">04</span>
-          <div><h3>お見積り</h3>
-          <p>ご納得いただけた場合のみ、正式にお見積りします。初期費用と月額を、最初から両方お出しします。</p></div>
+          <div>
+            <h3>本開発・運用</h3>
+            <p class="meta"><span class="dur">2〜4か月</span><span class="amt">初期 150〜400万円</span><span class="amt">月額 2〜5万円</span></p>
+            <p>プロトタイプで確かめたうえで、正式にお見積りします。初期費用と月額を、最初から両方お出しします。月額にはOSの更新対応・不具合対応・軽微な改修が含まれます。</p>
+            <span class="deliver">ソースコード・設計書・運用手順を納品物に含めます</span>
+          </div>
         </li>
       </ol>
       <div class="freebox rv">
-        <strong>01から03まで、<br>費用は一切かかりません。</strong>
-        <span>合わなければ、そこでやめていただいて構いません。請求は発生しません。</span>
+        <strong>02 は、合格条件を満たさなければ<br>請求しません。</strong>
+        <span>「何ができれば合格か」を着手前に書面で合意します。基準を先に決めておくことで、なんとなく良かった・悪かったで終わらないようにしています。判断していただくのは、現場で2週間使ったあとです。</span>
       </div>
+      <p class="pricenote rv">金額はいずれも税別の目安で、規模により前後します。補助金が使える場合は、申請用の資料づくりもお手伝いします。なお、01 の段階で「作らないほうがいい」という結論になることもあります。その場合もレポートはお渡しし、そこで終わりにしていただいて構いません。</p>
+      <p class="cta-row rv">
+        <a class="btn fill" href="#contact">現場診断を相談する</a>
+      </p>
     </div>
   </div>
 </section>
 
 <!-- ============ これまでの仕事 ============ -->
-<section class="dense shade" id="works">
+<section class="dense" id="works">
   <div class="wrap grid2">
     <p class="vhead">これまでの仕事</p>
     <div>
+      <p class="lead rv">誰もが知っている会社の、<br>公式アプリをつくってきました。</p>
+      <p class="lead-sub rv">受託開発会社に所属していた期間に、チームの一員として担当したものです。守秘義務のため企業名は伏せています。</p>
       <ul class="works">
         <li class="rv">
           <span class="t">食品商社グループ｜製造記録アプリ（iPad）</span>
           <span class="r">要件設計・開発リーダー</span>
-          <span class="d">製造現場で紙に記入していた記録を、iPad上で入力・保存できるようにしたアプリ。電子化により作業が効率化され、記入漏れが発生しなくなりました。</span>
+          <span class="d">製造現場で紙に記入していた記録を、iPad上で入力・保存できるようにしたアプリ。電子化により作業が効率化され、記入漏れが発生しなくなりました。いま受託でお受けしているのは、これと同じ種類の仕事です。</span>
         </li>
         <li class="rv">
           <span class="t">大手銀行｜公式スマートフォンアプリ</span>
@@ -543,7 +552,24 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
           <span class="d">窓口の待ち番号を表示するデジタルサイネージシステム。</span>
         </li>
       </ul>
-      <p class="nda">上記はいずれも受託開発会社に所属していた期間に、チームの一員として担当したものです。守秘義務のため企業名は伏せています。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 一人であることへの答え ============ -->
+<section class="dense shade" id="solo">
+  <div class="wrap grid2">
+    <p class="vhead">一人であること</p>
+    <div>
+      <p class="lead rv">一人です。<br>その前提で、守ることを決めています。</p>
+      <p class="lead-sub rv">数百万円の仕事を個人に預けるのは、不安があって当然だと思います。「この人がいなくなったらどうなるのか」への答えを、契約の時点で先に決めておきます。</p>
+      <ul class="promise">
+        <li class="rv"><span class="pi">01</span><span class="ph">ソースコードをお渡しします</span><span class="pd">納品物に含めます。私以外の会社に引き継ぐことができます。囲い込みません。</span></li>
+        <li class="rv"><span class="pi">02</span><span class="ph">設計書と運用手順を残します</span><span class="pd">口頭でしか存在しない仕様をつくりません。引き継ぎのときに必要になるのは、動くものではなく書かれたものです。</span></li>
+        <li class="rv"><span class="pi">03</span><span class="ph">一般的な技術で作ります</span><span class="pd">私しか読めない書き方をしません。iOS・Android・Webとも、他の開発者が引き継げる標準的な構成にします。</span></li>
+        <li class="rv"><span class="pi">04</span><span class="ph">保守は月額で、解約できます</span><span class="pd">長期の縛りを設けません。続ける理由がなくなったときに、止められるようにしておきます。</span></li>
+      </ul>
+      <p class="note rv">そのうえで、企画・設計・開発・審査・運用まで一人で回しています。下の「つくったもの」は、出して終わりにせず動かし続けている記録です。</p>
     </div>
   </div>
 </section>
@@ -556,25 +582,93 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
       <p class="lead rv">企画から審査、その後の運用まで、<br>ひとりで出しています。</p>
       <p class="lead-sub rv">受託でつくるものも、同じ手でつくっています。QRコードはパソコンでご覧の方向けです。スマートフォンからはリンクをお使いください。</p>
       <ul class="prods">
-        <li class="rv"><div class="pmain"><p class="pn">tapuda<span class="pbadge">MY SERVICE</span></p><p class="ps">かざすと渡せるNFCカード。カードは1枚ずつ固有の番号を持ち、国内で製造・検品しています。アプリは、そのカードにどの名刺を出させるかを決める場所です。</p><p class="plinks"><a href="https://tapuda.app/" target="_blank" rel="noopener">Web ↗</a><a class="badge ios" href="https://apps.apple.com/jp/app/id6805284204" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=app.tapuda.android" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-tapuda-web"></span><figcaption>Web</figcaption></figure><figure><span class="qr qr-tapuda-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-tapuda-and"></span><figcaption>Google Play</figcaption></figure></div></li>
-        <li class="rv"><div class="pmain"><p class="pn">ひとまわり<span class="pbadge">NEW</span></p><p class="ps">毎日ひとつ、全国に同じお題が配られる散歩アプリ。歩いている間は何も要求しません。いいね数もフォロワー数もありません。</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6799991379" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=com.hitomawari.app" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-hitomawari-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-hitomawari-and"></span><figcaption>Google Play</figcaption></figure></div></li>
+        <li class="rv"><div class="pmain"><p class="pn">tapuda<span class="pbadge">MY SERVICE</span></p><p class="ps">かざすと渡せるNFCカード。カードは1枚ずつ固有の番号を持ち、国内で製造・検品しています。企画・製造・アプリ・サーバーまで自分で運営しています。</p><p class="plinks"><a href="https://tapuda.app/" target="_blank" rel="noopener">Web ↗</a><a class="badge ios" href="https://apps.apple.com/jp/app/id6805284204" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=app.tapuda.android" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-tapuda-web"></span><figcaption>Web</figcaption></figure><figure><span class="qr qr-tapuda-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-tapuda-and"></span><figcaption>Google Play</figcaption></figure></div></li>
+        <li class="rv"><div class="pmain"><p class="pn">ひとまわり</p><p class="ps">毎日ひとつ、全国に同じお題が配られる散歩アプリ。</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6799991379" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=com.hitomawari.app" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-hitomawari-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-hitomawari-and"></span><figcaption>Google Play</figcaption></figure></div></li>
         <li class="rv"><div class="pmain"><p class="pn">Pokory</p><p class="ps">家族で共有する育児記録</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6785926739" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=com.pokopoko.pokory" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-pokory-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-pokory-and"></span><figcaption>Google Play</figcaption></figure></div></li>
         <li class="rv"><div class="pmain"><p class="pn">Omry</p><p class="ps">犬猫の記録手帳</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6781990488" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-omry-ios"></span><figcaption>App Store</figcaption></figure></div></li>
         <li class="rv"><div class="pmain"><p class="pn">カベメーター</p><p class="ps">扶養の壁を1つの数字で</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6786967194" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-kabe-ios"></span><figcaption>App Store</figcaption></figure></div></li>
         <li class="rv"><div class="pmain"><p class="pn">余白と、あじ。</p><p class="ps">手書きフォントの作成・販売</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6789184486" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-yohaku-ios"></span><figcaption>App Store</figcaption></figure></div></li>
       </ul>
-      <p class="fontnote rv">サイトのなかで使っているこの書体は、「余白と、あじ。」でつくった私の手書き文字です</p>
     </div>
   </div>
 </section>
 
-<!-- ============ CONTACT ============ -->
+<!-- ============ tapuda（法人導入のみ。個人向け販売は tapuda.app へ） ============ -->
+<section class="dense shade" id="tapuda">
+  <div class="wrap grid2">
+    <p class="vhead">自社サービス</p>
+    <div>
+      <p class="tag rv">MY SERVICE</p>
+      <p class="tpname rv">tapuda</p>
+      <p class="lead rv" style="margin-top:20px">かざすと、名刺が渡せる。</p>
+      <p class="lead-sub rv">スマートフォンに近づけるだけで、あなたのページが開くNFCカードです。相手のスマホにはアプリも登録も要りません。ブラウザで開くだけ。企画・製造・アプリ・サーバーまで自分で運営しています。</p>
+      <ul class="promise">
+        <li class="rv"><span class="pi">01</span><span class="ph">会社でまとめて配れます</span><span class="pd">人数分をまとめて発行し、管理できます。</span></li>
+        <li class="rv"><span class="pi">02</span><span class="ph">退職時に失効できます</span><span class="pd">カードを回収できなくても、中身を止められます。</span></li>
+        <li class="rv"><span class="pi">03</span><span class="ph">交換の記録は本人のものです</span><span class="pd">誰と名刺を交換したかは、会社からは見えません。</span></li>
+      </ul>
+      <p class="note rv">個人のお客様向けの価格・ご購入は、tapuda のサイトをご覧ください。</p>
+      <p class="cta-row rv">
+        <a class="btn fill" href="#contact">法人での導入を相談する</a>
+        <a class="btn" href="https://tapuda.app/" target="_blank" rel="noopener">tapuda を見る ↗</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ よくあるご質問 ============ -->
+<section class="dense" id="faq">
+  <div class="wrap grid2">
+    <p class="vhead">よくあるご質問</p>
+    <div>
+      <dl class="faq">
+        <dt class="rv">いくらから頼めますか</dt>
+        <dd class="rv">現場診断の15万円からです。その先へ進むかどうかは、診断のレポートをご覧になってから決めていただけます。診断だけで終わっても構いません。</dd>
+
+        <dt class="rv">うちは小さい会社ですが、相手にしてもらえますか</dt>
+        <dd class="rv">従業員10人ほどの会社が中心です。大きな会社向けの仕組みをそのまま入れても合わないことが多いので、むしろ小さい現場のほうが向いています。</dd>
+
+        <dt class="rv">「作らないほうがいい」と言われることはありますか</dt>
+        <dd class="rv">あります。Excelの使い方を変えれば済むこと、市販のソフトで足りることは、そう申し上げます。現場診断の納品物は、その判断そのものです。</dd>
+
+        <dt class="rv">作ったあとの保守はどうなりますか</dt>
+        <dd class="rv">月額2〜5万円です。OSの更新対応、不具合対応、軽微な改修を含みます。長期の縛りはなく、解約できます。</dd>
+
+        <dt class="rv">契約はどのような形になりますか</dt>
+        <dd class="rv">業務委託契約を結びます。ソースコードの納品、検収の条件、保守の範囲を書面で定めます。インボイス登録番号はお見積り時にお伝えします。</dd>
+
+        <dt class="rv">姫路以外でも対応できますか</dt>
+        <dd class="rv">現場を直接見る必要があるため、日帰りで伺える範囲（兵庫・大阪・岡山あたり）を基本にしています。それ以外の地域はご相談ください。</dd>
+
+        <dt class="rv">補助金は使えますか</dt>
+        <dd class="rv">制度によっては対象になる場合があります。使える可能性がありそうなときは、申請用の資料づくりもお手伝いします。可否は制度の要件によりますので、現場診断の段階で一緒に確認します。</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ご相談 ============ -->
 <section class="contact" id="contact">
   <div class="wrap grid2">
     <p class="vhead">ご相談</p>
     <div>
-      <p class="msg rv">「これはアプリで解決することなのか」<br>という段階のご相談で構いません。</p>
-      <p class="sub rv">作らないほうがいい、というお返事をすることもあります。まずは現場を見せてください。tapuda の法人導入についてのお問い合わせも、同じ窓口で承ります。</p>
+      <p class="msg rv">「これはアプリで解決することなのか」<br>という段階で構いません。</p>
+      <p class="sub rv">作らないほうがいい、というお返事をすることもあります。まずは現場を見せてください。tapuda の法人導入についても、同じ窓口で承ります。</p>
+
+      <form class="cform rv" id="cform">
+        <label>業種・会社名
+          <input type="text" name="company" autocomplete="organization" placeholder="例：食品製造／○○食品株式会社">
+        </label>
+        <label>いま、紙やExcelでやっていること
+          <textarea name="issue" placeholder="例：製造記録を紙に書いて、事務所でExcelに打ち直しています。1日30分くらい。"></textarea>
+        </label>
+        <label>お名前・ご連絡先
+          <input type="text" name="contact" placeholder="例：山田太郎／090-0000-0000／yamada@example.com">
+        </label>
+        <button type="submit">この内容で相談する</button>
+        <p class="fnote">ボタンを押すとメールソフトが開き、入力した内容が本文に入ります。お急ぎの場合はお電話ください。</p>
+      </form>
+
       <dl>
         <dt>TEL</dt><dd><a href="tel:08062061245">080-6206-1245</a></dd>
         <dt>MAIL</dt><dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
@@ -583,7 +677,12 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
   </div>
 </section>
 
-<footer><div class="wrap">© 長谷川 侑希</div></footer>
+<footer><div class="wrap">
+  <!-- TODO 事業形態が決まったら、屋号・所在地・インボイス登録番号をここに入れる。
+       法人が発注前に必ず確認する項目で、無いと与信の段階で止まることがある。 -->
+  長谷川 侑希｜兵庫県姫路市｜現場の業務アプリ開発<br>
+  © 長谷川 侑希
+</div></footer>
 
 <script>
 /* ==================================================================
@@ -592,52 +691,21 @@ footer{padding:26px 0 42px;font-size:11.5px;color:var(--hai)}
    並びは tapuda を先頭に寄せ、受託をその後ろに置いている。
 ================================================================== */
 const ITEMS = [
- {no:'01', key:'ABOUT', short:'私のこと',
-  title:'姫路で、<br>アプリをつくっています',
-  body:'自分のサービスを出しながら、現場のための業務アプリを受託でつくっています。どちらも一人です。'},
+ {no:'01', key:'GENBA', short:'現場',
+  title:'紙の記録を、<br>現場のスマホで<br><em>終わらせる</em>。',
+  body:'兵庫県姫路市。製造・物流・建設の現場向けの業務アプリを、設計から申請・運用まで一人でつくっています。',
+  cta:[{label:'対象の現場を見る', href:'#genba'}]},
 
- /* ---- tapuda（一番の推し） ---- */
- {no:'02', key:'TAPUDA', short:'tapuda',
-  title:'かざすと、<br>名刺が渡せる。',
-  body:'スマートフォンに近づけるだけで、あなたのページが開くNFCカード。自分でつくって運営しています。',
-  cta:[{label:'tapuda を見る', href:'https://tapuda.app/', fill:true, ext:true}]},
-
- {no:'03', key:'NO APP', short:'アプリ不要',
-  title:'相手のスマホには<br>何も入りません',
-  lst:[{n:'かざすだけ', s:'近づけるだけで開く'},
-       {n:'ブラウザだけ', s:'アプリも登録も不要'},
-       {n:'あとから直せる', s:'配ったカードはそのまま'},
-       {n:'法人はまとめて', s:'辞めるときに失効できる'}],
-  cta:[{label:'くわしく', href:'#tapuda'}]},
-
- /* ---- 受託 ---- */
- {no:'04', key:'CONTRACT', short:'受託',
-  title:'PCを使わない<br>現場のために',
-  body:'紙やExcelでの記録作業を、現場のスマートフォンで完結させます。'},
-
- {no:'05', key:'CHANGE', short:'変わること',
-  title:'紙から、<br>手元のスマホへ',
+ {no:'02', key:'CHANGE', short:'変わること',
+  title:'打ち直しが、<br>なくなります',
   ba:{before:['現場で紙に書く','事務所に持ち帰る','Excelに打ち直す','記入漏れに後から気づく'],
       after:['その場で入力して終わり','打ち直しが要らない','集計まで自動','未入力はその場で分かる']}},
 
- {no:'06', key:'FREE', short:'まず無償で',
-  title:'まず2週間、<br><em>動くものを無償で</em><br>おつくりします。',
-  body:'お見積りだけでは判断のしようがないと思います。現場で使ってから決めてください。',
-  cta:[{label:'進め方を見る', href:'#process'}]},
-
- {no:'07', key:'WORKS', short:'これまで',
-  title:'これまでの仕事',
-  lst:[{n:'食品商社グループ', s:'製造記録アプリ（iPad）'},
-       {n:'大手銀行', s:'公式スマホアプリ'},
-       {n:'大手家電量販店', s:'公式スマホアプリ'},
-       {n:'公共インフラ企業', s:'待ち番号表示システム'}],
-  body:'受託開発会社に所属していた期間の担当分。企業名は伏せています。',
-  cta:[{label:'詳しく見る', href:'#works'}]},
-
- {no:'08', key:'CONTACT', short:'ご相談',
-  title:'自分のサービスも受託も、<br>同じ手でつくっています。',
-  body:'「これはアプリで解決することなのか」という段階のご相談で構いません。',
-  cta:[{label:'ご相談する', href:'#contact', fill:true}]}
+ {no:'03', key:'PRICE', short:'費用',
+  title:'現場診断<br>15万円から。',
+  body:'3段階に分け、それぞれの段階で止められるようにしています。金額は最初から公開しています。',
+  cta:[{label:'進め方と費用', href:'#process', fill:true},
+       {label:'現場を見てもらう', href:'#contact'}]}
 ];
 const N = ITEMS.length;
 
@@ -877,7 +945,12 @@ let lastAct = -1;
 const lastPE = new Array(N).fill(null);
 
 function render(){
-  const step = (Math.PI*2)/N;
+  /* 小円の間隔。2π/N のままだと3枚で120°開き、軌道上に1つしか乗らない。
+     枚数から切り離して固定角にする。
+     45°（元の8枚と同じ）だと R が vh に対して大きいぶん、隣の円が
+     画面の下に落ちる。32°まで詰めると中央と前後が画面に残る。
+     枚数を増減しても、この値は触らなくてよい。 */
+  const step = 32 * Math.PI/180;
   minis.forEach(function(m,i){
     const d = i - cur, th = A0 + d*step, ad = Math.abs(d);
     /* 位置は transform のみで更新する（left/top を毎フレーム書き換えない） */
@@ -971,7 +1044,41 @@ if(!reduce){
   }, { rootMargin:'0px 0px -6% 0px' });
   [].forEach.call(els, function(el){ io.observe(el); });
 })();
+
+/* ==================================================================
+   8. 相談フォーム
+   Workers Static Assets はサーバー処理を持たないため、入力内容を
+   本文に入れたメールを立ち上げる形にしている。外部フォーム
+   （Formspree 等）に移すときは、この submit ハンドラごと
+   form の action/method に差し替えること。
+================================================================== */
+(function(){
+  var f = document.getElementById('cform');
+  if(!f) return;
+  var TO = 'pokonavi.info@gmail.com';
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var v = function(n){ var el = f.elements[n]; return el ? el.value.trim() : ''; };
+    var body = [
+      '■ 業種・会社名',       v('company') || '（未記入）', '',
+      '■ いま紙やExcelでやっていること', v('issue')   || '（未記入）', '',
+      '■ お名前・ご連絡先',   v('contact') || '（未記入）', '',
+      '---', 'yhasegawa.com の相談フォームから'
+    ].join('\n');
+    var subj = '【ご相談】' + (v('company') || 'お問い合わせ');
+    window.location.href = 'mailto:' + TO
+      + '?subject=' + encodeURIComponent(subj)
+      + '&body='    + encodeURIComponent(body);
+  });
+})();
 </script>
+
+<!-- Cloudflare Web Analytics。
+     TODO: dash.cloudflare.com → Analytics & Logs → Web Analytics で
+     yhasegawa.com を追加し、発行されたトークンを下の YOUR_TOKEN_HERE に貼る。
+     貼るまで計測は始まらない。Cookie を使わないので同意バナーは不要。 -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "YOUR_TOKEN_HERE"}'></script>
 
 </body>
 </html>
