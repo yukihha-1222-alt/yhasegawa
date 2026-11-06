@@ -1,0 +1,291 @@
+<!-- ============================================================
+     このファイルは build.py が組み立てたものです。直接編集しても、
+     次のビルドで消えます。本文は pages/pages/about.html、
+     共通部分は parts/ を編集して python3 build.py を実行してください。
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>長谷川について｜なぜこの仕事をしているか｜兵庫県姫路市</title>
+<meta name="description" content="以前つとめていた会社で、食品商社グループの製造記録アプリを担当しました。入力を担当されていた方の「夕方の時間が戻ってきた」という言葉が、いまの仕事の出発点です。これまでの仕事と、一人でお受けするうえでお約束していることを書いています。">
+<link rel="canonical" href="https://yhasegawa.com/about/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yhasegawa.com/about/">
+<meta property="og:title" content="長谷川について｜なぜこの仕事をしているか｜兵庫県姫路市">
+<meta property="og:description" content="以前つとめていた会社で、食品商社グループの製造記録アプリを担当しました。入力を担当されていた方の「夕方の時間が戻ってきた」という言葉が、いまの仕事の出発点です。これまでの仕事と、一人でお受けするうえでお約束していることを書いています。">
+<meta property="og:site_name" content="長谷川侑希｜現場の業務アプリ開発">
+<meta property="og:locale" content="ja_JP">
+<!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
+<meta name="theme-color" content="#C2653A">
+<meta name="theme-color" content="#1F1A17" media="(prefers-color-scheme: dark)">
+
+<!-- 書体は Zen Kaku Gothic New ひとつ。swap を指定しているので、
+     落ちてくるまではシステムのゴシックで読める状態になる -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body data-current="about">
+
+<a class="skip" href="#main">本文へ移動する</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="who" href="/">
+      <b>長谷川　侑希</b>
+      <span>現場の業務アプリ開発｜兵庫県姫路市</span>
+    </a>
+
+    <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
+         ここが折り返して出るだけなので、リンクは必ず辿れる -->
+    <nav class="nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="/#gyoshu" data-nav="gyoshu">業種から探す</a></li>
+        <li><a href="/ryokin/" data-nav="ryokin">進め方と費用</a></li>
+        <li><a href="/hojokin/" data-nav="hojokin">補助金</a></li>
+        <li><a href="/about/" data-nav="about">長谷川について</a></li>
+        <li><a href="/faq/" data-nav="faq">よくある質問</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn head-cta" href="/contact/">相談する</a>
+  </div>
+</header>
+
+
+<main id="main">
+<section class="section page-hero">
+  <div class="wrap">
+    <div class="duo">
+      <figure>
+        <!-- TODO: 写真を用意。本人の顔写真。笑顔で、正面寄り。自然光。
+             <img src="/assets/img/hasegawa.jpg" width="640" height="640" loading="eager"
+                  decoding="async" class="photo" alt="長谷川侑希"> -->
+        <div class="photo-slot" role="img" aria-label="写真（準備中）長谷川侑希の顔写真">
+          <b>顔写真が入ります</b>
+          本人の顔写真（笑顔・正面寄り・自然光）
+        </div>
+      </figure>
+
+      <div>
+        <p class="eyebrow">長谷川について</p>
+        <h1>夕方の時間が<br>戻ってきた、という<br>言葉がきっかけです</h1>
+        <p class="lead">
+          兵庫県姫路市で、現場で使う業務アプリをつくっています。企画から開発、その後の運用まで、ひとりで担当しています。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ なぜこの仕事をしているか ============ -->
+<section class="section alt">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <h2>なぜ、この仕事をしているか</h2>
+    </div>
+
+    <!-- TODO: 本人の言葉で確認 -->
+    <p class="lead-p">
+      以前つとめていた受託開発の会社で、食品商社グループの製造記録アプリを担当しました。製造の現場で紙に書いた記録を、事務所でExcelに入力し直していた会社です。
+    </p>
+    <p class="lead-p">
+      それをiPadで入力できるようにしたところ、入力し直す作業がまるごとなくなりました。記入漏れも出なくなりました。数字の上では、はっきりした成果でした。
+    </p>
+    <p class="lead-p">
+      ただ、そのとき一番うれしかったのは、数字のほうではありませんでした。入力を担当されていた事務の方が、「夕方の時間が戻ってきた」とおっしゃったことでした。毎日しなくてよくなった作業が、その方の一日をひとつ変えていた。つくったものが誰かの時間を返したのだと、そのとき初めて実感しました。
+    </p>
+    <p class="lead-p">
+      いま独立しておつくりしているものは、ずっとその続きです。大きな仕組みをつくりたいわけではなく、夕方に日報の束を前にしている方の手が空けば、それでいいと思っています。
+    </p>
+  </div>
+</section>
+
+<!-- ============ これまでの仕事 ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>これまでの仕事</h2>
+      <p>
+        受託開発会社に所属していたころに、チームの一員として担当したものです。守秘義務のため、社名は伏せています。
+      </p>
+    </div>
+
+    <ul class="works">
+      <li>
+        <span class="t">食品商社グループ｜製造記録アプリ（iPad）</span>
+        <span class="role">要件設計・開発リーダー</span>
+        <span class="d">
+          製造現場で紙に書いていた記録を、iPadで入力・保存できるようにしました。事務所で打ち直す作業がなくなり、記入漏れも出なくなりました。どの項目をどの順番で並べるかは、実際に書いている方に見せていただきながら決めています。
+        </span>
+      </li>
+      <li>
+        <span class="t">大手銀行｜公式スマートフォンアプリ</span>
+        <span class="role">iOS開発</span>
+        <span class="d">個人のお客様向けのアプリを担当しました。</span>
+      </li>
+      <li>
+        <span class="t">大手家電量販店｜公式スマートフォンアプリ</span>
+        <span class="role">iOS開発</span>
+        <span class="d">会員向けのアプリで、全国の店舗とECにつながるものでした。</span>
+      </li>
+      <li>
+        <span class="t">公共インフラ企業｜待ち番号表示システム</span>
+        <span class="role">システム開発</span>
+        <span class="d">窓口の待ち番号を表示する仕組みをつくりました。</span>
+      </li>
+    </ul>
+
+    <p class="note">
+      独立してからは、自分で企画したアプリをApp StoreとGoogle Playに出しています。申請から審査、出したあとの運用まで、ひとりで回しています。
+    </p>
+    <div class="side-links">
+      <a href="/works/">これまでにつくったアプリ</a>
+      <a href="/tapuda/">かざすと渡せる名刺「tapuda」の法人導入</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 一人でも安心していただくために ============ -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>一人でも、安心していただくために</h2>
+      <p>
+        何百万円かのお仕事を、会社ではなく個人に預けるのは、不安があって当たり前だと思います。「この人がいなくなったら、うちのアプリはどうなるのか」。その問いへの答えを、契約の時点で先に決めておきます。
+      </p>
+    </div>
+
+    <ul class="assure">
+      <li>
+        <h3>ソースコードをお渡しします</h3>
+        <p>
+          納品物に含めます。私以外の会社へ、そのまま引き継いでいただけます。囲い込むようなことはしません。
+        </p>
+      </li>
+      <li>
+        <h3>設計書と運用手順を残します</h3>
+        <p>
+          口頭でしか存在しない決まりごとをつくりません。引き継ぐときに必要になるのは、動くものよりも、書かれたもののほうです。
+        </p>
+      </li>
+      <li>
+        <h3>一般的な技術でつくります</h3>
+        <p>
+          私にしか読めない書き方をしません。
+          iOSもAndroidもWebも、ほかの開発者が読んで引き継げる、標準的な形にします。
+        </p>
+      </li>
+      <li>
+        <h3>保守は、いつでも解約できます</h3>
+        <p>
+          長期の縛りは設けません。続ける理由がなくなったときには、止めていただいて大丈夫です。
+        </p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 所在地 ============ -->
+<section class="section">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <h2>所在地について</h2>
+    </div>
+    <p class="lead-p">
+      <b>活動拠点：</b>兵庫県姫路市。播磨エリアを中心に、現場へうかがっています。
+    </p>
+    <p class="lead-p">
+      <b>所在地：</b>〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室
+    </p>
+    <p class="note">
+      <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを
+           一言。バーチャルオフィスであることをどこまで書くかは本人の判断 -->
+      登録している所在地と、普段うかがっている地域が異なります。ご不明な点があれば、お気軽にお尋ねください。
+    </p>
+  </div>
+</section>
+
+<!-- 全ページの末尾に入る相談ブロック。
+     パートナーが業種別ページのURLを直接送る想定なので、
+     どのページで読み終わっても、次の一歩がここにある -->
+<section class="section tint" id="soudan">
+  <div class="wrap narrow">
+    <h2>まずは、無料で現場を見てもらいませんか</h2>
+    <p class="lead-p">
+      ご相談と、半日ほどの現場の見学は無料です。見せていただいたうえで、アプリで解決したほうがいいのか、それとも今のやり方を少し変えれば済むのかを、正直にお伝えします。作らないほうがいい場合は、そうお伝えします。
+    </p>
+    <div class="btn-row">
+      <a class="btn" href="/contact/">まずは無料で見てもらう</a>
+      <a class="btn ghost" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
+    </div>
+    <p class="note">
+      兵庫・大阪・岡山あたりの、日帰りで伺える範囲が対象です。「これはアプリで解決することなのか」という段階のご相談で構いません。
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="name">長谷川　侑希</p>
+    <p class="tag">兵庫県姫路市を拠点に、現場で使う業務アプリをつくっています。</p>
+
+    <nav aria-label="フッターメニュー">
+      <a href="/">ホーム</a>
+      <a href="/kensetsu/">建設・設備工事</a>
+      <a href="/shokuhin/">食品工場</a>
+      <a href="/butsuryu/">物流・配送</a>
+      <a href="/seizo/">その他の製造業</a>
+      <a href="/ryokin/">進め方と費用</a>
+      <a href="/hojokin/">補助金のご案内</a>
+      <a href="/about/">長谷川について</a>
+      <a href="/faq/">よくあるご質問</a>
+      <a href="/works/">つくったもの</a>
+      <a href="/tapuda/">tapuda 法人導入</a>
+      <a href="/contact/">ご相談</a>
+    </nav>
+
+    <dl>
+      <dt>お電話</dt>
+      <dd><a href="tel:08062061245">080-6206-1245</a></dd>
+      <!-- TODO: info@yhasegawa.com などに変更。Cloudflare Email Routing の
+           転送設定が済むまでは、届かなくなるので切り替えないこと -->
+      <dt>メール</dt>
+      <dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
+      <dt>活動拠点</dt>
+      <dd>兵庫県姫路市（播磨エリアを中心に、現場へ伺います）</dd>
+      <dt>所在地</dt>
+      <dd>
+        〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室<br>
+        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言。
+             バーチャルオフィスであることをどこまで書くかは本人の判断 -->
+        <span class="why-addr">事務所の所在地と、普段うかがっている地域が異なります。</span>
+      </dd>
+    </dl>
+
+    <p class="cr">©長谷川侑希</p>
+  </div>
+</footer>
+
+
+<!-- スマホの画面下に固定する。本文を隠さないよう高さは抑え、
+     iPhone のホームバーにかからないよう safe-area を見ている -->
+<div class="mobilebar" aria-label="お問い合わせ">
+  <a href="tel:08062061245">電話する</a>
+  <a class="primary" href="/contact/">相談する</a>
+</div>
+
+
+<script src="/assets/js/site.js" defer></script>
+<!-- Cloudflare Web Analytics。Cookie を使わないので同意バナーは不要 -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
+</body>
+</html>

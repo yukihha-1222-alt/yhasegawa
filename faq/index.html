@@ -1,0 +1,280 @@
+<!-- ============================================================
+     このファイルは build.py が組み立てたものです。直接編集しても、
+     次のビルドで消えます。本文は pages/pages/faq.html、
+     共通部分は parts/ を編集して python3 build.py を実行してください。
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>よくあるご質問｜費用・補助金・契約について｜長谷川侑希</title>
+<meta name="description" content="いくらから頼めますか、小さい会社でも相手にしてもらえますか、合格しなかったら本当に請求されないのですか、IT導入補助金は使えますか。よくいただくご質問にお答えしています。">
+<link rel="canonical" href="https://yhasegawa.com/faq/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yhasegawa.com/faq/">
+<meta property="og:title" content="よくあるご質問｜費用・補助金・契約について｜長谷川侑希">
+<meta property="og:description" content="いくらから頼めますか、小さい会社でも相手にしてもらえますか、合格しなかったら本当に請求されないのですか、IT導入補助金は使えますか。よくいただくご質問にお答えしています。">
+<meta property="og:site_name" content="長谷川侑希｜現場の業務アプリ開発">
+<meta property="og:locale" content="ja_JP">
+<!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
+<meta name="theme-color" content="#C2653A">
+<meta name="theme-color" content="#1F1A17" media="(prefers-color-scheme: dark)">
+
+<!-- 書体は Zen Kaku Gothic New ひとつ。swap を指定しているので、
+     落ちてくるまではシステムのゴシックで読める状態になる -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body data-current="faq">
+
+<a class="skip" href="#main">本文へ移動する</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="who" href="/">
+      <b>長谷川　侑希</b>
+      <span>現場の業務アプリ開発｜兵庫県姫路市</span>
+    </a>
+
+    <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
+         ここが折り返して出るだけなので、リンクは必ず辿れる -->
+    <nav class="nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="/#gyoshu" data-nav="gyoshu">業種から探す</a></li>
+        <li><a href="/ryokin/" data-nav="ryokin">進め方と費用</a></li>
+        <li><a href="/hojokin/" data-nav="hojokin">補助金</a></li>
+        <li><a href="/about/" data-nav="about">長谷川について</a></li>
+        <li><a href="/faq/" data-nav="faq">よくある質問</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn head-cta" href="/contact/">相談する</a>
+  </div>
+</header>
+
+
+<main id="main">
+<section class="section page-hero">
+  <div class="wrap narrow">
+    <p class="eyebrow">よくあるご質問</p>
+    <h1>よくいただく<br>ご質問にお答えします</h1>
+    <p class="lead">
+      ここに無いことでも、気になる点があればお気軽にお尋ねください。答えられないことは、答えられないとお伝えします。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 費用について ============ -->
+<section class="section alt">
+  <div class="wrap narrow">
+    <div class="sec-head"><h2>費用について</h2></div>
+
+    <div class="faq">
+      <details open>
+        <summary>いくらから頼めますか</summary>
+        <div class="a">
+          ご相談と、半日ほどの現場の見学は無料です。費用がかかるのは、実際に動くお試し版（プロトタイプ）をおつくりする段階からで、約30万円です。しかも、先に決めた合格条件を満たさなければ、その代金もいただきません。
+          <a href="/ryokin/">進め方と費用をくわしく見る</a>
+        </div>
+      </details>
+
+      <details>
+        <summary>合格しなかった場合、本当に請求されないのですか</summary>
+        <div class="a">
+          請求しません。何ができれば合格かを、着手する前に書面で決めておきます。その条件を満たさなかった場合は、お試し版の代金はいただきません。判断していただくのは、現場で2週間ほど使っていただいたあとです。
+        </div>
+      </details>
+
+      <details>
+        <summary>作ったあとの保守はどうなりますか</summary>
+        <div class="a">
+          月額約5万円です。OSの更新への対応、不具合の対応、軽微な改修が含まれます。長期の縛りはありませんので、続ける理由がなくなったときは解約していただけます。
+        </div>
+      </details>
+
+      <details>
+        <summary>うちは小さい会社ですが、相手にしてもらえますか</summary>
+        <div class="a">
+          従業員10人ほどの会社が中心です。大きな会社向けの仕組みは、そのまま持ってきても合わないことが多いので、むしろ小さい現場のほうが向いています。
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 補助金について ============ -->
+<section class="section">
+  <div class="wrap narrow">
+    <div class="sec-head"><h2>補助金について</h2></div>
+
+    <div class="faq">
+      <details>
+        <summary>IT導入補助金は使えますか</summary>
+        <div class="a">
+          現在のオーダーメイドでの開発は、対象外です。この制度は、あらかじめ登録されたツールを導入する場合が対象になるためです。御社に合わせてつくるものには、別の制度をご案内します。
+          <a href="/hojokin/">補助金のご案内を見る</a>
+        </div>
+      </details>
+
+      <details>
+        <summary>補助金は、いつ相談すればいいですか</summary>
+        <div class="a">
+          <b>契約の前にご相談ください。</b>
+          多くの制度では、交付が決まる前に契約・発注したものは対象外になります。先に契約してしまうと、あとから申請できなくなることがありますので、お見積りの段階で「使いたい」とお伝えいただければ、着手の時期をご一緒に決めます。
+        </div>
+      </details>
+
+      <details>
+        <summary>補助金の申請は代行してもらえますか</summary>
+        <div class="a">
+          申請そのものの代行はしておりません。申請に必要な、システムの内容や見積りの資料づくりまでをお手伝いします。顧問の税理士さんや、商工会議所の相談窓口と合わせてお使いいただくのが確実です。
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 進め方について ============ -->
+<section class="section alt">
+  <div class="wrap narrow">
+    <div class="sec-head"><h2>進め方について</h2></div>
+
+    <div class="faq">
+      <details>
+        <summary>「作らないほうがいい」と言われることはありますか</summary>
+        <div class="a">
+          あります。Excelの使い方を変えれば済むこと、市販のソフトで足りることは、そのようにお伝えします。現場を見せていただくのは、その判断をするためでもあります。そこで終えていただいて大丈夫です。
+        </div>
+      </details>
+
+      <details>
+        <summary>姫路以外でも対応できますか</summary>
+        <div class="a">
+          現場を直接見せていただく必要があるため、日帰りでうかがえる範囲が基本です。兵庫・大阪・岡山あたりとお考えください。それ以外の地域も、ご相談いただければ調整します。
+        </div>
+      </details>
+
+      <details>
+        <summary>どのくらいの期間がかかりますか</summary>
+        <div class="a">
+          お試し版が2〜3週間、本開発が2〜4か月を目安にしています。規模によって前後しますので、現場を見せていただいてからお伝えします。
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 契約について ============ -->
+<section class="section">
+  <div class="wrap narrow">
+    <div class="sec-head"><h2>契約について</h2></div>
+
+    <div class="faq">
+      <details>
+        <summary>一人でやられているとのことですが、大丈夫でしょうか</summary>
+        <div class="a">
+          不安に思われるのは当然だと思います。ソースコードと設計書、運用手順を納品物に含め、ほかの会社へそのまま引き継げる形でお渡しします。私しか読めない書き方もしません。
+          <a href="/about/">お約束していることを見る</a>
+        </div>
+      </details>
+
+      <details>
+        <summary>契約はどのような形になりますか</summary>
+        <div class="a">
+          業務委託契約を結びます。ソースコードの納品、検収の条件、保守の範囲を書面で定めます。
+        </div>
+      </details>
+
+      <details>
+        <summary>インボイスの登録番号はありますか</summary>
+        <div class="a">
+          いまは未登録です。お見積りは税込の総額でお出しします。登録事業者でないと発注できないお決まりの会社もありますので、その場合は早めに教えてください。こちらで登録を進めることもできます。
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- 全ページの末尾に入る相談ブロック。
+     パートナーが業種別ページのURLを直接送る想定なので、
+     どのページで読み終わっても、次の一歩がここにある -->
+<section class="section tint" id="soudan">
+  <div class="wrap narrow">
+    <h2>まずは、無料で現場を見てもらいませんか</h2>
+    <p class="lead-p">
+      ご相談と、半日ほどの現場の見学は無料です。見せていただいたうえで、アプリで解決したほうがいいのか、それとも今のやり方を少し変えれば済むのかを、正直にお伝えします。作らないほうがいい場合は、そうお伝えします。
+    </p>
+    <div class="btn-row">
+      <a class="btn" href="/contact/">まずは無料で見てもらう</a>
+      <a class="btn ghost" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
+    </div>
+    <p class="note">
+      兵庫・大阪・岡山あたりの、日帰りで伺える範囲が対象です。「これはアプリで解決することなのか」という段階のご相談で構いません。
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="name">長谷川　侑希</p>
+    <p class="tag">兵庫県姫路市を拠点に、現場で使う業務アプリをつくっています。</p>
+
+    <nav aria-label="フッターメニュー">
+      <a href="/">ホーム</a>
+      <a href="/kensetsu/">建設・設備工事</a>
+      <a href="/shokuhin/">食品工場</a>
+      <a href="/butsuryu/">物流・配送</a>
+      <a href="/seizo/">その他の製造業</a>
+      <a href="/ryokin/">進め方と費用</a>
+      <a href="/hojokin/">補助金のご案内</a>
+      <a href="/about/">長谷川について</a>
+      <a href="/faq/">よくあるご質問</a>
+      <a href="/works/">つくったもの</a>
+      <a href="/tapuda/">tapuda 法人導入</a>
+      <a href="/contact/">ご相談</a>
+    </nav>
+
+    <dl>
+      <dt>お電話</dt>
+      <dd><a href="tel:08062061245">080-6206-1245</a></dd>
+      <!-- TODO: info@yhasegawa.com などに変更。Cloudflare Email Routing の
+           転送設定が済むまでは、届かなくなるので切り替えないこと -->
+      <dt>メール</dt>
+      <dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
+      <dt>活動拠点</dt>
+      <dd>兵庫県姫路市（播磨エリアを中心に、現場へ伺います）</dd>
+      <dt>所在地</dt>
+      <dd>
+        〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室<br>
+        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言。
+             バーチャルオフィスであることをどこまで書くかは本人の判断 -->
+        <span class="why-addr">事務所の所在地と、普段うかがっている地域が異なります。</span>
+      </dd>
+    </dl>
+
+    <p class="cr">©長谷川侑希</p>
+  </div>
+</footer>
+
+
+<!-- スマホの画面下に固定する。本文を隠さないよう高さは抑え、
+     iPhone のホームバーにかからないよう safe-area を見ている -->
+<div class="mobilebar" aria-label="お問い合わせ">
+  <a href="tel:08062061245">電話する</a>
+  <a class="primary" href="/contact/">相談する</a>
+</div>
+
+
+<script src="/assets/js/site.js" defer></script>
+<!-- Cloudflare Web Analytics。Cookie を使わないので同意バナーは不要 -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
+</body>
+</html>
