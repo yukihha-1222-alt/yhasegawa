@@ -110,7 +110,7 @@ def main():
 
     layout = read(os.path.join(PARTS, 'layout.html'))
     common = {name: read(os.path.join(PARTS, name + '.html'))
-              for name in ('header', 'contact', 'footer', 'mobilebar')}
+              for name in ('header', 'contact', 'footer', 'mobilebar', 'pricebrief')}
 
     built = []
     for fn in sorted(os.listdir(PAGES)):
@@ -127,6 +127,13 @@ def main():
         out = os.path.join(ROOT, 'index.html') if slug == 'index' \
             else os.path.join(ROOT, slug, 'index.html')
         url = '/' if slug == 'index' else '/%s/' % slug
+
+        # 本文の中の {{pricebrief}} などを先に埋める。
+        # layout を埋めたあとでは、差し込んだ本文は走査されない。
+        try:
+            body = fill(body, common)
+        except ValueError as e:
+            sys.exit('%s: %s' % (fn, e))
 
         values = dict(common)
         values.update({
