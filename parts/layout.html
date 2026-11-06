@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+<link rel="canonical" href="https://yhasegawa.com{{url}}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yhasegawa.com{{url}}">
+<meta property="og:title" content="{{title}}">
+<meta property="og:description" content="{{description}}">
+<meta property="og:site_name" content="長谷川侑希｜現場の業務アプリ開発">
+<meta property="og:locale" content="ja_JP">
+<!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
+<meta name="theme-color" content="#C2653A">
+<meta name="theme-color" content="#1F1A17" media="(prefers-color-scheme: dark)">
+
+<!-- 書体は Zen Kaku Gothic New ひとつ。swap を指定しているので、
+     落ちてくるまではシステムのゴシックで読める状態になる -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body data-current="{{current}}">
+
+<a class="skip" href="#main">本文へ移動する</a>
+
+{{header}}
+
+<main id="main">
+{{body}}
+
+{{contact}}
+</main>
+
+{{footer}}
+
+{{mobilebar}}
+
+<script src="/assets/js/site.js" defer></script>
+<!-- Cloudflare Web Analytics。Cookie を使わないので同意バナーは不要 -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
+</body>
+</html>

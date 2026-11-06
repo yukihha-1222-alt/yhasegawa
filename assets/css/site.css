@@ -1,0 +1,568 @@
+@charset "utf-8";
+/* ==================================================================
+   yhasegawa.com 共通スタイル
+
+   方針
+     ・読み手は、従業員10人前後の会社の社長と事務担当の方。
+       税理士や社労士からの紹介で来る想定で、ITには詳しくない。
+     ・「速そう」「賢そう」ではなく「相談してみようかな」と思えること。
+     ・白地に黒、鮮やかな単色、同じ形のカードの格子、英語ラベル、
+       装飾的な連番は使わない。前の版はそれで無愛想になっていた。
+
+   ビルドは入れない。このCSS1枚を全ページから読む。
+================================================================== */
+
+/* ---------- 色 ----------------------------------------------------
+   真っ白と真っ黒を避け、紙と墨に寄せる。
+   アクセントの柿色は白地で 3.4:1 しかないため、本文中の小さい文字には
+   使わず、--accent-ink（濃いめ）を使い分ける。ここを混ぜると読めなくなる。
+------------------------------------------------------------------ */
+:root{
+  --bg:         #FAF6EF;   /* 生成り。ページの地 */
+  --bg-alt:     #F2EADF;   /* 少し濃いベージュ。節の切り替え */
+  --bg-card:    #FFFCF7;   /* 白に寄せた面。囲みの中 */
+  --ink:        #3B3632;   /* 本文。茶みのある濃グレー */
+  --ink-soft:   #6B625A;   /* 補足 */
+  --ink-faint:  #938A80;   /* 注記 */
+  --accent:     #C2653A;   /* 柿色。ボタンの塗りと見出しだけ */
+  --accent-ink: #A8522C;   /* 本文中で柿色を使うとき（4.5:1以上） */
+  --accent-pale:#F3E3D8;   /* 柿色の薄い面 */
+  --green:      #5F7A5B;   /* 安心感を出したい箇所に少しだけ */
+  --green-pale: #E8EEE5;
+  --line:       #E3D9C9;
+  --shadow:     0 1px 2px rgba(59,54,50,.04), 0 6px 20px rgba(59,54,50,.06);
+
+  --round:  10px;
+  --round-s: 8px;
+  --round-l: 14px;
+
+  /* 書体は1種類に絞る。Zen Kaku Gothic New は丸みがあり、
+     Windows の Yu Gothic より線が太く、画面で読んでも冷たくならない。 */
+  --font: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN",
+          "Yu Gothic", "Noto Sans JP", sans-serif;
+
+  --wrap: 1080px;
+  --pad: clamp(20px, 5vw, 48px);
+}
+
+/* 暗い環境でも同じ温度を保つ。灰色に転ばせず、茶に寄せる */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:         #1F1A17;
+    --bg-alt:     #272019;
+    --bg-card:    #2A231E;
+    --ink:        #EFE6DA;
+    --ink-soft:   #C0B4A6;
+    --ink-faint:  #948879;
+    --accent:     #D98355;   /* 暗地では明るめにしないと沈む */
+    --accent-ink: #E8A078;
+    --accent-pale:#3A2A21;
+    --green:      #8FAE89;
+    --green-pale: #263024;
+    --line:       #3D342C;
+    --shadow:     0 1px 2px rgba(0,0,0,.2), 0 6px 20px rgba(0,0,0,.25);
+  }
+}
+
+/* ---------- 下ごしらえ ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+body,h1,h2,h3,h4,p,ul,ol,li,dl,dt,dd,figure,blockquote{margin:0;padding:0}
+ul,ol{list-style:none}
+img{max-width:100%;height:auto;display:block}
+
+body{
+  font-family:var(--font);
+  /* 本文17px。読み手に50〜60代が含まれるので、15pxまで落とさない */
+  font-size:17px;
+  line-height:1.85;
+  letter-spacing:.02em;
+  color:var(--ink);
+  background:var(--bg);
+  /* 行頭に句読点が来ないようにする */
+  line-break:strict;
+  word-break:normal;
+  overflow-wrap:anywhere;
+}
+@media (max-width:600px){ body{font-size:16px;line-height:1.8} }
+
+a{color:var(--accent-ink);text-underline-offset:.25em}
+a:hover{color:var(--accent)}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:3px}
+
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--pad)}
+.narrow{max-width:46rem}
+
+/* 読み上げには残して画面からは隠す */
+.vh{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;
+}
+
+/* キーボードで来た人が本文へ飛べるように */
+.skip{
+  position:absolute;left:12px;top:-60px;z-index:100;
+  background:var(--accent);color:#fff;padding:10px 18px;border-radius:var(--round-s);
+  transition:top .2s;
+}
+.skip:focus{top:12px}
+
+/* ---------- 見出し ---------- */
+h1,h2,h3{font-weight:700;line-height:1.5;letter-spacing:.01em}
+h1{font-size:clamp(27px,5.2vw,42px);line-height:1.42}
+h2{font-size:clamp(22px,3.8vw,31px)}
+h3{font-size:clamp(17px,2.4vw,20px)}
+
+/* 節の見出し。英語ラベルや連番は置かない。
+   代わりに短い導入文を添えて、何の話が始まるかを日本語で示す。 */
+.sec-head{max-width:40rem;margin-bottom:clamp(24px,4vw,38px)}
+.sec-head p{margin-top:14px;color:var(--ink-soft)}
+
+/* ---------- 節 ---------- */
+.section{padding-block:clamp(52px,8vw,92px)}
+.section.alt{background:var(--bg-alt)}
+.section.tint{background:var(--accent-pale)}
+
+/* ---------- ボタン ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5em;
+  min-height:52px;padding:14px 28px;
+  font:inherit;font-weight:700;font-size:16px;letter-spacing:.03em;
+  border-radius:var(--round);border:1.5px solid var(--accent);
+  background:var(--accent);color:#fff;text-decoration:none;cursor:pointer;
+  box-shadow:var(--shadow);
+  transition:background .18s, transform .18s, box-shadow .18s;
+}
+.btn:hover{background:var(--accent-ink);color:#fff;transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn.ghost{
+  background:transparent;color:var(--accent-ink);box-shadow:none;
+}
+.btn.ghost:hover{background:var(--accent-pale);color:var(--accent-ink)}
+@media (prefers-color-scheme: dark){
+  .btn{color:#241B16}
+  .btn:hover{color:#241B16}
+  .btn.ghost{color:var(--accent-ink)}
+}
+.btn-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:clamp(22px,3vw,30px)}
+
+/* ---------- ヘッダー ----------------------------------------------
+   広い画面ではロゴ・メニュー・相談ボタンを横一列に。
+   狭い画面では site.js がメニューを折りたたむ。
+   JSが動かない環境では折りたたまれず、そのまま折り返して出る。
+   リンクが辿れなくなるより、少し縦に伸びるほうがましという判断。
+------------------------------------------------------------------ */
+.site-head{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+@supports not (backdrop-filter:blur(2px)){ .site-head{background:var(--bg)} }
+.site-head .wrap{
+  display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;
+  padding-block:10px;
+}
+.site-head .who{text-decoration:none;color:inherit;line-height:1.35;margin-right:auto}
+.site-head .who b{display:block;font-size:18px;font-weight:700;letter-spacing:.05em}
+.site-head .who span{display:block;font-size:12px;color:var(--ink-soft);margin-top:1px}
+.site-head .head-cta{min-height:42px;padding:9px 20px;font-size:15px;flex:none}
+
+.nav ul{display:flex;flex-wrap:wrap;gap:2px}
+.nav a{
+  display:inline-block;padding:8px 13px;border-radius:999px;
+  text-decoration:none;color:var(--ink);font-size:15px;white-space:nowrap;
+}
+.nav a:hover{background:var(--bg-alt);color:var(--accent-ink)}
+/* 現在地のページだけ下線で示す。色だけに頼らない */
+body[data-current="ryokin"]  [data-nav="ryokin"],
+body[data-current="hojokin"] [data-nav="hojokin"],
+body[data-current="about"]   [data-nav="about"],
+body[data-current="faq"]     [data-nav="faq"]{
+  color:var(--accent-ink);font-weight:700;
+  text-decoration:underline;text-underline-offset:.4em;text-decoration-thickness:2px;
+}
+
+/* 折りたたみボタン。site.js が作る */
+.nav-toggle{
+  display:none;font:inherit;font-size:15px;font-weight:700;color:var(--ink);
+  background:transparent;border:1.5px solid var(--line);border-radius:999px;
+  padding:8px 16px;cursor:pointer;
+}
+.nav-toggle:hover{border-color:var(--accent)}
+@media (max-width:900px){
+  .site-head .who span{display:none}
+  .site-head .head-cta{display:none}      /* 画面下の固定ボタンがあるので重ねない */
+  .js .nav-toggle{display:inline-block}
+  .js .nav{display:none;flex-basis:100%}
+  .js .nav.open{display:block}
+  .nav ul{flex-direction:column;gap:0;padding-block:6px}
+  .nav a{display:block;padding:12px 4px;border-radius:0;border-bottom:1px solid var(--line)}
+  .nav li:last-child a{border-bottom:0}
+}
+
+/* ---------- 写真 ----------------------------------------------------
+   写真は後から本人が差し替える。それまでは何を入れるかを書いた枠を出す。
+   実物を入れるときは .photo-slot を <img> に置き換えるだけでよい。
+   画像には loading="lazy" と decoding="async" を付けること。
+------------------------------------------------------------------ */
+figure{margin:0}
+.photo, .photo-slot{
+  border-radius:var(--round-l);
+  overflow:hidden;
+  background:var(--bg-alt);
+}
+.photo-slot{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:28px 22px;text-align:center;
+  border:1.5px dashed var(--line);
+  color:var(--ink-faint);font-size:13.5px;line-height:1.7;
+  min-height:200px;
+}
+.photo-slot b{display:block;font-weight:700;color:var(--ink-soft);font-size:14px}
+figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1.7}
+
+/* 写真と文章を左右交互に置く。カードの格子に頼らないための基本形 */
+.duo{
+  display:grid;gap:clamp(24px,4vw,46px);align-items:center;
+  grid-template-columns:1fr;
+}
+@media (min-width:860px){
+  .duo{grid-template-columns:1fr 1fr}
+  .duo.flip > :first-child{order:2}
+}
+
+/* ---------- ファーストビュー ---------- */
+.hero{padding-block:clamp(40px,6vw,72px) clamp(44px,7vw,80px)}
+.hero .lead{
+  margin-top:20px;font-size:clamp(17px,2.3vw,19px);color:var(--ink-soft);
+  max-width:34em;
+}
+.hero .note{
+  margin-top:26px;padding:18px 22px;
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:var(--round);
+  font-size:15.5px;line-height:1.85;color:var(--ink-soft);
+  max-width:34em;box-shadow:var(--shadow);
+}
+
+/* ---------- 業種の入口 ----------------------------------------------
+   同じ形のカードを格子に並べると、どれも同じに見えて選べなくなる。
+   写真を左、言葉を右に置いた横長の行にして、上から読めるようにする。
+------------------------------------------------------------------ */
+.trades{display:flex;flex-direction:column;gap:14px;margin-top:clamp(18px,3vw,26px)}
+.trades a{
+  display:grid;gap:16px clamp(18px,3vw,26px);align-items:center;
+  grid-template-columns:1fr;
+  padding:clamp(14px,2.4vw,18px);
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:var(--round-l);text-decoration:none;color:inherit;
+  box-shadow:var(--shadow);
+  transition:border-color .18s, transform .18s;
+}
+@media (min-width:640px){ .trades a{grid-template-columns:clamp(150px,22vw,220px) 1fr} }
+.trades a:hover{border-color:var(--accent);transform:translateY(-1px)}
+.trades .thumb{margin:0}
+.trades .thumb img,.trades .thumb .photo-slot{
+  border-radius:var(--round);aspect-ratio:4/3;object-fit:cover;width:100%;
+}
+.trades .name{display:block;font-size:clamp(19px,2.6vw,22px);font-weight:700}
+.trades .what{
+  display:block;margin-top:8px;color:var(--ink-soft);
+  font-size:15.5px;line-height:1.8;max-width:42em;
+}
+.trades .go{
+  display:inline-block;margin-top:12px;
+  color:var(--accent-ink);font-size:15px;font-weight:700;
+}
+.trades .go::after{content:" →"}
+
+/* ---------- 変わること ---------- */
+.ba{
+  display:grid;gap:18px;grid-template-columns:1fr;
+  margin-top:clamp(20px,3vw,28px);
+}
+@media (min-width:720px){ .ba{grid-template-columns:1fr 1fr;gap:22px} }
+.ba > div{
+  padding:22px clamp(18px,3vw,26px);
+  border-radius:var(--round);border:1px solid var(--line);
+  background:var(--bg-card);
+}
+.ba .now{background:var(--bg-alt)}
+.ba .after{background:var(--green-pale);border-color:color-mix(in srgb, var(--green) 35%, transparent)}
+.ba h3{font-size:16px;margin-bottom:12px}
+.ba .now h3{color:var(--ink-soft)}
+.ba .after h3{color:var(--green)}
+.ba li{
+  position:relative;padding-left:1.4em;margin-top:8px;
+  font-size:16px;line-height:1.75;
+}
+.ba li::before{
+  content:"";position:absolute;left:0;top:.72em;
+  width:.6em;height:1.5px;background:var(--ink-faint);border-radius:2px;
+}
+.ba .after li::before{background:var(--green)}
+
+/* ---------- 進め方と費用 ----------------------------------------------
+   装飾的な連番（01 / 02）はやめ、「まず」「次に」で順序を示す。
+------------------------------------------------------------------ */
+.steps{display:flex;flex-direction:column;gap:16px;margin-top:clamp(20px,3vw,30px)}
+.step{
+  padding:clamp(20px,3vw,28px);
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:var(--round);box-shadow:var(--shadow);
+}
+.step .when{
+  display:inline-block;font-size:13.5px;font-weight:700;letter-spacing:.06em;
+  color:var(--accent-ink);background:var(--accent-pale);
+  padding:4px 12px;border-radius:999px;margin-bottom:12px;
+}
+.step h3{margin-bottom:6px}
+.step .meta{
+  display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;
+  margin-top:4px;margin-bottom:12px;
+}
+.step .price{font-size:clamp(20px,2.8vw,24px);font-weight:700;color:var(--accent-ink)}
+.step .span{font-size:14.5px;color:var(--ink-soft)}
+.step p{color:var(--ink-soft);font-size:16px}
+.step .gives{
+  margin-top:14px;padding:14px 18px;
+  background:var(--bg-alt);border-radius:var(--round-s);
+  font-size:15px;line-height:1.8;
+}
+.step .gives b{color:var(--ink)}
+
+.promise-box{
+  margin-top:clamp(22px,3vw,30px);
+  padding:clamp(22px,3.5vw,32px);
+  background:var(--green-pale);
+  border:1px solid color-mix(in srgb, var(--green) 35%, transparent);
+  border-radius:var(--round-l);
+}
+.promise-box h3{color:var(--green);margin-bottom:10px}
+.promise-box p{color:var(--ink-soft);font-size:16px}
+.price-note{margin-top:20px;font-size:14.5px;color:var(--ink-faint);line-height:1.85}
+
+/* ---------- 実績 ---------- */
+.works{display:flex;flex-direction:column;gap:14px;margin-top:clamp(20px,3vw,28px)}
+.works li{
+  padding:20px clamp(18px,3vw,26px);
+  background:var(--bg-card);border:1px solid var(--line);border-radius:var(--round);
+}
+.works .t{font-size:17px;font-weight:700;line-height:1.6}
+.works .role{
+  display:inline-block;margin-top:8px;font-size:13.5px;color:var(--ink-soft);
+  background:var(--bg-alt);padding:3px 11px;border-radius:999px;
+}
+.works .d{margin-top:12px;color:var(--ink-soft);font-size:15.5px;line-height:1.85}
+.nda{margin-top:18px;font-size:14.5px;color:var(--ink-faint);line-height:1.8}
+
+/* ---------- 安心していただくために ---------- */
+.assure{display:flex;flex-direction:column;gap:14px;margin-top:clamp(20px,3vw,28px)}
+.assure li{
+  padding:20px clamp(18px,3vw,26px);
+  background:var(--bg-card);border:1px solid var(--line);border-radius:var(--round);
+}
+.assure h3{margin-bottom:8px}
+.assure p{color:var(--ink-soft);font-size:16px}
+
+/* ---------- 長谷川について ---------- */
+.about .photo-slot{min-height:280px}
+.about p + p{margin-top:1.1em}
+.about .sign{
+  margin-top:22px;font-size:15px;color:var(--ink-soft);
+}
+
+/* ---------- よくあるご質問 ---------- */
+.faq{margin-top:clamp(20px,3vw,28px);border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:20px 0;cursor:pointer;list-style:none;
+  font-size:17px;font-weight:700;line-height:1.65;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{
+  content:"＋";flex:none;color:var(--accent-ink);font-weight:700;
+  line-height:1.65;transition:transform .2s;
+}
+.faq details[open] summary::before{content:"−"}
+.faq summary:hover{color:var(--accent-ink)}
+.faq .a{
+  padding:0 0 22px 30px;color:var(--ink-soft);font-size:16px;line-height:1.9;
+  max-width:46em;
+}
+
+/* ---------- ご相談 ---------- */
+.contact-card{
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:var(--round-l);padding:clamp(24px,4vw,40px);
+  box-shadow:var(--shadow);
+}
+.contact-ways{
+  display:flex;flex-wrap:wrap;gap:12px 36px;margin-top:22px;
+}
+.contact-ways div{min-width:0}
+.contact-ways dt{font-size:13.5px;color:var(--ink-faint);letter-spacing:.08em}
+.contact-ways dd{margin:4px 0 0;font-size:clamp(19px,2.6vw,23px);font-weight:700}
+.contact-ways dd a{text-decoration:none;color:var(--ink)}
+.contact-ways dd a:hover{color:var(--accent-ink)}
+
+.form{display:flex;flex-direction:column;gap:18px;margin-top:28px;max-width:34rem}
+.form label{display:flex;flex-direction:column;gap:7px;font-size:15px;font-weight:700}
+.form .hint{font-weight:400;font-size:13.5px;color:var(--ink-faint);line-height:1.7}
+.form input,.form textarea{
+  font:inherit;
+  font-size:16px;              /* 16px未満だと iOS が勝手に拡大する */
+  padding:13px 15px;width:100%;
+  color:var(--ink);background:var(--bg);
+  border:1.5px solid var(--line);border-radius:var(--round-s);
+}
+.form textarea{min-height:120px;resize:vertical;line-height:1.8}
+.form input:focus,.form textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-pale)}
+.form .note{font-size:14px;color:var(--ink-faint);line-height:1.8}
+
+/* ---------- 小さなリンク列（つくったもの・tapuda へ） ---------- */
+.side-links{
+  display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(26px,4vw,36px);
+}
+.side-links a{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 18px;font-size:15px;text-decoration:none;color:var(--ink-soft);
+  background:var(--bg-card);border:1px solid var(--line);border-radius:999px;
+}
+.side-links a:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+/* ---------- フッター ---------- */
+.site-foot{
+  background:var(--bg-alt);border-top:1px solid var(--line);
+  padding-block:clamp(34px,5vw,52px);font-size:15px;
+}
+.site-foot .name{font-size:19px;font-weight:700;letter-spacing:.04em}
+.site-foot dl{
+  display:grid;grid-template-columns:auto 1fr;gap:6px 20px;
+  margin-top:18px;font-size:14.5px;line-height:1.75;
+}
+.site-foot dt{color:var(--ink-faint);white-space:nowrap}
+.site-foot dd{margin:0;color:var(--ink-soft)}
+.site-foot .cr{margin-top:26px;font-size:13.5px;color:var(--ink-faint)}
+.site-foot nav{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:22px;font-size:14.5px}
+@media (max-width:560px){
+  .site-foot dl{grid-template-columns:1fr;gap:0}
+  .site-foot dt{margin-top:12px;font-size:13px}
+}
+
+/* ---------- 控えめな出現。動きを減らす設定は尊重する ---------- */
+.rise{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease}
+.rise.shown{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rise{opacity:1;transform:none;transition:none}
+}
+
+/* ---------- 進め方の要約（トップ） ----------------------------------
+   「まず / 次に / そのあと」で順序を示す。01 / 02 のような
+   装飾の連番は使わない。無料から始まることが一目で分かるよう、
+   最初の一段だけ緑にしている。
+------------------------------------------------------------------ */
+.flow{display:flex;flex-direction:column;gap:14px;margin-top:clamp(18px,3vw,26px)}
+.flow li{
+  display:grid;gap:4px 22px;align-items:start;
+  grid-template-columns:1fr;
+  padding:clamp(18px,3vw,26px);
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:var(--round);box-shadow:var(--shadow);
+}
+@media (min-width:760px){
+  .flow li{grid-template-columns:5.5rem 1fr auto}
+  .flow .d{grid-column:2/3}
+  .flow .price{grid-column:3/4;grid-row:1/3;text-align:right;align-self:center}
+}
+.flow .when{
+  font-size:14px;font-weight:700;color:var(--ink-faint);letter-spacing:.1em;
+  padding-top:.2em;
+}
+.flow h3{margin:0}
+.flow .d{color:var(--ink-soft);font-size:16px;margin-top:6px}
+.flow .d b{color:var(--ink)}
+.flow .price{
+  font-size:clamp(21px,3vw,26px);font-weight:700;color:var(--accent-ink);
+  white-space:nowrap;line-height:1.35;
+}
+.flow .price small{
+  display:block;font-size:14.5px;font-weight:400;color:var(--ink-soft);margin-top:2px;
+}
+.flow .price.free{color:var(--green)}
+.flow li:first-child{
+  background:var(--green-pale);
+  border-color:color-mix(in srgb, var(--green) 35%, transparent);
+}
+.flow-sum{
+  margin-top:clamp(18px,3vw,24px);
+  font-size:clamp(17px,2.4vw,20px);font-weight:700;line-height:1.75;
+  max-width:30em;
+}
+
+/* ---------- 補助金の注意書き ---------- */
+.lead-p{color:var(--ink-soft);max-width:40em}
+.caution{
+  margin-top:20px;padding:18px 22px;
+  background:var(--bg-card);
+  border:1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-left:4px solid var(--accent);
+  border-radius:var(--round);
+  font-size:16px;line-height:1.85;
+}
+.caution b{color:var(--accent-ink)}
+.note{margin-top:16px;font-size:14.5px;color:var(--ink-faint);line-height:1.85;max-width:40em}
+section .note{margin-top:16px}
+
+/* ---------- 小さめの写真枠 ---------- */
+.photo-slot.small{
+  min-height:0;padding:14px 10px;font-size:12.5px;gap:4px;
+  aspect-ratio:4/3;
+}
+.photo-slot.small b{font-size:12.5px}
+
+/* ---------- スマホの画面下に固定するボタン ----------------------------
+   高さを抑え、iPhone のホームバーにかからないよう safe-area を見る。
+   本文が隠れないよう、body の下に同じ高さの余白を取る。
+------------------------------------------------------------------ */
+.mobilebar{display:none}
+@media (max-width:900px){
+  .mobilebar{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    display:flex;gap:8px;
+    padding:8px 12px calc(8px + env(safe-area-inset-bottom));
+    background:color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+  }
+  @supports not (backdrop-filter:blur(2px)){ .mobilebar{background:var(--bg)} }
+  .mobilebar a{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    min-height:48px;padding:10px;border-radius:var(--round);
+    font-size:16px;font-weight:700;text-decoration:none;
+    border:1.5px solid var(--accent);color:var(--accent-ink);background:var(--bg-card);
+  }
+  .mobilebar a.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+}
+@media (max-width:900px) and (prefers-color-scheme: dark){
+  .mobilebar a.primary{color:#241B16}
+}
+
+/* ---------- 長谷川について（トップの短い版） ---------- */
+.about h2{margin-bottom:18px}
+
+/* ---------- 狭い画面での手直し ----------------------------------------
+   ボタンは幅いっぱいにして押しやすく。
+   ファーストビューは、スマホでは写真を先に出す。
+   最初に目に入るのが文字の壁ではなく人の写真であってほしい。
+------------------------------------------------------------------ */
+@media (max-width:620px){
+  .btn-row{gap:10px}
+  .btn-row .btn{width:100%}
+  .hero .duo > figure{order:-1;margin-bottom:4px}
+  .hero h1{margin-top:4px}
+}

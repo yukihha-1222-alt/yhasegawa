@@ -1,1138 +1,373 @@
+<!-- ============================================================
+     このファイルは build.py が組み立てたものです。直接編集しても、
+     次のビルドで消えます。本文は pages/pages/index.html、
+     共通部分は parts/ を編集して python3 build.py を実行してください。
+     ============================================================ -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>現場の業務アプリ開発｜長谷川侑希（兵庫県姫路市）</title>
-<meta name="description" content="紙とExcelの記録作業を、現場のスマートフォンで終わらせます。兵庫県姫路市。製造・物流・建設の現場向け業務アプリを、設計から開発、運用まで一人で担当。現場診断は約10万円から。費用を公開しています。">
-<meta property="og:title" content="現場の業務アプリ開発｜長谷川侑希（兵庫県姫路市）">
-<meta property="og:description" content="紙とExcelの記録作業を、現場のスマートフォンで終わらせます。現場診断は約10万円から。費用を公開しています。">
+<title>事務所での打ち直しを、なくしませんか｜長谷川侑希（兵庫県姫路市）</title>
+<meta name="description" content="現場で紙に書いて、事務所でもう一度入力する。その二度手間を手元のスマートフォンで終わらせる業務アプリを、兵庫県姫路市からおつくりしています。ご相談と現場の見学は無料です。">
+<link rel="canonical" href="https://yhasegawa.com/">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://yhasegawa.com">
-<meta name="theme-color" content="#E8380D">
-<style>
-:root{
-  /* tapuda のブランドカラー #E8380D を基調にする。
-     1色では白抜き文字がコントラスト不足になるため、用途別に3段持たせている。
-       --hi       … 24px以上の見出し・罫線・装飾（白背景で3:1以上）
-       --hi-text  … 小さい文字をブランド色で置くとき（白背景で4.5:1以上）
-       --hi-deep  … 白文字を載せる塗り（#fff で4.5:1以上）
-     この3つを混同すると可読性が落ちる。塗りに --hi を使わないこと。 */
-  --hi:#E8380D;        /* tapuda --pop-fill */
-  --hi-text:#D4320B;   /* tapuda --pop。地の上で 4.5:1 を満たす */
-  --hi-deep:#D4320B;   /* 白文字を載せる赤の塗り */
-  --hi-mid:#F1886E;    /* tapuda --pop-pale */
-  --hi-tint:#FEF6F4;   /* tapuda --pop-soft */
-  --navy:#16233F;      /* tapuda --ground-navyband。赤の塗りを続けないための錨 */
-  --sumi:#2C2C2A;      /* tapuda --text */
-  --hai:#6E6B63;       /* tapuda --text-sub */
-  --kami:#FBF9F4;      /* tapuda --bg */
-  --washi:#EFEDE6;     /* tapuda --ground-deep */
-  --line:#E4DFD3;      /* tapuda --border */
-  /* 頁の光。tapuda の .hero::before と同じ2枚。
-     白を 86% で広く被せ、そこへ赤みを 7% だけ差す。
-     要素を横に -50vw 伸ばすので、上の左右の角が白く抜けて薄くなる。 */
-  --wash:rgba(255,255,255,.86);
-  --wash-pop:rgba(212,50,11,.07);
-  --mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","MS Mincho",serif;
-  --gothic:"Hiragino Kaku Gothic ProN","Yu Gothic","YuGothic","Noto Sans JP","Meiryo",sans-serif;
-  --wrap:1040px;
-  --pad:clamp(22px,5vw,56px);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;scroll-padding-top:84px}  /* .bar の高さ＋余白。バーを変えたらここも */  /* ここに overflow を足さないこと。#stage の sticky が死ぬ */
-body{
-  font-family:var(--gothic);color:var(--sumi);background:var(--kami);
-  line-height:1.9;font-size:16px;letter-spacing:.02em;overflow-x:hidden;
-}
-a{color:var(--hi-text)}
-a:focus-visible{outline:2px solid var(--hi);outline-offset:3px}
-.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+<meta property="og:url" content="https://yhasegawa.com/">
+<meta property="og:title" content="事務所での打ち直しを、なくしませんか｜長谷川侑希（兵庫県姫路市）">
+<meta property="og:description" content="現場で紙に書いて、事務所でもう一度入力する。その二度手間を手元のスマートフォンで終わらせる業務アプリを、兵庫県姫路市からおつくりしています。ご相談と現場の見学は無料です。">
+<meta property="og:site_name" content="長谷川侑希｜現場の業務アプリ開発">
+<meta property="og:locale" content="ja_JP">
+<!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
+<meta name="theme-color" content="#C2653A">
+<meta name="theme-color" content="#1F1A17" media="(prefers-color-scheme: dark)">
 
-.vhead{
-  writing-mode:vertical-rl;font-family:var(--mincho);
-  font-size:15px;letter-spacing:.42em;color:var(--hi-text);
-  height:auto;padding-top:2px;white-space:nowrap;user-select:none;
-}
-.grid2{display:grid;grid-template-columns:38px 1fr;gap:clamp(20px,4vw,44px);align-items:start}
-
-.btn{
-  display:inline-block;border:1px solid var(--hi);color:var(--hi-text);
-  font-size:13px;letter-spacing:.08em;padding:11px 20px;border-radius:2px;
-  text-decoration:none;background:transparent;
-}
-.btn.fill{background:var(--hi-deep);color:#fff}
-
-/* ==================================================================
-   オービット
-   トラックの高さは JS が (N-1)*vh*0.8 + vh で設定する。
-   ステージを sticky で貼り、スクロール量を回転に変換する。
-   トラックを抜ければ sticky は自然解除され、通常スクロールへ戻る。
-================================================================== */
-#track{position:relative;background:var(--kami)}
-#stage{position:sticky;top:0;height:100vh;overflow:hidden}
-/* オービットにも同じ光を敷く。z-index:0 なので補助線(1)より下に入る。 */
-#stage::before{
-  content:"";position:absolute;inset:-6rem -50vw 30%;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(60% 70% at 30% 30%, var(--wash-pop) 0%, transparent 70%),
-    radial-gradient(90% 80% at 50% 20%, var(--wash) 0%, transparent 72%);
-}
-
-/* 補助線。#ring は残すと軌道が読めるので残している */
-#ring{position:absolute;border:1px dashed var(--line);border-radius:50%;pointer-events:none;z-index:1}
-#spoke{position:absolute;height:0;border-top:1px dashed var(--line);transform-origin:0 0;z-index:1}
-#slot{position:absolute;border:1px dashed #CFC4B8;border-radius:50%;pointer-events:none;z-index:2}
-
-/* 大円。位置・サイズとも固定で、中身だけが差し替わる */
-#big{position:absolute;border-radius:50%;background:#fff;border:1px solid var(--hi);z-index:2}
-
-/* 大円の中身。8枚を重ねてクロスフェードさせる */
-#bigwrap{position:absolute;z-index:3}
-.layer{position:absolute;left:0;top:0;width:100%;display:flex;flex-direction:column;gap:var(--g)}
-.layer .lk{font-size:var(--k);letter-spacing:.24em;color:var(--hai)}
-.layer .lt{
-  font-family:var(--mincho);font-size:var(--t);font-weight:600;
-  color:var(--sumi);line-height:1.4;letter-spacing:.04em;
-}
-.layer .lt em{font-style:normal;color:var(--hi)}
-.layer .lp{font-size:var(--b);color:#4A4845;line-height:1.85}
-.layer .lb{margin-top:calc(var(--g) * .2);display:flex;flex-wrap:wrap;gap:.6em}
-.layer .lb a{font-size:var(--b);padding:.5em 1.3em}
-
-/* BEFORE → AFTER。円の中なので枠線を持たせない */
-.layer .lba{display:flex;align-items:flex-start;gap:var(--g)}
-.layer .lba .col{flex:1;min-width:0}
-.layer .lba .cap{font-size:var(--k);letter-spacing:.2em;color:var(--hai);margin-bottom:.6em}
-.layer .lba .col.aft .cap{color:var(--hi-text)}
-.layer .lba ul{list-style:none;display:flex;flex-direction:column;gap:.3em}
-.layer .lba li{font-size:var(--l);line-height:1.7;color:#4A4845;padding-left:.9em;position:relative}
-.layer .lba li::before{content:"";position:absolute;left:0;top:.82em;width:.45em;height:1px;background:var(--hai)}
-.layer .lba .col.aft li{color:var(--hi-text);font-weight:700}
-.layer .lba .col.aft li::before{background:var(--hi-mid)}
-.layer .lba .sep{width:1px;align-self:stretch;background:var(--line)}
-
-/* 円内の一覧。行数は4までに抑える */
-.layer .lst{list-style:none;display:flex;flex-direction:column}
-.layer .lst li{
-  font-size:var(--l);line-height:1.6;padding:.52em 0;
-  border-top:1px solid var(--line);
-}
-.layer .lst li:last-child{border-bottom:1px solid var(--line)}
-.layer .lst .n{font-weight:700;color:var(--hi-text);letter-spacing:.02em}
-.layer .lst .s{color:#6E6B63;margin-left:.6em}
-.layer .lst a{text-decoration:none;color:inherit}
-.layer .lst a:hover .n{color:var(--hi-mid)}
-.layer .lst a:hover .s{color:var(--sumi)}
-
-/* 小円。button で実装（キーボード到達とスクリーンリーダー対応のため必須） */
-.mini{
-  position:absolute;border-radius:50%;background:#fff;border:1px solid var(--line);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  cursor:pointer;z-index:4;will-change:transform;font:inherit;color:inherit;padding:0;
-}
-.mini .mn{font-family:var(--mincho);font-size:var(--mn);color:#B4ABA3;letter-spacing:.08em;line-height:1}
-.mini .ml{font-size:var(--ml);color:#6E6B63;line-height:1.3;text-align:center;padding:0 6px;letter-spacing:.02em}
-.mini.on{border-color:var(--hi)}
-.mini.on .mn{color:var(--hi-text)}
-.mini:focus-visible{outline:2px solid var(--hi);outline-offset:3px}
-/* タップ領域を一回り広げる。これが無いと SP で取りこぼす */
-.mini::after{content:"";position:absolute;inset:-10px;border-radius:50%}
-
-/* PC のみ：大円の右に空く余白へ、番号・見出し・進捗を置く */
-#tb{
-  position:absolute;right:4%;top:50%;transform:translateY(-50%);max-width:25%;
-  display:none;flex-direction:column;gap:8px;z-index:5;
-}
-#tb .tn{font-family:var(--mincho);font-size:12px;letter-spacing:.24em;color:#B4ABA3}
-#tb .tl{font-size:14px;letter-spacing:.14em;color:var(--hai)}
-#tb .prog{margin-top:6px;display:flex;flex-direction:column;gap:6px}
-#tb .prog i{display:block;width:26px;height:2px;background:var(--line);transition:width .3s,background .3s}
-#tb .prog i.on{background:var(--hi);width:40px}
-body[data-lay="pc"] #tb{display:flex}
-
-.omark{
-  position:absolute;left:var(--pad);bottom:18px;font-size:10px;letter-spacing:.14em;
-  color:#B4ABA3;z-index:6;
-}
-.omark b{font-family:var(--mincho);font-size:15px;color:var(--hi-text)}
-.omark span{margin-left:.7em}
-
-/* ------------------------------------------------------------------
-   フォールバック
-   prefers-reduced-motion 指定時と JS 失敗時は8枚を縦積みで出す。
-   代替経路であって省略可能なものではない。初期は縦積み側を表示にし、
-   JS が成功したら切り替える。
------------------------------------------------------------------- */
-#track{display:none}
-#fallback{display:block}
-body[data-orbit="on"] #track{display:block}
-body[data-orbit="on"] #fallback{display:none}
-#fallback{padding:clamp(60px,10vh,96px) 0}
-#fallback .fb{max-width:640px;margin:0 auto;padding:clamp(30px,5vh,48px) var(--pad);border-top:1px solid var(--line)}
-#fallback .fb:first-child{border-top:0}
-#fallback .fb .lk{font-size:10.5px;letter-spacing:.24em;color:var(--hai)}
-#fallback .fb .lt{font-family:var(--mincho);font-size:clamp(21px,4.4vw,30px);font-weight:600;line-height:1.45;letter-spacing:.05em;margin-top:12px}
-#fallback .fb .lt em{font-style:normal;color:var(--hi)}
-#fallback .fb .lp{font-size:14px;color:#4A4845;margin-top:14px}
-#fallback .fb .lba{display:flex;gap:26px;margin-top:18px}
-#fallback .fb .lba .sep{display:none}
-#fallback .fb .lba .cap{font-size:10px;letter-spacing:.2em;color:var(--hai);margin-bottom:8px}
-#fallback .fb .lba ul{list-style:none;display:flex;flex-direction:column;gap:5px}
-#fallback .fb .lba li{font-size:13px;color:#4A4845}
-#fallback .fb .lba .col.aft li{color:var(--hi-text);font-weight:700}
-#fallback .fb .lst{list-style:none;margin-top:18px}
-#fallback .fb .lst li{font-size:13px;padding:9px 0;border-top:1px solid var(--line)}
-#fallback .fb .lst .n{font-weight:700;color:var(--hi-text)}
-#fallback .fb .lst .s{color:#6E6B63;margin-left:8px}
-#fallback .fb .lst a{text-decoration:none;color:inherit}
-#fallback .fb .lb{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
-
-/* ============ 共通セクション ============ */
-.dense{padding:clamp(70px,11vh,112px) 0;border-top:1px solid var(--line)}
-.dense.shade{background:var(--washi)}
-.lead{font-family:var(--mincho);font-size:clamp(18px,3.2vw,26px);font-weight:600;line-height:1.6;letter-spacing:.05em}
-.lead-sub{font-size:15px;color:#4A4845;margin-top:16px;max-width:34em}
-.cta-row{margin-top:30px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.cta-row .btn{min-height:40px;display:inline-flex;align-items:center}
-
-
-/* ============ STEPS ============ */
-.steps{list-style:none;margin-top:34px;display:flex;flex-direction:column}
-.steps li{
-  display:grid;grid-template-columns:clamp(48px,8vw,82px) 1fr;
-  gap:clamp(14px,3vw,30px);align-items:baseline;
-  padding:clamp(18px,3vw,28px) 0;border-top:1px solid var(--line);
-}
-.steps li:last-child{border-bottom:1px solid var(--line)}
-.steps .n{font-family:var(--mincho);font-size:clamp(30px,6vw,54px);line-height:.9;color:var(--hi);opacity:.24}
-.steps h3{font-size:clamp(15px,2.3vw,18px);font-weight:700;line-height:1.5}
-.steps .dur{
-  display:inline-block;font-size:10.5px;letter-spacing:.12em;color:var(--hi-text);
-  background:var(--hi-tint);padding:3px 9px;border-radius:2px;margin-left:11px;
-  vertical-align:2px;font-weight:700;
-}
-.steps p{font-size:14.5px;color:#4A4845;margin-top:9px;max-width:38em;line-height:1.85}
-.freebox{margin-top:38px;padding:clamp(24px,4vw,38px);background:var(--hi-deep);color:#fff}
-.freebox strong{display:block;font-family:var(--mincho);font-weight:600;font-size:clamp(18px,3.4vw,28px);line-height:1.55;letter-spacing:.05em}
-.freebox span{display:block;font-size:14.5px;color:#F7DAD2;margin-top:13px;line-height:1.85}
-
-/* ============ WORKS ============ */
-.works{list-style:none;margin-top:32px;border-top:1px solid var(--line)}
-.works li{padding:15px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:6px 22px;align-items:baseline}
-.works .t{font-size:15px;font-weight:700;letter-spacing:.02em}
-.works .r{font-size:12.5px;color:var(--hai);letter-spacing:.03em;text-align:right;white-space:nowrap}
-.works .d{grid-column:1/-1;font-size:13.5px;color:#6E6B63;line-height:1.8;max-width:44em}
-.nda{font-size:12.5px;color:var(--hai);margin-top:16px;line-height:1.8}
-@media (max-width:560px){
-  .works li{grid-template-columns:1fr}
-  .works .r{text-align:left;white-space:normal}
-}
-
-/* ============ つくったもの（リンク＋QR） ============ */
-.prods{list-style:none;margin-top:34px;border-top:1px solid var(--line)}
-.prods li{
-  display:grid;grid-template-columns:1fr auto;gap:clamp(18px,4vw,44px);
-  align-items:start;padding:clamp(20px,3vw,30px) 0;border-bottom:1px solid var(--line);
-}
-.prods .pn{font-size:clamp(16px,2.6vw,20px);font-weight:700;color:var(--hi-text);line-height:1.4}
-.prods .pbadge{
-  display:inline-block;vertical-align:2px;margin-left:11px;
-  font-size:9.5px;letter-spacing:.2em;font-weight:700;color:#fff;
-  background:var(--hi-deep);padding:3px 8px;border-radius:2px;white-space:nowrap;
-}
-.prods .ps{font-size:14px;color:#4A4845;margin-top:7px;line-height:1.8;max-width:34em}
-.prods .plinks{margin-top:14px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.prods .plinks a{font-size:13.5px;letter-spacing:.04em;color:var(--hi-text);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
-.prods .plinks a:hover{border-bottom-color:var(--hi)}
-
-/* QR。スマホで見ている人には意味がないので SP では出さない。
-   1モジュールが小さいと読めないため 104px より下げないこと。 */
-.pqr{display:flex;gap:14px}
-.pqr figure{width:120px;text-align:center}
-.pqr .qr{
-  display:block;width:120px;height:120px;border:1px solid var(--line);
-  /* 【注意】background ショートハンドを使わないこと。
-     ショートハンドは background-image を none にリセットするため、
-     下のQR個別指定（詳細度が同じか低い）が打ち消される。 */
-  background-color:#fff;background-position:center;
-  background-size:contain;background-repeat:no-repeat;
-}
-/* QRのファイル参照は 721px 以上でだけ有効にする。
-   720px以下では .pqr が display:none なので、この規則が当たらない＝
-   スマホではQRを1枚もダウンロードしない。 */
-@media (min-width:721px){
-  .pqr .qr-tapuda-web{background-image:url(assets/qr/tapuda-web.svg)}
-  .pqr .qr-tapuda-ios{background-image:url(assets/qr/tapuda-ios.svg)}
-  .pqr .qr-tapuda-and{background-image:url(assets/qr/tapuda-and.svg)}
-  .pqr .qr-hitomawari-ios{background-image:url(assets/qr/hitomawari-ios.svg)}
-  .pqr .qr-hitomawari-and{background-image:url(assets/qr/hitomawari-and.svg)}
-  .pqr .qr-pokory-ios{background-image:url(assets/qr/pokory-ios.svg)}
-  .pqr .qr-pokory-and{background-image:url(assets/qr/pokory-and.svg)}
-  .pqr .qr-omry-ios{background-image:url(assets/qr/omry-ios.svg)}
-  .pqr .qr-kabe-ios{background-image:url(assets/qr/kabe-ios.svg)}
-  .pqr .qr-yohaku-ios{background-image:url(assets/qr/yohaku-ios.svg)}
-}
-.pqr figcaption{font-size:9.5px;letter-spacing:.14em;color:var(--hai);margin-top:7px;line-height:1.4}
-@media (max-width:1080px){
-  .prods li{grid-template-columns:1fr}
-  .pqr{margin-top:6px}
-}
-@media (max-width:720px){
-  .pqr{display:none}   /* スマホでQRは無意味なので出さない */
-}
-
-/* ============ ストアバッジ ============
-   Apple / Google の公式素材。両社の規約で図形の改変は不可なので、
-   拡大縮小のみ行い、色や比率は触らない。
-   どちらも余白なしのタイト素材だったため、同じ高さで見た目が揃う。
-   幅は --bh から実測アスペクト比で算出しているので、高さだけ変えれば追従する。
-   画像は背景で敷き、読み上げ用の名前は .vh のテキストで与えている
-   （CSS が落ちてもテキストが残る）。 */
-.badge{
-  --bh:40px;
-  display:inline-block;height:var(--bh);
-  background-repeat:no-repeat;background-position:center;background-size:contain;
-  border-radius:5px;
-}
-.badge:focus-visible{outline:2px solid var(--hi);outline-offset:3px}
-.badge.ios{width:calc(var(--bh) * 2.72129);background-image:url(assets/store-appstore-ja.svg)}
-.badge.and{
-  width:calc(var(--bh) * 3.37500);
-  /* WebPはロスレス＝ピクセル完全一致で、PNGの 9,080B に対し 2,382B。
-     image-set() を解さない古い環境は1行目のPNGにそのまま落ちる。 */
-  background-image:url(assets/store-googleplay-ja.png);
-  background-image:image-set(url(assets/store-googleplay-ja.webp) type("image/webp"),
-                             url(assets/store-googleplay-ja.png)  type("image/png"));
-}
-@media (max-width:560px){ .badge{--bh:36px} }
-
-/* 視覚的に隠すが読み上げには残す */
-.vh{
-  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
-  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
-}
-
-/* ============ CONTACT ============ */
-.contact{padding:clamp(78px,13vh,132px) 0;background:var(--navy);color:#fff}
-.contact .vhead{color:#93A4C4}
-.contact .msg{font-family:var(--mincho);font-size:clamp(18px,3.4vw,28px);line-height:1.7;letter-spacing:.05em;max-width:22em}
-.contact .sub{font-size:15px;color:#C9D3E6;margin-top:22px;max-width:32em;line-height:1.85}
-.contact dl{margin-top:44px;display:grid;gap:0}
-.contact dt{font-size:10px;letter-spacing:.24em;color:#8C9CBC;padding-top:16px}
-.contact dd{font-size:clamp(16px,3vw,22px);padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.16);word-break:break-all}
-.contact dd a{color:#fff;text-decoration:none}
-.contact dd a:hover{color:#C9D3E6}
-
-footer{padding:34px 0 48px;font-size:12.5px;color:var(--hai);line-height:1.9;border-top:1px solid var(--line)}
-footer .info{display:grid;grid-template-columns:auto 1fr;gap:2px 20px;max-width:48em}
-footer .info dt{letter-spacing:.14em;color:#A49E92;white-space:nowrap}
-footer .cr{margin-top:22px;color:#A49E92;letter-spacing:.06em}
-@media (max-width:560px){
-  /* 1カラムに落とす。住所が長いので、項目名の下に送る */
-  footer .info{grid-template-columns:1fr;gap:0}
-  footer .info dt{margin-top:13px;font-size:11px;letter-spacing:.2em}
-  footer .info dt:first-child{margin-top:0}
-}
-
-
-/* ==================================================================
-   細いヘッダー（常時表示）
-   #stage も position:sticky なので、同じ土俵に乗せると競合する。
-   こちらは position:fixed にして流れから完全に抜き、オービットは
-   その下を通す。だから #track の offsetTop は 0 のままで、
-   スクロール量を回転に変換する計算に手を入れなくて済む。
-   背景は半透明＋blur。小円が下を通り抜けるのが見えるのは、
-   隠し損ねではなくそう見せている。
-   【注意】高さを変えたら html の scroll-padding-top も合わせること。
-   合っていないと、ページ内リンクの飛び先がバーの裏に潜る。
-================================================================== */
-.bar{
-  position:fixed;top:0;left:0;right:0;z-index:20;
-  border-bottom:1px solid var(--line);
-  background:rgba(251,249,244,.86);
-}
-@supports (backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px)){
-  .bar{-webkit-backdrop-filter:blur(12px) saturate(140%);backdrop-filter:blur(12px) saturate(140%)}
-}
-@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
-  .bar{background:var(--kami)}
-}
-.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px;padding-bottom:12px}
-/* 行の高さを詰める。body の line-height:1.9 のままだとバーが85pxになる */
-.bar .who b{display:block;font-family:var(--mincho);font-size:17px;font-weight:600;letter-spacing:.08em;color:var(--sumi);line-height:1.3}
-.bar .who span{display:block;font-size:11.5px;letter-spacing:.06em;color:var(--hai);margin-top:2px;line-height:1.3}
-.bar .btn{white-space:nowrap;flex:none;padding:9px 16px;line-height:1.5}
-@media (max-width:420px){
-  .bar .who span{display:none}
-  .bar .btn{font-size:12px;padding:8px 12px}
-}
-
-/* ============ 対象の現場 ============ */
-.cases{list-style:none;margin-top:34px;display:grid;gap:1px;grid-template-columns:repeat(3,1fr);background:var(--line);border:1px solid var(--line)}
-@media (max-width:820px){ .cases{grid-template-columns:1fr} }
-.cases li{background:#fff;padding:22px 22px 24px}
-.cases .ct{display:inline-block;font-size:10.5px;letter-spacing:.2em;color:#fff;background:var(--hi-deep);padding:3px 10px;border-radius:2px}
-.cases .cb{display:block;font-size:15px;font-weight:700;color:var(--sumi);margin-top:13px;line-height:1.55}
-.cases .cd{display:block;font-size:13.5px;color:#6E6B63;margin-top:9px;line-height:1.85}
-.note{font-size:13px;color:var(--hai);margin-top:20px;line-height:1.85;max-width:40em}
-
-/* ============ 費用（STEPS に金額バッジを足す） ============ */
-.steps .amt{
-  display:inline-block;font-size:11.5px;letter-spacing:.06em;color:#fff;
-  background:var(--hi-deep);padding:4px 11px;border-radius:2px;margin-left:9px;
-  vertical-align:2px;font-weight:700;white-space:nowrap;
-}
-.steps .meta{margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.steps .meta .dur,.steps .meta .amt{margin-left:0}
-.deliver{display:block;font-size:13px;color:var(--hi-text);margin-top:10px;font-weight:700;line-height:1.75}
-
-/* ============ 一人であることへの答え ============ */
-.promise{list-style:none;margin-top:32px;border-top:1px solid var(--line)}
-.promise li{padding:17px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:34px 1fr;gap:4px 14px;align-items:baseline}
-.promise .pi{font-family:var(--mincho);font-size:15px;color:var(--hi);opacity:.5;letter-spacing:.04em}
-.promise .ph{font-size:15px;font-weight:700;color:var(--sumi);line-height:1.55}
-.promise .pd{grid-column:2;font-size:13.5px;color:#6E6B63;line-height:1.85;max-width:40em}
-
-/* ============ tapuda（法人導入の1ブロック） ============ */
-.tag{display:inline-block;font-size:10px;letter-spacing:.24em;color:#fff;background:var(--hi-deep);padding:4px 11px;border-radius:2px}
-.tpname{font-family:var(--mincho);font-size:clamp(30px,6vw,52px);font-weight:600;line-height:1.1;letter-spacing:.02em;color:var(--hi);margin-top:18px}
-
-/* ============ よくあるご質問 ============ */
-.faq{margin-top:30px;border-top:1px solid var(--line)}
-.faq dt{font-size:15px;font-weight:700;color:var(--sumi);line-height:1.6;padding:20px 0 0;position:relative;padding-left:26px}
-.faq dt::before{content:"Q";position:absolute;left:0;top:20px;font-family:var(--mincho);color:var(--hi);font-weight:600}
-.faq dd{font-size:14px;color:#4A4845;line-height:1.9;padding:9px 0 20px 26px;border-bottom:1px solid var(--line);max-width:44em}
-
-/* ============ ご相談フォーム ============
-   バックエンドを持たない（Workers Static Assets）ので、送信は
-   入力内容を本文に入れたメールを立ち上げる形にしている。
-   外部フォームを使う場合は #cform の submit を差し替えること。 */
-.cform{margin-top:40px;display:flex;flex-direction:column;gap:18px;max-width:34em}
-.cform label{display:flex;flex-direction:column;gap:7px;font-size:12.5px;letter-spacing:.1em;color:#A9B7D2}
-.cform input,.cform textarea{
-  font:inherit;font-size:16px;              /* 16px 未満だと iOS が勝手に拡大する */
-  color:#fff;background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.22);border-radius:2px;padding:12px 14px;width:100%;
-}
-.cform textarea{min-height:104px;resize:vertical;line-height:1.8}
-.cform input:focus,.cform textarea:focus{outline:2px solid var(--hi-mid);outline-offset:1px;background:rgba(255,255,255,.11)}
-.cform button{
-  font:inherit;font-size:14px;font-weight:700;letter-spacing:.08em;cursor:pointer;
-  background:var(--hi-deep);color:#fff;border:1px solid var(--hi);border-radius:2px;
-  padding:14px 22px;align-self:flex-start;
-}
-.cform button:hover{background:var(--hi)}
-.fnote{font-size:12px;color:#93A4C4;line-height:1.85}
-.contact .cta-row .btn{color:#fff;border-color:rgba(255,255,255,.5)}
-.contact .cta-row .btn.fill{background:var(--hi-deep);border-color:var(--hi)}
-
-
-/* reveal */
-.rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
-.rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){
-  .rv{opacity:1;transform:none;transition:none}
-}
-@media (max-width:640px){
-  .grid2{grid-template-columns:26px 1fr;gap:16px}
-  .vhead{font-size:13px;letter-spacing:.34em}
-}
-</style>
+<!-- 書体は Zen Kaku Gothic New ひとつ。swap を指定しているので、
+     落ちてくるまではシステムのゴシックで読める状態になる -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
+<script>document.documentElement.className+=" js";</script>
 </head>
-<body>
+<body data-current="index">
 
-<!-- ==================================================================
-     金額を変えるときに触る場所（ここ以外には無い）
+<a class="skip" href="#main">本文へ移動する</a>
 
-       現場診断     約10万円        #process の01 / #faq / オービット03
-       プロトタイプ 約30万円        #process の02
-       本開発       約100〜200万円  #process の03（本文に「150万円前後」もある）
-       保守         月額約5万円     #process の03 / #faq
-
-     すべて「約」付き。外すと見積りとの差が出たときに言い訳が立たない。
-       ついでに <meta name="description"> と og:description にも入っている
-
-     読み手のために同じ金額を複数回出している（意図的な重複）。
-     1箇所だけ直すと、金額を公開しているページで数字が食い違う。
-     必ず上の全部を直すこと。
-================================================================== -->
-
-<!-- 細いヘッダー。position:fixed で常時表示。高さを変えるときは
-     CSS の .bar と html の scroll-padding-top をセットで直すこと。 -->
-<header class="bar">
+<header class="site-head">
   <div class="wrap">
-    <p class="who"><b>長谷川　侑希</b><span>現場の業務アプリ開発｜兵庫県姫路市</span></p>
-    <a class="btn fill" href="#contact">現場を見てもらう</a>
+    <a class="who" href="/">
+      <b>長谷川　侑希</b>
+      <span>現場の業務アプリ開発｜兵庫県姫路市</span>
+    </a>
+
+    <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
+         ここが折り返して出るだけなので、リンクは必ず辿れる -->
+    <nav class="nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="/#gyoshu" data-nav="gyoshu">業種から探す</a></li>
+        <li><a href="/ryokin/" data-nav="ryokin">進め方と費用</a></li>
+        <li><a href="/hojokin/" data-nav="hojokin">補助金</a></li>
+        <li><a href="/about/" data-nav="about">長谷川について</a></li>
+        <li><a href="/faq/" data-nav="faq">よくある質問</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn head-cta" href="/contact/">相談する</a>
   </div>
 </header>
 
-<!-- ============ オービット（3枚。ここがヒーローを兼ねる） ============ -->
-<div id="track">
-  <div id="stage">
-    <div id="ring"></div>
-    <div id="spoke"></div>
-    <div id="big"></div>
-    <div id="bigwrap"></div>
-    <div id="slot"></div>
-    <div id="orbit"></div>
-    <div id="tb">
-      <div class="tn" id="tbn">01</div>
-      <div class="tl" id="tbl">GENBA</div>
-      <div class="prog" id="prog"></div>
+
+<main id="main">
+<!-- ===================== ファーストビュー ===================== -->
+<section class="section hero">
+  <div class="wrap">
+    <div class="duo">
+      <div>
+        <h1>事務所での打ち直しを、<br>なくしませんか</h1>
+        <p class="lead">
+          現場で紙に書いて、事務所に戻ってからもう一度入力する。その二度手間だけを、みなさんがすでにお持ちのスマートフォンで終わらせます。
+        </p>
+        <div class="btn-row">
+          <a class="btn" href="/contact/">まずは無料で見てもらう</a>
+          <a class="btn ghost" href="/ryokin/">進め方と費用を見る</a>
+        </div>
+        <p class="note">
+          夕方、事務所で日報の束を前にして、一枚ずつ入力し直している方がいらっしゃると思います。あの時間をなくせないか、というご相談をお受けしています。
+        </p>
+      </div>
+
+      <figure>
+        <!-- TODO: 写真を用意。長谷川本人が現場でスマートフォンかタブレットを手に、
+             相手と話している様子。自然光。작り笑顔ではなく、説明している表情。
+             用意できたら、下の div をこの img に置き換えてください:
+             <img src="/assets/img/hero.jpg" width="960" height="720" loading="eager"
+                  decoding="async" class="photo"
+                  alt="長谷川侑希が現場でタブレットを手に、担当の方と記録のつけ方を話している様子"> -->
+        <div class="photo-slot" role="img"
+             aria-label="写真（準備中）長谷川侑希が現場でタブレットを手に話している様子">
+          <b>写真が入ります</b>
+          長谷川本人が現場でスマートフォンかタブレットを手に、<br>
+          相手と話している様子（自然光）
+        </div>
+      </figure>
     </div>
-    <div class="omark"><b id="omn">01</b> / 03 <span id="oml">GENBA</span></div>
   </div>
+</section>
+
+<!-- ===================== 業種の入口 ===================== -->
+<section class="section alt" id="gyoshu">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>どの現場のお話でしょうか</h2>
+      <p>
+        業種によって、残っている紙も、困っていることも違います。近いものを選んでいただくと、その現場の話からご覧いただけます。
+      </p>
+    </div>
+
+    <ul class="trades">
+      <li>
+        <a href="/kensetsu/">
+          <figure class="thumb">
+            <!-- TODO: 写真を用意。工事現場の雰囲気（屋外・重機や足場・自然光）。
+                 <img src="/assets/img/trade-kensetsu.jpg" width="480" height="360"
+                      loading="lazy" decoding="async" alt=""> -->
+            <div class="photo-slot small" role="img" aria-label="写真（準備中）工事現場の様子">
+              <b>写真</b>工事現場の様子
+            </div>
+          </figure>
+          <div class="txt">
+            <span class="name">建設・設備工事</span>
+            <span class="what">
+              現場で撮った写真を、事務所に戻ってから報告書に貼っている。どの写真がどの現場だったか、思い出しながら整理している。
+            </span>
+            <span class="go">この現場の話を見る</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="/shokuhin/">
+          <figure class="thumb">
+            <!-- TODO: 写真を用意。食品工場の衛生的な作業場（白衣・ステンレス・明るい照明）。
+                 <img src="/assets/img/trade-shokuhin.jpg" width="480" height="360"
+                      loading="lazy" decoding="async" alt=""> -->
+            <div class="photo-slot small" role="img" aria-label="写真（準備中）食品工場の作業場">
+              <b>写真</b>食品工場の作業場
+            </div>
+          </figure>
+          <div class="txt">
+            <span class="name">食品工場</span>
+            <span class="what">
+              温度の確認や清掃のチェックを、紙の帳票に手書きしている。あとから見返したいときに、綴じた紙をめくって探している。
+            </span>
+            <span class="go">この現場の話を見る</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="/butsuryu/">
+          <figure class="thumb">
+            <!-- TODO: 写真を用意。トラックの積込や配送の現場。
+                 <img src="/assets/img/trade-butsuryu.jpg" width="480" height="360"
+                      loading="lazy" decoding="async" alt=""> -->
+            <div class="photo-slot small" role="img" aria-label="写真（準備中）積込や配送の現場">
+              <b>写真</b>積込・配送の現場
+            </div>
+          </figure>
+          <div class="txt">
+            <span class="name">物流・配送</span>
+            <span class="what">
+              ドライバーの方が戻ってくるまで、現場で何があったか分からない。集まった日報を、事務の方がまとめて集計している。
+            </span>
+            <span class="go">この現場の話を見る</span>
+          </div>
+        </a>
+      </li>
+
+      <li>
+        <a href="/seizo/">
+          <figure class="thumb">
+            <!-- TODO: 写真を用意。町工場・製造現場の様子。
+                 <img src="/assets/img/trade-seizo.jpg" width="480" height="360"
+                      loading="lazy" decoding="async" alt=""> -->
+            <div class="photo-slot small" role="img" aria-label="写真（準備中）製造現場の様子">
+              <b>写真</b>製造現場の様子
+            </div>
+          </figure>
+          <div class="txt">
+            <span class="name">その他の製造業</span>
+            <span class="what">
+              作業の記録や検査の結果を紙に残していて、そのあと誰かがパソコンに入力し直している。
+            </span>
+            <span class="go">この現場の話を見る</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 進め方の要約 ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>最初の一歩は、無料です</h2>
+      <p>
+        いきなり大きな金額をお見せしても、決めにくいと思います。見ていただいて、試していただいて、よければ進む。その順番にしています。
+      </p>
+    </div>
+
+    <ol class="flow">
+      <li>
+        <p class="when">まず</p>
+        <h3>ご相談と、現場の見学</h3>
+        <p class="price free">無料</p>
+        <p class="d">
+          お電話でもオンラインでも、うかがってお話を聞くのでも構いません。半日ほど現場を見せていただいて、作るべきかどうかを正直にお伝えします。
+        </p>
+      </li>
+      <li>
+        <p class="when">次に</p>
+        <h3>お試し版（プロトタイプ）をつくる</h3>
+        <p class="price">約30万円</p>
+        <p class="d">
+          現場で実際に動くものをおつくりして、2週間ほど使っていただきます。
+          <b>先に決めた合格条件を満たさなければ、代金はいただきません。</b>
+        </p>
+      </li>
+      <li>
+        <p class="when">そのあと</p>
+        <h3>本開発と運用</h3>
+        <p class="price">初期約100〜200万円<small>月額約5万円</small></p>
+        <p class="d">
+          お試し版で確かめていただいてから、正式にお見積りします。月額には、OSの更新対応と不具合対応、軽微な改修が含まれます。
+        </p>
+      </li>
+    </ol>
+
+    <p class="flow-sum">
+      お金がかかるのは、動くものを試していただくときからです。しかも、合格しなければ０円です。
+    </p>
+    <div class="btn-row">
+      <a class="btn ghost" href="/ryokin/">進め方と費用をくわしく見る</a>
+    </div>
+    <p class="price-note">金額はいずれも税別の目安です。規模によって前後します。</p>
+  </div>
+</section>
+
+<!-- ===================== 補助金の一言案内 ===================== -->
+<section class="section alt">
+  <div class="wrap narrow">
+    <h2>補助金が使える場合があります</h2>
+    <p class="lead-p">
+      本開発には、導入される会社が申請できる補助金を使えることがあります。たとえば補助率が4分の3の制度なら、150万円の開発が実質37.5万円になる計算です。申請用の資料づくりもお手伝いします。
+    </p>
+    <p class="caution">
+      <b>補助金を使いたい場合は、契約の前にご相談ください。</b>
+      多くの制度では、交付が決まる前に契約・発注したものは対象外になります。
+    </p>
+    <p class="note">
+      上の金額は「補助率が4分の3の場合」の計算例です。採択されるかどうかは審査によりますので、必ず受けられるものではありません。
+    </p>
+    <div class="btn-row">
+      <a class="btn ghost" href="/hojokin/">使える制度と注意点を見る</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 長谷川について（短く） ===================== -->
+<section class="section about">
+  <div class="wrap">
+    <div class="duo flip">
+      <figure>
+        <!-- TODO: 写真を用意。本人の顔写真。笑顔で、正面寄り。自然光。
+             <img src="/assets/img/hasegawa.jpg" width="640" height="640" loading="lazy"
+                  decoding="async" class="photo" alt="長谷川侑希"> -->
+        <div class="photo-slot" role="img" aria-label="写真（準備中）長谷川侑希の顔写真">
+          <b>顔写真が入ります</b>
+          本人の顔写真（笑顔・正面寄り・自然光）
+        </div>
+      </figure>
+
+      <div>
+        <h2>つくっているのは、私ひとりです</h2>
+        <!-- TODO: 本人の言葉で確認 -->
+        <p>
+          以前つとめていた会社で、食品商社グループの製造記録アプリを担当しました。現場で紙に書いた記録を、事務所でExcelに入力し直していた会社です。それをiPadで入力できるようにしたところ、入力し直す作業がなくなりました。
+        </p>
+        <p>
+          そのとき一番うれしかったのは、仕組みが新しくなったことではなく、入力を担当されていた方が「夕方の時間が戻ってきた」とおっしゃったことでした。いまつくっているのは、ずっとその続きです。
+        </p>
+        <div class="btn-row">
+          <a class="btn ghost" href="/about/">長谷川について</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-links">
+      <a href="/works/">これまでにつくったアプリ</a>
+      <a href="/tapuda/">かざすと渡せる名刺「tapuda」の法人導入</a>
+    </div>
+  </div>
+</section>
+
+<!-- 全ページの末尾に入る相談ブロック。
+     パートナーが業種別ページのURLを直接送る想定なので、
+     どのページで読み終わっても、次の一歩がここにある -->
+<section class="section tint" id="soudan">
+  <div class="wrap narrow">
+    <h2>まずは、無料で現場を見てもらいませんか</h2>
+    <p class="lead-p">
+      ご相談と、半日ほどの現場の見学は無料です。見せていただいたうえで、アプリで解決したほうがいいのか、それとも今のやり方を少し変えれば済むのかを、正直にお伝えします。作らないほうがいい場合は、そうお伝えします。
+    </p>
+    <div class="btn-row">
+      <a class="btn" href="/contact/">まずは無料で見てもらう</a>
+      <a class="btn ghost" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
+    </div>
+    <p class="note">
+      兵庫・大阪・岡山あたりの、日帰りで伺える範囲が対象です。「これはアプリで解決することなのか」という段階のご相談で構いません。
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="name">長谷川　侑希</p>
+    <p class="tag">兵庫県姫路市を拠点に、現場で使う業務アプリをつくっています。</p>
+
+    <nav aria-label="フッターメニュー">
+      <a href="/">ホーム</a>
+      <a href="/kensetsu/">建設・設備工事</a>
+      <a href="/shokuhin/">食品工場</a>
+      <a href="/butsuryu/">物流・配送</a>
+      <a href="/seizo/">その他の製造業</a>
+      <a href="/ryokin/">進め方と費用</a>
+      <a href="/hojokin/">補助金のご案内</a>
+      <a href="/about/">長谷川について</a>
+      <a href="/faq/">よくあるご質問</a>
+      <a href="/works/">つくったもの</a>
+      <a href="/tapuda/">tapuda 法人導入</a>
+      <a href="/contact/">ご相談</a>
+    </nav>
+
+    <dl>
+      <dt>お電話</dt>
+      <dd><a href="tel:08062061245">080-6206-1245</a></dd>
+      <!-- TODO: info@yhasegawa.com などに変更。Cloudflare Email Routing の
+           転送設定が済むまでは、届かなくなるので切り替えないこと -->
+      <dt>メール</dt>
+      <dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
+      <dt>活動拠点</dt>
+      <dd>兵庫県姫路市（播磨エリアを中心に、現場へ伺います）</dd>
+      <dt>所在地</dt>
+      <dd>
+        〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室<br>
+        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言。
+             バーチャルオフィスであることをどこまで書くかは本人の判断 -->
+        <span class="why-addr">事務所の所在地と、普段うかがっている地域が異なります。</span>
+      </dd>
+    </dl>
+
+    <p class="cr">©長谷川侑希</p>
+  </div>
+</footer>
+
+
+<!-- スマホの画面下に固定する。本文を隠さないよう高さは抑え、
+     iPhone のホームバーにかからないよう safe-area を見ている -->
+<div class="mobilebar" aria-label="お問い合わせ">
+  <a href="tel:08062061245">電話する</a>
+  <a class="primary" href="/contact/">相談する</a>
 </div>
-<!-- ============ オービット3枚の中身（このHTMLが唯一の原本） ============
-     ここがサーバーの返すHTMLに載る実体で、JS はこれを読んで
-     大円と小円を組み立てる。JS が動かない環境ではこのまま縦に並ぶ。
-     文言を直すときは、ここだけを触ること。
-     section.fb を足し引きすれば枚数も変わる（JS は数えている）。 -->
-<div id="fallback">
-  <section class="fb" data-no="01" data-key="GENBA" data-short="現場">
-    <p class="lk">01 &nbsp;GENBA</p>
-    <h1 class="lt">紙の記録を<br>現場のスマホで<br><em>終わらせる</em></h1>
-    <p class="lp">兵庫県姫路市。製造・物流・建設の現場で使う業務アプリをつくっています。設計から開発、運用まで一人で担当します。</p>
-    <div class="lb"><a class="btn" href="#genba">対象の現場を見る</a></div>
-  </section>
 
-  <section class="fb" data-no="02" data-key="CHANGE" data-short="変わること">
-    <p class="lk">02 &nbsp;CHANGE</p>
-    <h2 class="lt">事務所での打ち直しが<br>なくなります</h2>
-    <div class="lba">
-      <div class="col"><p class="cap">BEFORE</p>
-        <ul><li>現場で紙に書く</li><li>事務所へ持ち帰る</li><li>Excelに打ち直す</li><li>記入漏れは翌日わかる</li></ul>
-      </div>
-      <div class="sep" aria-hidden="true"></div>
-      <div class="col aft"><p class="cap">AFTER</p>
-        <ul><li>その場で入力する</li><li>持ち帰るものがない</li><li>打ち直しがない</li><li>未入力はその場で出る</li></ul>
-      </div>
-    </div>
-  </section>
 
-  <section class="fb" data-no="03" data-key="PRICE" data-short="費用">
-    <p class="lk">03 &nbsp;PRICE</p>
-    <h2 class="lt">現場診断<br>約10万円から</h2>
-    <p class="lp">3段階に分けています。どこでも止められます。金額は先に出します。</p>
-    <div class="lb">
-      <a class="btn fill" href="#process">進め方と費用</a>
-      <a class="btn" href="#contact">現場を見てもらう</a>
-    </div>
-  </section>
-</div>
-
-<!-- ============ 対象の現場 ============ -->
-<section class="dense" id="genba">
-  <div class="wrap grid2">
-    <p class="vhead">こういう現場の話です</p>
-    <div>
-      <p class="lead rv">パソコンの前に座らない人が<br>書く記録の話です。</p>
-      <p class="lead-sub rv">事務所のシステムはたいてい足りています。足りないのは現場です。紙に書いて、あとから誰かが打ち直している。その部分だけを現場の手元で終わらせます。</p>
-      <ul class="cases">
-        <li class="rv">
-          <span class="ct">製造</span>
-          <span class="cb">製造記録・検査記録</span>
-          <span class="cd">帳票に手書きして、事務所でExcelに転記。記入漏れが見つかるのは翌日以降。もう誰も覚えていない。</span>
-        </li>
-        <li class="rv">
-          <span class="ct">物流・配送</span>
-          <span class="cb">積込記録・配送日報</span>
-          <span class="cd">ドライバーが紙で出して、事務所で集計。帰ってくるまで現場で何があったか分からない。</span>
-        </li>
-        <li class="rv">
-          <span class="ct">建設・保守</span>
-          <span class="cb">点検記録・作業報告</span>
-          <span class="cd">現場で写真を撮って、戻ってから報告書に貼る。どの写真がどの現場かは、記憶を頼りに合わせている。</span>
-        </li>
-      </ul>
-      <p class="note rv">業種は違っても「現場で紙 → 事務所で打ち直し」が残っていれば同じ話です。まずその作業に何分かかっているかを測ります。</p>
-      <p class="cta-row rv">
-        <a class="btn fill" href="#process">進め方と費用を見る</a>
-        <a class="btn" href="#contact">現場を見てもらう</a>
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 進め方と費用（このページで最も重要） ============ -->
-<section class="dense shade" id="process">
-  <div class="wrap grid2">
-    <p class="vhead">進め方と費用</p>
-    <div>
-      <p class="lead rv">約10万円から始めて、<br>いつでもやめられます。</p>
-      <p class="lead-sub rv">いきなり数百万円の見積りを出されても、判断のしようがありません。3段階に分けて、どの段階でも止められるようにしました。金額は先に公開します。</p>
-      <ol class="steps">
-        <li class="rv"><span class="n">01</span>
-          <div>
-            <h3>現場診断</h3>
-            <p class="meta"><span class="dur">1〜2日</span><span class="amt">約10万円</span></p>
-            <p>現場に半日から一日つきます。どの作業に何分かかっているかを実際に測ります。感覚ではなく数字にします。</p>
-            <span class="deliver">納品物：年間で何時間・いくら消えているかのレポートと、アプリで解くべきかどうかの結論</span>
-          </div>
-        </li>
-        <li class="rv"><span class="n">02</span>
-          <div>
-            <h3>プロトタイプ</h3>
-            <p class="meta"><span class="dur">2〜3週間</span><span class="amt">約30万円</span></p>
-            <p>現場で実際に動くものを作ります。2週間ほど使ってみてください。着手前に「何ができれば合格か」を書面で決めます。</p>
-            <span class="deliver">合格条件を満たさなければ請求しません</span>
-          </div>
-        </li>
-        <li class="rv"><span class="n">03</span>
-          <div>
-            <h3>本開発・運用</h3>
-            <p class="meta"><span class="dur">2〜4か月</span><span class="amt">初期 約100〜200万円</span><span class="amt">月額 約5万円</span></p>
-            <p>プロトタイプで確かめてから、正式に見積ります。規模によりますが、150万円前後になることが多いです。月額にはOSの更新対応と不具合対応、軽微な改修が入ります。</p>
-            <span class="deliver">納品物：ソースコード、設計書、運用手順</span>
-          </div>
-        </li>
-      </ol>
-      <div class="freebox rv">
-        <strong>合格条件を満たさなければ<br>プロトタイプ代はいただきません。</strong>
-        <span>何ができれば合格かを、着手前に書面で決めます。基準が先にあれば「なんとなく良かった」で終わりません。判断するのは、現場で2週間使ったあとです。</span>
-      </div>
-      <p class="pricenote rv">金額は税別の目安です。規模によって前後します。01で「作らないほうがいい」という結論になることもあります。その場合もレポートは渡します。そこで終わりで構いません。補助金が使えそうなときは、申請用の資料もつくります。</p>
-      <p class="cta-row rv">
-        <a class="btn fill" href="#contact">現場診断を相談する</a>
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ これまでの仕事 ============ -->
-<section class="dense" id="works">
-  <div class="wrap grid2">
-    <p class="vhead">これまでの仕事</p>
-    <div>
-      <p class="lead rv">誰もが知っている会社の<br>公式アプリをつくってきました。</p>
-      <p class="lead-sub rv">受託開発会社にいたころ、チームの一員として担当したものです。守秘義務のため社名は伏せます。</p>
-      <ul class="works">
-        <li class="rv">
-          <span class="t">食品商社グループ｜製造記録アプリ（iPad）</span>
-          <span class="r">要件設計・開発リーダー</span>
-          <span class="d">製造現場で紙に書いていた記録を、iPadで入力・保存できるようにしました。転記がなくなり、記入漏れも出なくなりました。いまお受けしているのは、これと同じ仕事です。</span>
-        </li>
-        <li class="rv">
-          <span class="t">大手銀行｜公式スマートフォンアプリ</span>
-          <span class="r">iOS開発</span>
-          <span class="d">個人のお客様向けバンキングアプリ。</span>
-        </li>
-        <li class="rv">
-          <span class="t">大手家電量販店｜公式スマートフォンアプリ</span>
-          <span class="r">iOS開発</span>
-          <span class="d">会員向けアプリ。全国の店舗・ECと連携。</span>
-        </li>
-        <li class="rv">
-          <span class="t">公共インフラ企業｜待ち番号表示システム</span>
-          <span class="r">システム開発</span>
-          <span class="d">窓口の待ち番号を表示するデジタルサイネージシステム。</span>
-        </li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ============ 一人であることへの答え ============ -->
-<section class="dense shade" id="solo">
-  <div class="wrap grid2">
-    <p class="vhead">一人であること</p>
-    <div>
-      <p class="lead rv">一人です。<br>いなくなったときの話を<br>先にしておきます。</p>
-      <p class="lead-sub rv">数百万円の仕事を個人に預けるのは不安です。当然だと思います。だから「この人がいなくなったらどうなるのか」の答えを、契約の時点で決めておきます。</p>
-      <ul class="promise">
-        <li class="rv"><span class="pi">01</span><span class="ph">ソースコードをお渡しします</span><span class="pd">納品物に含めます。別の会社へそのまま引き継げます。囲い込みません。</span></li>
-        <li class="rv"><span class="pi">02</span><span class="ph">設計書と運用手順を残します</span><span class="pd">口頭だけの仕様をつくりません。引き継ぐときに要るのは、動くものより書かれたものです。</span></li>
-        <li class="rv"><span class="pi">03</span><span class="ph">一般的な技術で作ります</span><span class="pd">私しか読めない書き方をしません。iOS・Android・Webとも、他の人が読める標準的な構成にします。</span></li>
-        <li class="rv"><span class="pi">04</span><span class="ph">保守はいつでも解約できます</span><span class="pd">長期の縛りはありません。続ける理由がなくなったら止めてください。</span></li>
-      </ul>
-      <p class="note rv">そのうえで、企画から審査、運用まで一人で回しています。下の「つくったもの」は、出して終わりにしていない記録です。</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ つくったもの ============ -->
-<section class="dense" id="apps">
-  <div class="wrap grid2">
-    <p class="vhead">つくったもの</p>
-    <div>
-      <p class="lead rv">企画から審査、運用まで<br>ひとりで出しています。</p>
-      <p class="lead-sub rv">受託でつくるものも同じ手です。QRコードはパソコン用です。スマートフォンからはリンクをどうぞ。</p>
-      <ul class="prods">
-        <li class="rv"><div class="pmain"><p class="pn">tapuda<span class="pbadge">MY SERVICE</span></p><p class="ps">かざすと渡せるNFCカード。1枚ずつ固有の番号を持たせ、国内で製造・検品しています。企画から製造、アプリ、サーバーまで自分で回しています。</p><p class="plinks"><a href="https://tapuda.app/" target="_blank" rel="noopener">Web ↗</a><a class="badge ios" href="https://apps.apple.com/jp/app/id6805284204" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=app.tapuda.android" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-tapuda-web"></span><figcaption>Web</figcaption></figure><figure><span class="qr qr-tapuda-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-tapuda-and"></span><figcaption>Google Play</figcaption></figure></div></li>
-        <li class="rv"><div class="pmain"><p class="pn">ひとまわり</p><p class="ps">毎日ひとつ、全国に同じお題が配られる散歩アプリ。</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6799991379" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=com.hitomawari.app" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-hitomawari-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-hitomawari-and"></span><figcaption>Google Play</figcaption></figure></div></li>
-        <li class="rv"><div class="pmain"><p class="pn">Pokory</p><p class="ps">家族で共有する育児記録</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6785926739" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a><a class="badge and" href="https://play.google.com/store/apps/details?id=com.pokopoko.pokory" target="_blank" rel="noopener"><span class="vh">Google Play で手に入れよう</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-pokory-ios"></span><figcaption>App Store</figcaption></figure><figure><span class="qr qr-pokory-and"></span><figcaption>Google Play</figcaption></figure></div></li>
-        <li class="rv"><div class="pmain"><p class="pn">Omry</p><p class="ps">犬猫の記録手帳</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6781990488" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-omry-ios"></span><figcaption>App Store</figcaption></figure></div></li>
-        <li class="rv"><div class="pmain"><p class="pn">カベメーター</p><p class="ps">扶養の壁を1つの数字で</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6786967194" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-kabe-ios"></span><figcaption>App Store</figcaption></figure></div></li>
-        <li class="rv"><div class="pmain"><p class="pn">余白と、あじ。</p><p class="ps">手書きフォントの作成・販売</p><p class="plinks"><a class="badge ios" href="https://apps.apple.com/jp/app/id6789184486" target="_blank" rel="noopener"><span class="vh">App Store でダウンロード</span></a></p></div><div class="pqr" aria-hidden="true"><figure><span class="qr qr-yohaku-ios"></span><figcaption>App Store</figcaption></figure></div></li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ============ tapuda（法人導入のみ。個人向け販売は tapuda.app へ） ============ -->
-<section class="dense shade" id="tapuda">
-  <div class="wrap grid2">
-    <p class="vhead">自社サービス</p>
-    <div>
-      <p class="tag rv">MY SERVICE</p>
-      <p class="tpname rv">tapuda</p>
-      <p class="lead rv" style="margin-top:20px">かざすと、名刺が渡せる。</p>
-      <p class="lead-sub rv">スマートフォンに近づけるだけで、あなたのページが開きます。相手のスマホにアプリも登録も要りません。ブラウザが開くだけです。企画から製造、アプリ、サーバーまで自分で回しています。</p>
-      <ul class="promise">
-        <li class="rv"><span class="pi">01</span><span class="ph">会社でまとめて配れます</span><span class="pd">人数分をまとめて発行して、管理できます。</span></li>
-        <li class="rv"><span class="pi">02</span><span class="ph">退職時に失効できます</span><span class="pd">カードを回収できなくても、中身を止められます。</span></li>
-        <li class="rv"><span class="pi">03</span><span class="ph">交換の記録は本人のものです</span><span class="pd">誰と交換したかは会社から見えません。</span></li>
-      </ul>
-      <p class="note rv">個人向けの価格と購入は tapuda のサイトにあります。</p>
-      <p class="cta-row rv">
-        <a class="btn fill" href="#contact">法人での導入を相談する</a>
-        <a class="btn" href="https://tapuda.app/" target="_blank" rel="noopener">tapuda を見る ↗</a>
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ よくあるご質問 ============ -->
-<section class="dense" id="faq">
-  <div class="wrap grid2">
-    <p class="vhead">よくあるご質問</p>
-    <div>
-      <dl class="faq">
-        <dt class="rv">いくらから頼めますか</dt>
-        <dd class="rv">現場診断の約10万円からです。先へ進むかどうかは、レポートを見てから決めてください。診断だけで終わっても構いません。</dd>
-
-        <dt class="rv">うちは小さい会社ですが、相手にしてもらえますか</dt>
-        <dd class="rv">従業員10人ほどの会社が中心です。大きな会社向けの仕組みは、そのまま入れても合いません。小さい現場のほうが向いています。</dd>
-
-        <dt class="rv">「作らないほうがいい」と言われることはありますか</dt>
-        <dd class="rv">あります。Excelの使い方を変えれば済むこと、市販のソフトで足りることは、そう言います。現場診断で納めるのは、その判断そのものです。</dd>
-
-        <dt class="rv">作ったあとの保守はどうなりますか</dt>
-        <dd class="rv">月額約5万円です。OSの更新対応、不具合対応、軽微な改修が入ります。長期の縛りはなく、いつでも解約できます。</dd>
-
-        <dt class="rv">契約はどのような形になりますか</dt>
-        <dd class="rv">業務委託契約を結びます。ソースコードの納品、検収の条件、保守の範囲を書面にします。</dd>
-
-        <dt class="rv">インボイスの登録番号はありますか</dt>
-        <dd class="rv">いまは未登録です。見積りは税込の総額で出します。登録事業者でないと発注できない決まりの会社もあるので、その場合は早めに教えてください。こちらで登録を進めることもできます。</dd>
-
-        <dt class="rv">姫路以外でも対応できますか</dt>
-        <dd class="rv">現場を直接見るので、日帰りで行ける範囲が基本です。兵庫・大阪・岡山あたり。それ以外はご相談ください。</dd>
-
-        <dt class="rv">補助金は使えますか</dt>
-        <dd class="rv">制度によります。使えそうなときは申請用の資料もつくります。可否は要件次第なので、現場診断の段階で一緒に確認します。</dd>
-      </dl>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ご相談 ============ -->
-<section class="contact" id="contact">
-  <div class="wrap grid2">
-    <p class="vhead">ご相談</p>
-    <div>
-      <p class="msg rv">「これはアプリで解決することなのか」<br>という段階で構いません。</p>
-      <p class="sub rv">作らないほうがいい、と返すこともあります。まず現場を見せてください。tapuda の法人導入も同じ窓口です。</p>
-
-      <form class="cform rv" id="cform">
-        <label>業種・会社名
-          <input type="text" name="company" autocomplete="organization" placeholder="例：食品製造／○○食品株式会社">
-        </label>
-        <label>いま、紙やExcelでやっていること
-          <textarea name="issue" placeholder="例：製造記録を紙に書いて、事務所でExcelに打ち直しています。1日30分くらい。"></textarea>
-        </label>
-        <label>お名前・ご連絡先
-          <input type="text" name="contact" placeholder="例：山田太郎／090-0000-0000／yamada@example.com">
-        </label>
-        <button type="submit">この内容で相談する</button>
-        <p class="fnote">ボタンを押すとメールソフトが開きます。入力した内容が本文に入ります。急ぎなら電話が早いです。</p>
-      </form>
-
-      <dl>
-        <dt>TEL</dt><dd><a href="tel:08062061245">080-6206-1245</a></dd>
-        <dt>MAIL</dt><dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
-      </dl>
-    </div>
-  </div>
-</section>
-
-<footer><div class="wrap">
-  <!-- 連絡先は #contact にあるので、ここでは繰り返さない。
-       所在地はバーチャルオフィス。「事務所」「本社」とは書かないこと。
-       実際に動いているのは姫路なので、活動拠点を併記して差を説明している。
-       TODO インボイス登録をしたら、ここに <dt>登録番号</dt> を足し、
-       #faq の「いまは未登録です」を書き換えること。 -->
-  <dl class="info">
-    <dt>氏名</dt><dd>長谷川　侑希</dd>
-    <dt>所在地</dt><dd>〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室</dd>
-    <dt>活動拠点</dt><dd>兵庫県姫路市（播磨エリアを中心に現場へ伺います）</dd>
-  </dl>
-  <p class="cr">© 長谷川 侑希</p>
-</div></footer>
-
-<script>
-/* ==================================================================
-   1. コンテンツ
-   中身はこのJSではなく #fallback の HTML が持っている。
-   JS側にも同じ文言を置くと、片方だけ直す事故が必ず起きる。
-   ここは読むだけ。円の中は「見出し＋1文」を基本とし、
-   一覧を置く枚は4行までに抑える。
-================================================================== */
-const SRC = [].slice.call(document.querySelectorAll('#fallback .fb'));
-const N = SRC.length;
-
-const track=document.getElementById('track'),
-      orbit=document.getElementById('orbit'),   big=document.getElementById('big'),
-      bigwrap=document.getElementById('bigwrap'), ring=document.getElementById('ring'),
-      spoke=document.getElementById('spoke'),   slot=document.getElementById('slot'),
-      prog=document.getElementById('prog'),     fallback=document.getElementById('fallback'),
-      tbn=document.getElementById('tbn'), tbl=document.getElementById('tbl'),
-      omn=document.getElementById('omn'), oml=document.getElementById('oml');
-
-/* ==================================================================
-   2. DOM 生成
-   #fallback の各 section を複製して、大円の中身（.layer）と
-   小円（.mini）を作る。原本はHTML側なので、ここでは文言を持たない。
-================================================================== */
-const minis=[], layers=[];
-SRC.forEach(function(sec,i){
-  const no = sec.dataset.no, key = sec.dataset.key, short = sec.dataset.short;
-  const head = sec.querySelector('.lt');
-
-  var m=document.createElement('button');
-  m.className='mini'; m.type='button';
-  m.setAttribute('aria-label', no+' '+(head ? head.textContent : key));
-  m.innerHTML='<span class="mn">'+no+'</span><span class="ml">'+short+'</span>';
-  m.addEventListener('click', function(){ snapTo(i); });
-  orbit.appendChild(m); minis.push(m);
-
-  /* 見出しは h1/h2 のまま複製しないこと。
-     #fallback 側は display:none になるだけでDOMには残るため、
-     同じ見出しが文書内に二重に出る。複製側は div に落とす。 */
-  var c = sec.cloneNode(true);
-  var ch = c.querySelector('.lt');
-  if(ch){
-    var d=document.createElement('div');
-    d.className='lt'; d.innerHTML=ch.innerHTML;
-    ch.parentNode.replaceChild(d,ch);
-  }
-  var l=document.createElement('div');
-  l.className='layer';
-  l.innerHTML=c.innerHTML;
-  bigwrap.appendChild(l); layers.push(l);
-
-  prog.appendChild(document.createElement('i'));
-});
-const progEls=[].slice.call(prog.children);
-
-/* ==================================================================
-   3. レイアウト
-   ここが移植でいちばん壊れやすい。数値は変更しないこと。
-================================================================== */
-let CX=0, CY=0, R=0, BD=0, SD=0, A0=0;
-
-function layout(){
-  const vw=window.innerWidth, vh=window.innerHeight, sp=vw<=680;
-  document.body.dataset.lay = sp ? 'sp' : 'pc';
-
-  if(sp){
-    /* SP：大円を画面幅より大きくして左上へはみ出させる。
-       小円は 右 → 右下 → 左下 のアークを通り、起点は大円の右下(55°)。
-       同時に見えるのは3つ前後。残りが画面外にあるのは正しい状態。 */
-    BD = Math.min(vw*1.22, vh*0.70);
-    CX = vw*0.26;  CY = vh*0.31;
-    SD = Math.max(58, vw*0.20);
-    R  = BD/2 + SD/2 + vw*0.055;
-    A0 = 55 * Math.PI/180;
-  }else{
-    /* PC：大円を左中央へはみ出させる。横長なので上寄せにすると下半分が死ぬ。
-       小円は 右上 → 右 → 右下 の縦アークを通り、起点はほぼ真横(14°)。 */
-    BD = Math.min(vh*1.16, vw*0.72);
-    CX = vw*0.22;  CY = vh*0.50;
-    SD = Math.max(64, Math.min(112, Math.min(vw,vh)*0.135));
-    R  = BD/2 + SD/2 + Math.min(vw,vh)*0.05;
-    A0 = 14 * Math.PI/180;
-  }
-
-  big.style.width = big.style.height = BD+'px';
-  big.style.left  = (CX-BD/2)+'px';
-  big.style.top   = (CY-BD/2)+'px';
-
-  ring.style.width = ring.style.height = (R*2)+'px';
-  ring.style.left  = (CX-R)+'px';
-  ring.style.top   = (CY-R)+'px';
-
-  spoke.style.width = R+'px';
-  spoke.style.left  = CX+'px';
-  spoke.style.top   = CY+'px';
-  spoke.style.transform = 'rotate('+A0+'rad)';
-
-  const sw = SD*1.40;
-  slot.style.width = slot.style.height = sw+'px';
-  slot.style.left  = (CX + Math.cos(A0)*R - sw/2)+'px';
-  slot.style.top   = (CY + Math.sin(A0)*R - sw/2)+'px';
-
-  /* --- 大円の中身：左上寄せ ---------------------------------------
-     中央に置くと内接正方形(直径の0.707倍)しか使えず幅が足りない。
-     ブロックの上端を中心より上にずらし、その高さの半弦 √(r²-dy²) から
-     使える幅を出す。円の左側は画面外なので、画面左端まで円の内側。
-     結果、中央置きより3割以上広い幅が取れる。
-     右下に残る大きな余白は意図的。埋めないこと。 */
-  const r     = BD/2;
-  const dyTop = -BD * (sp ? 0.26 : 0.28);
-  const half  = Math.sqrt(Math.max(1, r*r - dyTop*dyTop));
-  const inset = BD * 0.05;
-  const vpad  = vw * (sp ? 0.05 : 0.045);
-  const left  = Math.max(vpad,      CX - half + inset);
-  const right = Math.min(vw - vpad, CX + half - inset);
-  const W     = Math.min(right - left, 540);
-
-  bigwrap.style.width = W+'px';
-  bigwrap.style.left  = left+'px';
-  bigwrap.style.top   = (CY + dyTop)+'px';
-
-  /* 文字サイズはブロック幅ではなく円の直径に追従させる。
-     幅基準にすると、上の計算で幅が広がったとき見出しが過大になる。
-     明朝は同じ px でもゴシックより大きく見えるため、上限で抑えている。 */
-  bigwrap.style.setProperty('--t', Math.max(19, Math.min(48, BD*0.052))+'px');
-  bigwrap.style.setProperty('--b', Math.max(12, Math.min(16, BD*0.028))+'px');
-  bigwrap.style.setProperty('--l', Math.max(11, Math.min(14, BD*0.024))+'px');
-  bigwrap.style.setProperty('--k', Math.max(9,  Math.min(11, BD*0.019))+'px');
-  bigwrap.style.setProperty('--g', Math.max(8,  Math.min(20, BD*0.022))+'px');
-  layers.forEach(function(l){ l.style.width = W+'px'; });
-
-  minis.forEach(function(m){
-    m.style.width = m.style.height = SD+'px';
-    /* 位置は left/top ではなく transform で動かす。ここは中心に置くだけ。 */
-    m.style.left = (CX-SD/2)+'px';
-    m.style.top  = (CY-SD/2)+'px';
-    m.style.setProperty('--mn', Math.max(9, SD*0.20)+'px');
-    m.style.setProperty('--ml', Math.max(8, SD*0.125)+'px');
-  });
-
-  track.style.height = ((N-1)*vh*0.8 + vh)+'px';
-  read(); updateNear(); render();
-}
-
-/* ==================================================================
-   4. スクロール → 回転、および吸着
-================================================================== */
-const SNAP = {idle:3, dur:290, stop:1.4};
-let target=0, cur=0, snapping=false, needSnap=false, idle=0, prevY=0;
-
-/* 【重要】タッチ環境では自動吸着を切る。
-   指を離したあとも OS の慣性スクロールは続くが、そこにイベントは飛んで
-   来ない。SNAP.stop（1.4px/frame）まで落ちた瞬間に scrollTo を撃つため、
-   まだ滑っているスクロールと綱引きになって引っかかる。
-   回転はスクロールにそのまま追従するので、吸着が無くても成立する。
-   磁力のある止まり方をタッチでも使いたい場合は false にする。 */
-const NO_SNAP_ON_TOUCH = true;
-const coarse = window.matchMedia('(pointer:coarse)').matches;
-const autoSnap = !(coarse && NO_SNAP_ON_TOUCH);
-/* 小円のタップによる snapTo は残す。こちらは明示的な操作で、
-   慣性と競合しない。 */
-
-let lastRendered = NaN;
-function range(){ return Math.max(1, track.offsetHeight - window.innerHeight); }
-function posOf(i){ return Math.round(track.offsetTop + range()*i/(N-1)); }
-
-/* 【必須】吸着はオービット区間の内側でだけ動かす。
-   ページ全体で有効にすると、区間の入口で下へ引きずり込まれ、
-   出ようとすると引き戻される。 */
-function inZone(){
-  const y = window.scrollY;
-  return y > track.offsetTop - 6 && y < track.offsetTop + range() + 6;
-}
-
-function read(){
-  target = Math.min(N-1, Math.max(0,
-    (window.scrollY - track.offsetTop) / range() * (N-1)));
-}
-
-/* オービットが画面から遠いかどうか。ビューポート1枚分の余裕を前後に持たせる。
-   毎フレームではなく scroll のたびに1回だけ更新するので、
-   矩形読みによる強制レイアウトが1フレームに何度も起きない。 */
-let near = true;
-function updateNear(){
-  const y = window.scrollY, vh = window.innerHeight, top = track.offsetTop;
-  near = (y + vh * 2 > top) && (y - vh < top + track.offsetHeight);
-}
-
-function onScroll(){ read(); updateNear(); needSnap = true; }
-
-function snapTo(i){
-  i = Math.min(N-1, Math.max(0, i));
-  needSnap = false; idle = 0;
-  const from = window.scrollY, dif = posOf(i) - from;
-  if(Math.abs(dif) < 1.5) return;
-  const dur = 110 + SNAP.dur * Math.min(1, Math.abs(dif)/(range()/(N-1)));
-  const t0 = performance.now();
-  snapping = true;
-  (function anim(now){
-    if(!snapping) return;               // 途中でキャンセルされたら止める
-    const p = Math.min(1, (now-t0)/dur);
-    window.scrollTo(0, from + dif * (1 - Math.pow(1-p, 3)));   // easeOutCubic
-    if(p < 1) requestAnimationFrame(anim);
-    else { snapping = false; prevY = window.scrollY; }
-  })(t0);
-}
-
-/* 【必須】wheel を無条件にキャンセル扱いしないこと。
-   慣性スクロールの余韻も wheel を鳴らすため、始まった吸着が
-   自分の惰性で即座に打ち消される。一定以上の入力だけを操作とみなす。 */
-window.addEventListener('wheel', function(e){ if(Math.abs(e.deltaY) > 6) snapping = false; }, {passive:true});
-window.addEventListener('touchstart', function(){ snapping = false; }, {passive:true});
-window.addEventListener('keydown',    function(){ snapping = false; });
-
-/* ==================================================================
-   5. 描画
-================================================================== */
-let lastAct = -1;
-const lastPE = new Array(N).fill(null);
-
-function render(){
-  /* 小円の間隔。2π/N のままだと3枚で120°開き、軌道上に1つしか乗らない。
-     枚数から切り離して固定角にする。
-     45°（元の8枚と同じ）だと R が vh に対して大きいぶん、隣の円が
-     画面の下に落ちる。PCの初期表示(cur=0)で隣が丸ごと画面に乗る
-     上限が 25.7° なので、そこを取って25°にしている。
-     枚数を増減しても、この値は触らなくてよい。 */
-  const step = 25 * Math.PI/180;
-  minis.forEach(function(m,i){
-    const d = i - cur, th = A0 + d*step, ad = Math.abs(d);
-    /* 位置は transform のみで更新する（left/top を毎フレーム書き換えない） */
-    m.style.transform = 'translate('+(Math.cos(th)*R)+'px,'+(Math.sin(th)*R)+'px) '
-                      + 'scale('+(1 + Math.max(0,1-ad)*0.15)+')';
-    m.style.opacity = 0.34 + Math.max(0, 1-ad*0.5)*0.66;
-    m.classList.toggle('on', ad < 0.5);
-  });
-  layers.forEach(function(l,i){
-    const o = Math.max(0, 1 - Math.abs(i-cur)*1.5);
-    l.style.opacity = o;
-    /* 非表示の層は display:none にしない（SEO）。クリックだけ無効化する。
-       毎フレーム同じ値を書き直すとそのたびにスタイル再計算が走るので、
-       変わったときだけ書く。 */
-    const pe = o > 0.9 ? 'auto' : 'none';
-    if(lastPE[i] !== pe){ l.style.pointerEvents = pe; lastPE[i] = pe; }
-  });
-  /* 番号・見出し・進捗は、実際に枚が変わったときだけ触る */
-  const act = Math.min(N-1, Math.max(0, Math.round(cur)));
-  if(act !== lastAct){
-    tbn.textContent = SRC[act].dataset.no;  tbl.textContent = SRC[act].dataset.key;
-    omn.textContent = SRC[act].dataset.no;  oml.textContent = SRC[act].dataset.key;
-    progEls.forEach(function(p,i){ p.classList.toggle('on', i===act); });
-    lastAct = act;
-  }
-}
-
-/* requestAnimationFrame は 1本にまとめる */
-function loop(){
-  const y = window.scrollY;
-  /* オービットが画面から遠いときは何もしない。ここを回し続けると、
-     下のアプリ一覧を読んでいる間もCPUを食い続ける。 */
-  if(!near){ prevY = y; requestAnimationFrame(loop); return; }
-  if(autoSnap && !snapping && inZone()){
-    /* 【必須】タイマー(debounce)で待たないこと。
-       慣性スクロール中も scroll は鳴り続けるため、惰性が尽きるまで
-       発動できず体感1秒近く待たされる。毎フレームの移動量＝速度を見て、
-       十分落ちた瞬間に発動する。 */
-    if(Math.abs(y - prevY) < SNAP.stop) idle++; else idle = 0;
-    if(needSnap && idle >= SNAP.idle) snapTo(Math.round(target));
-  }
-  prevY = y;
-
-  cur += (target - cur) * 0.17;                  // 追従の慣性
-  if(Math.abs(target-cur) < 0.0004) cur = target;
-  /* 止まっているフレームは描画しない。吸着後はここで完全に静止する。 */
-  if(cur !== lastRendered){ render(); lastRendered = cur; }
-  requestAnimationFrame(loop);
-}
-
-/* ==================================================================
-   6. 起動
-================================================================== */
-/* 【重要】resize をそのまま layout() に繋がないこと。
-   モバイルはスクロールでURLバーが伸縮し、そのたびに innerHeight が数十px
-   変わって resize が飛ぶ。ここで layout() を回すと track の高さを再設定して
-   しまい、スクロール中に文書の高さが動く —— これが体感でいちばん大きい
-   カクつきの原因。さらに range() が変わるので吸着先まで動く。
-   幅が変わらず高さの変化が小さいものは、URLバーの伸縮として無視する。 */
-let lastW = window.innerWidth, lastH = window.innerHeight;
-function onResize(){
-  const w = window.innerWidth, h = window.innerHeight;
-  /* 無視するのはタッチ環境だけにする。PC で高さだけ少し変えたときに
-     再フィットしなくなるのを避けるため。 */
-  if(coarse && w === lastW && Math.abs(h - lastH) < 140) return;
-  lastW = w; lastH = h; layout();
-}
-
-const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-if(!reduce){
-  document.body.dataset.orbit = 'on';           // ここで初めてオービットを出す
-  window.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', onResize);
-  window.addEventListener('orientationchange', layout);   // 回転は必ず作り直す
-  layout(); read(); updateNear(); cur = target; prevY = window.scrollY; loop();
-}
-/* reduce の場合は何もしない → 縦積みのフォールバックがそのまま表示される */
-
-/* ==================================================================
-   7. reveal（オービット外のセクション用）
-================================================================== */
-(function(){
-  var els = document.querySelectorAll('.rv');
-  if (!('IntersectionObserver' in window) || reduce){
-    [].forEach.call(els, function(el){ el.classList.add('in'); }); return;
-  }
-  var io = new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  }, { rootMargin:'0px 0px -6% 0px' });
-  [].forEach.call(els, function(el){ io.observe(el); });
-})();
-
-/* ==================================================================
-   8. 相談フォーム
-   Workers Static Assets はサーバー処理を持たないため、入力内容を
-   本文に入れたメールを立ち上げる形にしている。外部フォーム
-   （Formspree 等）に移すときは、この submit ハンドラごと
-   form の action/method に差し替えること。
-================================================================== */
-(function(){
-  var f = document.getElementById('cform');
-  if(!f) return;
-  /* 宛先はページ上の mailto リンクが原本。ここに書き写さない。 */
-  var link = document.querySelector('a[href^="mailto:"]');
-  if(!link) return;
-  var TO = link.getAttribute('href').replace(/^mailto:/,'');
-  f.addEventListener('submit', function(e){
-    e.preventDefault();
-    var v = function(n){ var el = f.elements[n]; return el ? el.value.trim() : ''; };
-    var body = [
-      '■ 業種・会社名',       v('company') || '（未記入）', '',
-      '■ いま紙やExcelでやっていること', v('issue')   || '（未記入）', '',
-      '■ お名前・ご連絡先',   v('contact') || '（未記入）', '',
-      '---', 'yhasegawa.com の相談フォームから'
-    ].join('\n');
-    var subj = '【ご相談】' + (v('company') || 'お問い合わせ');
-    window.location.href = 'mailto:' + TO
-      + '?subject=' + encodeURIComponent(subj)
-      + '&body='    + encodeURIComponent(body);
-  });
-})();
-</script>
-
-<!-- Cloudflare Web Analytics。
-     Cookie を使わないので同意バナーは不要。トークンはクライアントに
-     埋まる公開の識別子で、秘密情報ではない（公開リポジトリで問題ない）。
-     【注意】ダッシュボード側は「Enable with JS Snippet installation」のまま
-     にしておくこと。自動挿入モードに切り替わると、Cloudflare は自分で
-     beacon を入れるつもりになり、このスニペットから送ったデータを
-     無言で捨てる。エラーは出ないので気づけない。 -->
+<script src="/assets/js/site.js" defer></script>
+<!-- Cloudflare Web Analytics。Cookie を使わないので同意バナーは不要 -->
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
         data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
-
 </body>
 </html>
