@@ -60,7 +60,35 @@
     if (to) location.replace(to);
   }
 
-  /* ---- 3. 本文の出現 ------------------------------------------------ */
+  /* ---- 3. ご相談フォーム --------------------------------------------
+     Workers Static Assets はサーバー処理を持たないため、入力内容を
+     本文に入れたメールを立ち上げる形にしている。
+     外部のフォームに移すときは、この節ごと差し替えること。 */
+  var form = document.getElementById('cform');
+  if (form) {
+    var link = document.querySelector('a[href^="mailto:"]');
+    if (link) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var v = function (n) {
+          var el = form.elements[n];
+          return el && el.value.trim() ? el.value.trim() : '（未記入）';
+        };
+        var body = [
+          '■ 業種・会社名', v('company'), '',
+          '■ いま紙やExcelでやっていること', v('issue'), '',
+          '■ お名前・ご連絡先', v('contact'), '',
+          '----', 'yhasegawa.com のご相談フォームから'
+        ].join('\n');
+        var to = link.getAttribute('href').replace(/^mailto:/, '');
+        window.location.href = 'mailto:' + to
+          + '?subject=' + encodeURIComponent('【ご相談】' + v('company'))
+          + '&body=' + encodeURIComponent(body);
+      });
+    }
+  }
+
+  /* ---- 4. 本文の出現 ------------------------------------------------ */
   var slow = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var targets = document.querySelectorAll('.rise');
   if (!targets.length) return;

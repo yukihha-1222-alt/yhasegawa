@@ -136,6 +136,10 @@ def main():
             sys.exit('%s: %s' % (fn, e))
 
         values = dict(common)
+        # ご相談ページ自身には、末尾の相談ブロックを入れない。
+        # 同じ見出しと同じボタンが1枚の中に二度出てしまう。
+        if meta.get('contact', 'yes') == 'no':
+            values['contact'] = ''
         values.update({
             'title':       meta['title'],
             'description': meta['description'],

@@ -1,0 +1,292 @@
+<!-- ============================================================
+     このファイルは build.py が組み立てたものです。直接編集しても、
+     次のビルドで消えます。本文は pages/pages/hojokin.html、
+     共通部分は parts/ を編集して python3 build.py を実行してください。
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>補助金のご案内｜契約の前にご相談ください｜長谷川侑希</title>
+<meta name="description" content="本開発には、導入される会社が申請できる補助金を使えることがあります。多くの制度では交付が決まる前に契約したものは対象外になるため、お使いになりたい場合は契約の前にご相談ください。申請用の資料づくりもお手伝いします。">
+<link rel="canonical" href="https://yhasegawa.com/hojokin/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yhasegawa.com/hojokin/">
+<meta property="og:title" content="補助金のご案内｜契約の前にご相談ください｜長谷川侑希">
+<meta property="og:description" content="本開発には、導入される会社が申請できる補助金を使えることがあります。多くの制度では交付が決まる前に契約したものは対象外になるため、お使いになりたい場合は契約の前にご相談ください。申請用の資料づくりもお手伝いします。">
+<meta property="og:site_name" content="長谷川侑希｜現場の業務アプリ開発">
+<meta property="og:locale" content="ja_JP">
+<!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
+<meta name="theme-color" content="#C2653A">
+<meta name="theme-color" content="#1F1A17" media="(prefers-color-scheme: dark)">
+
+<!-- 書体は Zen Kaku Gothic New ひとつ。swap を指定しているので、
+     落ちてくるまではシステムのゴシックで読める状態になる -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body data-current="hojokin">
+
+<a class="skip" href="#main">本文へ移動する</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="who" href="/">
+      <b>長谷川　侑希</b>
+      <span>現場の業務アプリ開発｜兵庫県姫路市</span>
+    </a>
+
+    <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
+         ここが折り返して出るだけなので、リンクは必ず辿れる -->
+    <nav class="nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="/#gyoshu" data-nav="gyoshu">業種から探す</a></li>
+        <li><a href="/ryokin/" data-nav="ryokin">進め方と費用</a></li>
+        <li><a href="/hojokin/" data-nav="hojokin">補助金</a></li>
+        <li><a href="/about/" data-nav="about">長谷川について</a></li>
+        <li><a href="/faq/" data-nav="faq">よくある質問</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn head-cta" href="/contact/">相談する</a>
+  </div>
+</header>
+
+
+<main id="main">
+<section class="section page-hero">
+  <div class="wrap narrow">
+    <p class="eyebrow">補助金のご案内</p>
+    <h1>補助金が使えるかどうか、<br>ご一緒に確かめます</h1>
+    <p class="lead">
+      アプリをおつくりする費用には、導入される会社が申請できる補助金を使えることがあります。申請用の資料づくりもお手伝いします。ただし、気をつけていただきたいことがひとつだけあります。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 一番大事な注意 ============
+     ここを読み飛ばされると、使えたはずの補助金が使えなくなる。
+     計算例より前に、独立した節として置いている。 -->
+<section class="section tint">
+  <div class="wrap narrow">
+    <h2>契約の前に、ご相談ください</h2>
+    <p class="caution">
+      <b>多くの制度では、交付が決まる前に契約・発注したものは対象外になります。</b>
+      先に契約してしまうと、あとから申請できなくなることがあります。補助金をお使いになりたい場合は、お見積りの段階で「使いたい」とお伝えください。申請から交付が決まるまでの時間を見込んで、着手の時期をご一緒に決めます。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 負担がどう変わるか（計算例） ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>負担がどう変わるか</h2>
+      <p>
+        補助率が4分の3の制度に採択された場合、ご負担はこのように変わります。下はあくまで計算例です。
+      </p>
+    </div>
+
+    <div class="calc">
+      <div class="row head">
+        <span class="name">補助率が4分の3の場合の計算例</span>
+        <span class="before">もとの金額</span>
+        <span class="after">実質のご負担</span>
+      </div>
+      <div class="row">
+        <span class="name">お試し版（プロトタイプ）</span>
+        <span class="before">約30万円</span>
+        <span class="after">約7.5万円</span>
+      </div>
+      <div class="row">
+        <span class="name">本開発（150万円の場合）</span>
+        <span class="before">約150万円</span>
+        <span class="after">約37.5万円</span>
+      </div>
+    </div>
+
+    <p class="note">
+      <b>これは「補助率が4分の3の制度に採択された場合」の計算例です。</b>
+      補助率も、対象になる費用も、上限額も制度ごとに違います。どの費用が対象になるかは、制度の要件を見ながら個別に確認します。採択されるかどうかは審査によりますので、必ず受けられるものではありません。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 組み合わせ方 ============ -->
+<section class="section alt">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <h2>小さく始めて、大きいところで使う</h2>
+    </div>
+    <p class="lead-p">
+      補助金は、申請してから交付が決まるまでに時間がかかります。その間なにも進まないのは、もったいないと思います。
+    </p>
+    <p class="lead-p">
+      そこで、<b>お試し版は小さく自費で始めていただき、金額の大きい本開発で補助金を使う</b>、という組み合わせもできます。お試し版で「これなら現場で使える」と確かめたうえで申請できるので、申請書も書きやすくなります。
+    </p>
+    <p class="note">
+      どちらがよいかは、制度の募集時期と、御社のご都合によります。現場を見せていただくときに、そこまで含めてご相談しましょう。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 使えることがある制度 ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="asof">2026年11月時点の情報です</p>
+      <h2>使えることがある制度</h2>
+      <p>
+        制度の名前も内容も毎年変わります。下の内容は確認した時点のものですので、実際にお使いになる前に、必ず公式のページで最新の内容をご確認ください。ご一緒に確認します。
+      </p>
+    </div>
+
+    <!-- 姫路市 -->
+    <div class="scheme">
+      <h3>姫路市産業デジタル化活用促進補助金</h3>
+      <p class="by">姫路市（令和8年度）</p>
+      <dl>
+        <dt>上限額</dt><dd>300万円</dd>
+        <dt>補助率</dt><dd>4分の3</dd>
+        <dt>対象</dt><dd>システムの構築費、クラウドの使用料など</dd>
+        <dt>募集</dt><dd>2026年6月から7月にかけて募集され、予算の上限に達したため終了しました</dd>
+      </dl>
+      <p>
+        令和8年度の募集はすでに終わっています。来年度に同じ制度が実施されるかどうかは、現時点では分かりません。
+        <!-- TODO: 来年度の実施状況を商工会議所・姫路市に確認 -->
+      </p>
+      <p class="link">
+        <!-- TODO: 姫路市の公式ページのURLを確認して入れる。
+             推測で書かないこと。商工会議所で聞くのが早い -->
+        公式ページ：準備中
+      </p>
+    </div>
+
+    <!-- 中小企業省力化投資補助金 -->
+    <div class="scheme">
+      <h3>中小企業省力化投資補助金（一般型）</h3>
+      <p class="by">国の制度</p>
+      <dl>
+        <dt>対象</dt><dd>オーダーメイドでのシステム構築</dd>
+        <dt>向いている段階</dt><dd>本開発</dd>
+      </dl>
+      <p>
+        御社に合わせてつくるシステムが対象になる制度です。本開発に向いています。ただし、求められる要件が多く、審査も簡単ではありません。申請してから採択が決まるまでに数か月かかります。お使いになる場合は、早めに準備を始める必要があります。
+      </p>
+      <p class="link">
+        <!-- TODO: 公式ページのURLを確認して入れる。制度名も年度で変わるため、
+             記載前に必ず最新の名称を確認すること -->
+        公式ページ：準備中
+      </p>
+    </div>
+
+    <div class="scheme">
+      <h3>お住まいの市町や、兵庫県の制度</h3>
+      <p class="by">自治体ごと</p>
+      <p>
+        上の2つのほかに、御社の所在地の市町や兵庫県にも、デジタル化を支援する制度があることがあります。募集の時期も条件もばらばらですので、御社の場所と時期に合わせて、ご一緒に探します。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 私がすること ============ -->
+<section class="section alt">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <h2>申請のときに、お手伝いできること</h2>
+    </div>
+    <ul class="changes">
+      <li>どの制度が使えそうかを、御社の場所と時期に合わせて一緒に探します。</li>
+      <li>申請に必要な、システムの内容や見積りの資料をおつくりします。</li>
+      <li>交付が決まるまでの時間を見込んで、着手の時期をご一緒に決めます。</li>
+    </ul>
+    <p class="note">
+      申請そのものの代行はしておりません。書類づくりのお手伝いと、技術的な部分の説明までとお考えください。顧問の税理士さんや、商工会議所の相談窓口と合わせてお使いいただくのが確実です。
+    </p>
+  </div>
+</section>
+
+<!-- 全ページの末尾に入る相談ブロック。
+     パートナーが業種別ページのURLを直接送る想定なので、
+     どのページで読み終わっても、次の一歩がここにある -->
+<section class="section tint" id="soudan">
+  <div class="wrap narrow">
+    <h2>まずは、無料で現場を見てもらいませんか</h2>
+    <p class="lead-p">
+      ご相談と、半日ほどの現場の見学は無料です。見せていただいたうえで、アプリで解決したほうがいいのか、それとも今のやり方を少し変えれば済むのかを、正直にお伝えします。作らないほうがいい場合は、そうお伝えします。
+    </p>
+    <div class="btn-row">
+      <a class="btn" href="/contact/">まずは無料で見てもらう</a>
+      <a class="btn ghost" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
+    </div>
+    <p class="note">
+      兵庫・大阪・岡山あたりの、日帰りで伺える範囲が対象です。「これはアプリで解決することなのか」という段階のご相談で構いません。
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="name">長谷川　侑希</p>
+    <p class="tag">兵庫県姫路市を拠点に、現場で使う業務アプリをつくっています。</p>
+
+    <nav aria-label="フッターメニュー">
+      <a href="/">ホーム</a>
+      <a href="/kensetsu/">建設・設備工事</a>
+      <a href="/shokuhin/">食品工場</a>
+      <a href="/butsuryu/">物流・配送</a>
+      <a href="/seizo/">その他の製造業</a>
+      <a href="/ryokin/">進め方と費用</a>
+      <a href="/hojokin/">補助金のご案内</a>
+      <a href="/about/">長谷川について</a>
+      <a href="/faq/">よくあるご質問</a>
+      <a href="/works/">つくったもの</a>
+      <a href="/tapuda/">tapuda 法人導入</a>
+      <a href="/contact/">ご相談</a>
+    </nav>
+
+    <dl>
+      <dt>お電話</dt>
+      <dd><a href="tel:08062061245">080-6206-1245</a></dd>
+      <!-- TODO: info@yhasegawa.com などに変更。Cloudflare Email Routing の
+           転送設定が済むまでは、届かなくなるので切り替えないこと -->
+      <dt>メール</dt>
+      <dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
+      <dt>活動拠点</dt>
+      <dd>兵庫県姫路市（播磨エリアを中心に、現場へ伺います）</dd>
+      <dt>所在地</dt>
+      <dd>
+        〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室<br>
+        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言。
+             バーチャルオフィスであることをどこまで書くかは本人の判断 -->
+        <span class="why-addr">事務所の所在地と、普段うかがっている地域が異なります。</span>
+      </dd>
+    </dl>
+
+    <p class="cr">©長谷川侑希</p>
+  </div>
+</footer>
+
+
+<!-- スマホの画面下に固定する。本文を隠さないよう高さは抑え、
+     iPhone のホームバーにかからないよう safe-area を見ている -->
+<div class="mobilebar" aria-label="お問い合わせ">
+  <a href="tel:08062061245">電話する</a>
+  <a class="primary" href="/contact/">相談する</a>
+</div>
+
+
+<script src="/assets/js/site.js" defer></script>
+<!-- Cloudflare Web Analytics。Cookie を使わないので同意バナーは不要 -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
+</body>
+</html>

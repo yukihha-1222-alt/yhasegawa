@@ -689,3 +689,51 @@ section .note{margin-top:16px}
 .price-brief .p{font-size:17px;font-weight:700;color:var(--accent-ink)}
 .price-brief .p.free{color:var(--green)}
 .price-brief .k{font-size:14.5px;color:var(--ink-soft)}
+
+/* ==================================================================
+   補助金のページ
+================================================================== */
+/* いつ時点の情報かを必ず出す。制度は毎年変わる */
+.asof{
+  display:inline-block;margin-bottom:18px;
+  font-size:14px;font-weight:700;letter-spacing:.04em;
+  color:var(--ink-soft);background:var(--bg-alt);
+  padding:6px 14px;border-radius:999px;
+}
+
+/* 補助率をかけた計算例。約束ではないので、見出しに必ず「計算例」と入れる */
+.calc{margin-top:clamp(18px,3vw,26px);border:1px solid var(--line);border-radius:var(--round-l);overflow:hidden}
+.calc .row{
+  display:grid;gap:4px 18px;grid-template-columns:1fr;
+  padding:16px clamp(16px,2.6vw,24px);background:var(--bg-card);
+  border-top:1px solid var(--line);
+}
+.calc .row:first-child{border-top:0}
+.calc .head{background:var(--bg-alt);font-size:14px;color:var(--ink-soft);letter-spacing:.06em}
+@media (min-width:600px){
+  .calc .row{grid-template-columns:1fr auto auto;align-items:baseline}
+  .calc .row > *:nth-child(2),.calc .row > *:nth-child(3){text-align:right;min-width:9em}
+}
+.calc .name{font-size:16px;font-weight:700}
+.calc .before{font-size:16px;color:var(--ink-soft)}
+.calc .after{font-size:clamp(18px,2.6vw,21px);font-weight:700;color:var(--green)}
+.calc .head .name,.calc .head .before,.calc .head .after{
+  font-size:14px;font-weight:400;color:var(--ink-soft)
+}
+
+/* 制度ひとつぶん */
+.scheme{
+  margin-top:16px;padding:clamp(20px,3vw,28px);
+  background:var(--bg-card);border:1px solid var(--line);border-radius:var(--round-l);
+}
+.scheme h3{margin-bottom:6px}
+.scheme .by{font-size:14px;color:var(--ink-faint);margin-bottom:14px}
+.scheme dl{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:15.5px;margin-bottom:14px}
+.scheme dt{color:var(--ink-faint);white-space:nowrap}
+.scheme dd{margin:0}
+.scheme p{font-size:15.5px;color:var(--ink-soft);line-height:1.85}
+.scheme .link{margin-top:14px;font-size:15px}
+@media (max-width:560px){
+  .scheme dl{grid-template-columns:1fr;gap:0}
+  .scheme dt{margin-top:10px;font-size:13.5px}
+}
