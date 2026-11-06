@@ -25,6 +25,14 @@ HTMLを直接さわらないこと。次のビルドで消える。pages/ と pa
 
 import io, os, re, sys, shutil
 
+# ------------------------------------------------------------------
+# サイト全体で使う値。ページや部品の中で {{mail}} と書けば差し込まれる。
+# TODO: info@yhasegawa.com などに変更
+#   Cloudflare Email Routing の転送設定が済むまでは切り替えないこと。
+#   先に変えると、メールが誰にも届かなくなる。
+MAIL = 'pokonavi.info@gmail.com'
+# ------------------------------------------------------------------
+
 ROOT  = os.path.dirname(os.path.abspath(__file__))
 PARTS = os.path.join(ROOT, 'parts')
 PAGES = os.path.join(ROOT, 'pages')
@@ -94,23 +102,59 @@ def tidy_ja(html):
     return ''.join(out)
 
 
-def fill(template, values):
-    """{{name}} を values[name] に置き換える。残ったら間違いなので落とす。"""
+def fill(template, values, strict=True):
+    """{{name}} を values[name] に置き換える。
+
+    strict のときは、埋まらなかった項目が残っていたら間違いとみなして落とす。
+    部品を先に埋める段階では、まだ値のない項目が残っていてよいので strict=False。
+    """
     out = re.sub(r'\{\{\s*(\w+)\s*\}\}',
                  lambda m: values.get(m.group(1), m.group(0)), template)
-    left = re.findall(r'\{\{\s*(\w+)\s*\}\}', out)
-    if left:
-        raise ValueError('差し込めなかった項目: ' + ', '.join(sorted(set(left))))
+    if strict:
+        left = re.findall(r'\{\{\s*(\w+)\s*\}\}', out)
+        if left:
+            raise ValueError('差し込めなかった項目: ' + ', '.join(sorted(set(left))))
     return out
+
+
+PREVIEW = os.path.join(ROOT, '_preview')
+
+
+def to_preview(html, slug):
+    """見せるためだけの、持ち出せる形に書き換える。
+
+    本番は Workers Static Assets に置くので /kensetsu/ のような絶対パスで
+    よいが、プレビューはどこに置かれるか分からない。
+    すべて相対パスの平たいファイル（kensetsu.html）に直す。
+    あわせて計測タグを外す。下書きを見た回数が本番の数字に混ざると困る。
+    """
+    # 計測タグ。プレビューの閲覧を Web Analytics に入れない
+    html = re.sub(r'<!-- Cloudflare Web Analytics.*?</script>', '', html, flags=re.S)
+
+    # ページへのリンク。/kensetsu/ → kensetsu.html、/ → index.html
+    html = re.sub(r'href="/([a-z]+)/(#[^"]*)?"',
+                  lambda m: 'href="%s.html%s"' % (m.group(1), m.group(2) or ''), html)
+    html = re.sub(r'href="/(#[^"]*)?"',
+                  lambda m: 'href="index.html%s"' % (m.group(1) or ''), html)
+    # 置き場所に依存しないよう、資材も相対にする
+    html = html.replace('href="/assets/', 'href="assets/')
+    html = html.replace('src="/assets/', 'src="assets/')
+    return html
 
 
 def main():
     if not os.path.isdir(PARTS) or not os.path.isdir(PAGES):
         sys.exit('parts/ か pages/ が見つかりません')
+    preview = '--preview' in sys.argv
 
     layout = read(os.path.join(PARTS, 'layout.html'))
-    common = {name: read(os.path.join(PARTS, name + '.html'))
+    # サイト共通の値を先に部品へ埋める。
+    # 部品は本文に差し込まれたあと走査されないので、ここで埋めておかないと
+    # footer の {{mail}} がそのまま残ってしまう。
+    scalars = {'mail': MAIL}
+    common = {name: fill(read(os.path.join(PARTS, name + '.html')), scalars, strict=False)
               for name in ('header', 'contact', 'footer', 'mobilebar', 'pricebrief')}
+    common.update(scalars)
 
     built = []
     for fn in sorted(os.listdir(PAGES)):
@@ -151,6 +195,24 @@ def main():
         write(out, WARNING.format(src='pages/' + fn) + page)
         built.append((url, os.path.relpath(out, ROOT), len(body)))
 
+        if preview:
+            write(os.path.join(PREVIEW, slug + '.html'), to_preview(page, slug))
+
+    if preview:
+        # CSS の中の画像も相対に直す。site.css は assets/css/ にあるので1つ上
+        css = read(os.path.join(ROOT, 'assets', 'css', 'site.css'))
+        write(os.path.join(PREVIEW, 'assets', 'css', 'site.css'),
+              css.replace('url(/assets/', 'url(../'))
+        for rel in ('assets/js/site.js', 'assets/store-appstore-ja.svg',
+                    'assets/store-googleplay-ja.png', 'assets/store-googleplay-ja.webp'):
+            src = os.path.join(ROOT, rel)
+            if os.path.isfile(src):
+                shutil.copy(src, os.path.join(PREVIEW, rel)) if os.path.isdir(
+                    os.path.dirname(os.path.join(PREVIEW, rel))) else (
+                    os.makedirs(os.path.dirname(os.path.join(PREVIEW, rel))),
+                    shutil.copy(src, os.path.join(PREVIEW, rel)))
+        print('プレビューを _preview/ に書き出しました（相対パス・計測タグなし）')
+
     print('%d ページを組み立てました' % len(built))
     for url, path, n in built:
         print('  %-14s → %-26s 本文 %5d 字' % (url, path, n))
@@ -159,7 +221,7 @@ def main():
     known = {p for _, p, _ in built}
     for d in sorted(os.listdir(ROOT)):
         p = os.path.join(d, 'index.html')
-        if os.path.isdir(os.path.join(ROOT, d)) and d not in ('.git', 'assets', 'parts', 'pages') \
+        if os.path.isdir(os.path.join(ROOT, d)) and d not in ('.git', 'assets', 'parts', 'pages', '_preview') \
            and os.path.isfile(os.path.join(ROOT, p)) and p not in known:
             print('  ※ pages/ に対応がない出力が残っています: ' + p)
 

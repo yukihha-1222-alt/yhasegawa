@@ -65,7 +65,7 @@
     <div class="duo">
       <div>
         <p class="eyebrow">食品工場の現場へ</p>
-        <h1>毎日たまる記録用紙を、<br>その場で<br>終わらせませんか</h1>
+        <h1><span class="nb">毎日たまる記録用紙を、</span><span class="nb">その場で</span><span class="nb">終わらせませんか</span></h1>
         <p class="lead">
           温度の確認も、清掃のチェックも、製造の記録も、その場で入力して終わり。お手元のiPadやスマートフォンの画面が、そのまま記録用紙になります。
         </p>
@@ -276,7 +276,18 @@
   </div>
 </section>
 
-<!-- ============ 7. 業種別の資料 ============ -->
+<!-- ============ 7. 業種別の資料 ============================
+     TODO: 業種別PDFができたら戻す
+
+     PDFと表紙のサムネイルができるまで、画面には出さない。
+     「準備中」と書いた箱が並ぶと、初めて来た方には作りかけに見えるため。
+
+     戻すときは、下の section のコメントを外したうえで
+       ・div.photo-slot を表紙の img に差し替える
+       ・「ただいま準備中です」の一文を消す
+       ・<a class="btn" href="/assets/doc/shokuhin.pdf" download>資料をダウンロード（PDF）</a>
+         を置くの3つを行うこと。
+
 <section class="section alt">
   <div class="wrap">
     <div class="sec-head">
@@ -286,10 +297,7 @@
 
     <div class="doc-dl">
       <figure class="cover">
-        <!-- TODO: 業種別PDFを用意（食品工場向けのご案内）。表紙のサムネイルも。
-             税理士・社労士などのパートナーが顧問先に渡す資料と同じものにすること。
-             <img src="/assets/img/doc-shokuhin.png" width="300" height="424"
-                  loading="lazy" decoding="async" alt="食品工場向けのご案内の表紙"> -->
+        
         <div class="photo-slot" role="img" aria-label="資料の表紙（準備中）">
           <b>表紙</b>準備中
         </div>
@@ -298,15 +306,14 @@
         <h3>食品工場向けのご案内（PDF）</h3>
         <p>
           このページの内容に、進め方と費用、補助金の注意点をまとめたものです。
-          <!-- TODO: 業種別PDFを用意。用意できたら下のボタンを
-               <a class="btn" href="/assets/doc/shokuhin.pdf" download>資料をダウンロード（PDF）</a>
-               に差し替える -->
+          
         </p>
         <p class="note">ただいま準備中です。お急ぎの場合は、お電話いただければお送りします。</p>
       </div>
     </div>
   </div>
 </section>
+============================================================ -->
 
 <!-- ============ 8. 進め方と費用・補助金の要約（共通部品） ============ -->
 <!-- 各ページに置く費用の要約。
@@ -392,8 +399,7 @@
     <dl>
       <dt>お電話</dt>
       <dd><a href="tel:08062061245">080-6206-1245</a></dd>
-      <!-- TODO: info@yhasegawa.com などに変更。Cloudflare Email Routing の
-           転送設定が済むまでは、届かなくなるので切り替えないこと -->
+      <!-- アドレスは build.py の MAIL ひとつで決まる。ここでは書かない -->
       <dt>メール</dt>
       <dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
       <dt>活動拠点</dt>

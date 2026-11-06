@@ -62,7 +62,7 @@
 <section class="section page-hero">
   <div class="wrap narrow">
     <p class="eyebrow">補助金のご案内</p>
-    <h1>補助金が使えるかどうか、<br>ご一緒に確かめます</h1>
+    <h1><span class="nb">補助金が使えるかどうか、</span><span class="nb">ご一緒に確かめます</span></h1>
     <p class="lead">
       アプリをおつくりする費用には、導入される会社が申請できる補助金を使えることがあります。申請用の資料づくりもお手伝いします。ただし、気をつけていただきたいことがひとつだけあります。
     </p>
@@ -99,11 +99,6 @@
         <span class="after">実質のご負担</span>
       </div>
       <div class="row">
-        <span class="name">お試し版（プロトタイプ）</span>
-        <span class="before">約30万円</span>
-        <span class="after">約7.5万円</span>
-      </div>
-      <div class="row">
         <span class="name">本開発（150万円の場合）</span>
         <span class="before">約150万円</span>
         <span class="after">約37.5万円</span>
@@ -111,6 +106,7 @@
     </div>
 
     <p class="note">
+      お試し版にも使えるかどうかは、制度と募集の時期によります。<br>
       <b>これは「補助率が4分の3の制度に採択された場合」の計算例です。</b>
       補助率も、対象になる費用も、上限額も制度ごとに違います。どの費用が対象になるかは、制度の要件を見ながら個別に確認します。採択されるかどうかは審査によりますので、必ず受けられるものではありません。
     </p>
@@ -160,11 +156,11 @@
         令和8年度の募集はすでに終わっています。来年度に同じ制度が実施されるかどうかは、現時点では分かりません。
         <!-- TODO: 来年度の実施状況を商工会議所・姫路市に確認 -->
       </p>
-      <p class="link">
-        <!-- TODO: 姫路市の公式ページのURLを確認して入れる。
-             推測で書かないこと。商工会議所で聞くのが早い -->
-        公式ページ：準備中
-      </p>
+      <!-- TODO: 姫路市の公式ページURL
+           URLが分かったら、下の1行を戻して href を入れる。
+           推測で書かないこと。商工会議所で聞くのが早い。
+      <p class="link"><a href="" target="_blank" rel="noopener">公式ページを見る</a></p>
+      -->
     </div>
 
     <!-- 中小企業省力化投資補助金 -->
@@ -179,9 +175,8 @@
         御社に合わせてつくるシステムが対象になる制度です。本開発に向いています。ただし、求められる要件が多く、審査も簡単ではありません。申請してから採択が決まるまでに数か月かかります。お使いになる場合は、早めに準備を始める必要があります。
       </p>
       <p class="link">
-        <!-- TODO: 公式ページのURLを確認して入れる。制度名も年度で変わるため、
-             記載前に必ず最新の名称を確認すること -->
-        公式ページ：準備中
+        <!-- 制度名は年度で変わることがある。名称を変えるときはリンク先も確認すること -->
+        <a href="https://shoryokuka.smrj.go.jp/ippan/" target="_blank" rel="noopener">公式ページを見る</a>
       </p>
     </div>
 
@@ -256,8 +251,7 @@
     <dl>
       <dt>お電話</dt>
       <dd><a href="tel:08062061245">080-6206-1245</a></dd>
-      <!-- TODO: info@yhasegawa.com などに変更。Cloudflare Email Routing の
-           転送設定が済むまでは、届かなくなるので切り替えないこと -->
+      <!-- アドレスは build.py の MAIL ひとつで決まる。ここでは書かない -->
       <dt>メール</dt>
       <dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
       <dt>活動拠点</dt>

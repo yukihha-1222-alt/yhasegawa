@@ -10,7 +10,7 @@ description: 作業日報、工事写真の整理、点検・作業報告書。�
     <div class="duo">
       <div>
         <p class="eyebrow">建設・設備工事の現場へ</p>
-        <h1>事務所に戻ってからの<br>書類を、現場で<br>終わらせませんか</h1>
+        <h1><span class="nb">事務所に戻ってからの</span><span class="nb">書類を、現場で</span><span class="nb">終わらせませんか</span></h1>
         <p class="lead">
           作業日報も、工事写真も、点検の報告も、現場で書いて現場で終わる。
           そのために、みなさんがすでにお持ちのスマートフォンを使います。
@@ -238,7 +238,19 @@ description: 作業日報、工事写真の整理、点検・作業報告書。�
   </div>
 </section>
 
-<!-- ============ 7. 業種別の資料 ============ -->
+<!-- ============ 7. 業種別の資料 ============================
+     TODO: 業種別PDFができたら戻す
+
+     PDFと表紙のサムネイルができるまで、画面には出さない。
+     「準備中」と書いた箱が並ぶと、初めて来た方には作りかけに見えるため。
+
+     戻すときは、下の section のコメントを外したうえで
+       ・div.photo-slot を表紙の img に差し替える
+       ・「ただいま準備中です」の一文を消す
+       ・<a class="btn" href="/assets/doc/kensetsu.pdf" download>資料をダウンロード（PDF）</a>
+         を置く
+     の3つを行うこと。
+
 <section class="section alt">
   <div class="wrap">
     <div class="sec-head">
@@ -250,11 +262,7 @@ description: 作業日報、工事写真の整理、点検・作業報告書。�
 
     <div class="doc-dl">
       <figure class="cover">
-        <!-- TODO: 業種別PDFを用意（建設・設備工事向けのご案内）。
-             表紙のサムネイル画像も合わせて用意する。
-             税理士・社労士などのパートナーが顧問先に渡す資料と同じものにすること。
-             <img src="/assets/img/doc-kensetsu.png" width="300" height="424"
-                  loading="lazy" decoding="async" alt="建設・設備工事向けのご案内の表紙"> -->
+        
         <div class="photo-slot" role="img" aria-label="資料の表紙（準備中）">
           <b>表紙</b>準備中
         </div>
@@ -263,15 +271,14 @@ description: 作業日報、工事写真の整理、点検・作業報告書。�
         <h3>建設・設備工事向けのご案内（PDF）</h3>
         <p>
           このページの内容に、進め方と費用、補助金の注意点をまとめたものです。
-          <!-- TODO: 業種別PDFを用意。用意できたら下のボタンを
-               <a class="btn" href="/assets/doc/kensetsu.pdf" download>資料をダウンロード（PDF）</a>
-               に差し替える -->
+          
         </p>
         <p class="note">ただいま準備中です。お急ぎの場合は、お電話いただければお送りします。</p>
       </div>
     </div>
   </div>
 </section>
+============================================================ -->
 
 <!-- ============ 8. 進め方と費用・補助金の要約（共通部品） ============ -->
 {{pricebrief}}

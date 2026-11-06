@@ -10,7 +10,7 @@ description: 作業日報、製造記録、検査記録、設備点検の記録�
     <div class="duo">
       <div>
         <p class="eyebrow">その他の製造業の現場へ</p>
-        <h1>書いた記録を、<br>もう一度<br>打ち直していませんか</h1>
+        <h1><span class="nb">書いた記録を、</span><span class="nb">もう一度</span><span class="nb">打ち直していませんか</span></h1>
         <p class="lead">
           現場で紙に書いて、そのあと誰かがパソコンに入力し直す。
           その二度手間だけを、手元のスマートフォンやタブレットでなくします。
@@ -219,7 +219,19 @@ description: 作業日報、製造記録、検査記録、設備点検の記録�
   </div>
 </section>
 
-<!-- ============ 7. 業種別の資料 ============ -->
+<!-- ============ 7. 業種別の資料 ============================
+     TODO: 業種別PDFができたら戻す
+
+     PDFと表紙のサムネイルができるまで、画面には出さない。
+     「準備中」と書いた箱が並ぶと、初めて来た方には作りかけに見えるため。
+
+     戻すときは、下の section のコメントを外したうえで
+       ・div.photo-slot を表紙の img に差し替える
+       ・「ただいま準備中です」の一文を消す
+       ・<a class="btn" href="/assets/doc/seizo.pdf" download>資料をダウンロード（PDF）</a>
+         を置く
+     の3つを行うこと。
+
 <section class="section alt">
   <div class="wrap">
     <div class="sec-head">
@@ -229,10 +241,7 @@ description: 作業日報、製造記録、検査記録、設備点検の記録�
 
     <div class="doc-dl">
       <figure class="cover">
-        <!-- TODO: 業種別PDFを用意（製造業向けのご案内）。表紙のサムネイルも。
-             税理士・社労士などのパートナーが顧問先に渡す資料と同じものにすること。
-             <img src="/assets/img/doc-seizo.png" width="300" height="424"
-                  loading="lazy" decoding="async" alt="製造業向けのご案内の表紙"> -->
+        
         <div class="photo-slot" role="img" aria-label="資料の表紙（準備中）">
           <b>表紙</b>準備中
         </div>
@@ -241,15 +250,14 @@ description: 作業日報、製造記録、検査記録、設備点検の記録�
         <h3>製造業向けのご案内（PDF）</h3>
         <p>
           このページの内容に、進め方と費用、補助金の注意点をまとめたものです。
-          <!-- TODO: 業種別PDFを用意。用意できたら下のボタンを
-               <a class="btn" href="/assets/doc/seizo.pdf" download>資料をダウンロード（PDF）</a>
-               に差し替える -->
+          
         </p>
         <p class="note">ただいま準備中です。お急ぎの場合は、お電話いただければお送りします。</p>
       </div>
     </div>
   </div>
 </section>
+============================================================ -->
 
 <!-- ============ 8. 進め方と費用・補助金の要約（共通部品） ============ -->
 {{pricebrief}}

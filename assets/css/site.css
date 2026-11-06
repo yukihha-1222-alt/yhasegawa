@@ -116,11 +116,12 @@ h3{font-size:clamp(17px,2.4vw,20px)}
 
 /* 節の見出し。英語ラベルや連番は置かない。
    代わりに短い導入文を添えて、何の話が始まるかを日本語で示す。 */
-.sec-head{max-width:40rem;margin-bottom:clamp(24px,4vw,38px)}
+.sec-head{max-width:40rem;margin-bottom:clamp(20px,3vw,28px)}
 .sec-head p{margin-top:14px;color:var(--ink-soft)}
 
 /* ---------- 節 ---------- */
-.section{padding-block:clamp(52px,8vw,92px)}
+/* 節の余白。広い画面で上下92pxずつ取ると、7節で1300px近くを余白が占める */
+.section{padding-block:clamp(44px,5.5vw,66px)}
 .section.alt{background:var(--bg-alt)}
 .section.tint{background:var(--accent-pale)}
 
@@ -218,7 +219,7 @@ figure{margin:0}
   gap:8px;padding:28px 22px;text-align:center;
   border:1.5px dashed var(--line);
   color:var(--ink-faint);font-size:13.5px;line-height:1.7;
-  min-height:200px;
+  min-height:180px;
 }
 .photo-slot b{display:block;font-weight:700;color:var(--ink-soft);font-size:14px}
 figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1.7}
@@ -248,35 +249,52 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
 }
 
 /* ---------- 業種の入口 ----------------------------------------------
-   同じ形のカードを格子に並べると、どれも同じに見えて選べなくなる。
-   写真を左、言葉を右に置いた横長の行にして、上から読めるようにする。
+   1行に1つずつ大きく並べるとトップが縦に伸びる。
+     広い画面 … 2列×2行。写真はカードの上に横長で置く
+     スマホ   … 80px角の小さい写真を左、右に業種名と説明
 ------------------------------------------------------------------ */
-.trades{display:flex;flex-direction:column;gap:14px;margin-top:clamp(18px,3vw,26px)}
+.trades{
+  display:grid;gap:14px;grid-template-columns:1fr;
+  margin-top:clamp(18px,3vw,26px);
+}
 .trades a{
-  display:grid;gap:16px clamp(18px,3vw,26px);align-items:center;
-  grid-template-columns:1fr;
-  padding:clamp(14px,2.4vw,18px);
+  display:grid;gap:4px 14px;align-items:center;
+  grid-template-columns:80px 1fr;
+  padding:14px;
   background:var(--bg-card);border:1px solid var(--line);
   border-radius:var(--round-l);text-decoration:none;color:inherit;
   box-shadow:var(--shadow);
   transition:border-color .18s, transform .18s;
 }
-@media (min-width:640px){ .trades a{grid-template-columns:clamp(150px,22vw,220px) 1fr} }
 .trades a:hover{border-color:var(--accent);transform:translateY(-1px)}
 .trades .thumb{margin:0}
 .trades .thumb img,.trades .thumb .photo-slot{
-  border-radius:var(--round);aspect-ratio:4/3;object-fit:cover;width:100%;
+  border-radius:var(--round-s);aspect-ratio:1/1;object-fit:cover;width:100%;
+  min-height:0;padding:6px;font-size:11px;
 }
-.trades .name{display:block;font-size:clamp(19px,2.6vw,22px);font-weight:700}
+.trades .name{display:block;font-size:17px;font-weight:700;line-height:1.5}
 .trades .what{
-  display:block;margin-top:8px;color:var(--ink-soft);
-  font-size:15.5px;line-height:1.8;max-width:42em;
+  display:block;margin-top:4px;color:var(--ink-soft);
+  font-size:14.5px;line-height:1.7;
 }
 .trades .go{
-  display:inline-block;margin-top:12px;
-  color:var(--accent-ink);font-size:15px;font-weight:700;
+  display:inline-block;margin-top:8px;
+  color:var(--accent-ink);font-size:14.5px;font-weight:700;
 }
 .trades .go::after{content:" →"}
+
+@media (min-width:768px){
+  .trades{grid-template-columns:1fr 1fr;gap:18px}
+  /* カードの中は縦積みに戻し、写真を上へ */
+  .trades a{grid-template-columns:1fr;gap:14px;padding:clamp(14px,2vw,18px);align-items:start}
+  /* 483px幅に16:9だと272pxになる。高さを抑えて帯に近い見え方にする。
+     .photo-slot の min-height は max-height より強いので、ここで打ち消す */
+  .trades .thumb img,.trades .thumb .photo-slot{
+    aspect-ratio:16/9;min-height:0;max-height:150px;object-fit:cover;border-radius:var(--round);
+  }
+  .trades .name{font-size:clamp(18px,2.2vw,21px)}
+  .trades .what{font-size:15px;max-width:30em}
+}
 
 /* ---------- 変わること ---------- */
 .ba{
@@ -368,7 +386,7 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
 .assure p{color:var(--ink-soft);font-size:16px}
 
 /* ---------- 長谷川について ---------- */
-.about .photo-slot{min-height:280px}
+.about .photo-slot{min-height:220px;max-height:300px}
 .about p + p{margin-top:1.1em}
 .about .sign{
   margin-top:22px;font-size:15px;color:var(--ink-soft);
@@ -437,17 +455,17 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
 /* ---------- フッター ---------- */
 .site-foot{
   background:var(--bg-alt);border-top:1px solid var(--line);
-  padding-block:clamp(34px,5vw,52px);font-size:15px;
+  padding-block:clamp(30px,4vw,40px);font-size:15px;
 }
 .site-foot .name{font-size:19px;font-weight:700;letter-spacing:.04em}
 .site-foot dl{
-  display:grid;grid-template-columns:auto 1fr;gap:6px 20px;
-  margin-top:18px;font-size:14.5px;line-height:1.75;
+  display:grid;grid-template-columns:auto 1fr;gap:2px 20px;
+  margin-top:14px;font-size:14px;line-height:1.7;
 }
 .site-foot dt{color:var(--ink-faint);white-space:nowrap}
 .site-foot dd{margin:0;color:var(--ink-soft)}
-.site-foot .cr{margin-top:26px;font-size:13.5px;color:var(--ink-faint)}
-.site-foot nav{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:22px;font-size:14.5px}
+.site-foot .cr{margin-top:18px;font-size:13px;color:var(--ink-faint)}
+.site-foot nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px;font-size:14px}
 @media (max-width:560px){
   .site-foot dl{grid-template-columns:1fr;gap:0}
   .site-foot dt{margin-top:12px;font-size:13px}
@@ -465,11 +483,11 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
    装飾の連番は使わない。無料から始まることが一目で分かるよう、
    最初の一段だけ緑にしている。
 ------------------------------------------------------------------ */
-.flow{display:flex;flex-direction:column;gap:14px;margin-top:clamp(18px,3vw,26px)}
+.flow{display:flex;flex-direction:column;gap:11px;margin-top:clamp(16px,2.4vw,22px)}
 .flow li{
   display:grid;gap:4px 22px;align-items:start;
   grid-template-columns:1fr;
-  padding:clamp(18px,3vw,26px);
+  padding:clamp(15px,2.2vw,19px) clamp(18px,3vw,26px);
   background:var(--bg-card);border:1px solid var(--line);
   border-radius:var(--round);box-shadow:var(--shadow);
 }
@@ -498,19 +516,20 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
   border-color:color-mix(in srgb, var(--green) 35%, transparent);
 }
 .flow-sum{
-  margin-top:clamp(18px,3vw,24px);
+  margin-top:clamp(15px,2.2vw,20px);
   font-size:clamp(17px,2.4vw,20px);font-weight:700;line-height:1.75;
   max-width:30em;
 }
 
 /* ---------- 補助金の注意書き ---------- */
 .lead-p{color:var(--ink-soft);max-width:40em}
+/* 注意書き。左に太い線を引くと「警告」の見た目になりすぎる。
+   面を薄い柿色にして、強調は先頭の太字の一文だけに任せる。 */
 .caution{
-  margin-top:20px;padding:18px 22px;
-  background:var(--bg-card);
-  border:1px solid color-mix(in srgb, var(--accent) 40%, transparent);
-  border-left:4px solid var(--accent);
-  border-radius:var(--round);
+  margin-top:20px;padding:20px 24px;
+  background:var(--accent-pale);
+  border:1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius:var(--round-l);
   font-size:16px;line-height:1.85;
 }
 .caution b{color:var(--accent-ink)}
@@ -790,3 +809,34 @@ section .note{margin-top:16px}
   font-size:clamp(34px,7vw,56px);font-weight:700;letter-spacing:.02em;
   color:var(--accent-ink);line-height:1.1;margin-bottom:14px;
 }
+
+/* ==================================================================
+   日本語の改行
+   「を、」だけが1行になる、最後の1〜2文字が次の行に落ちる、といった
+   見え方を減らす。
+     balance … 見出しの各行の長さを揃える
+     pretty  … 本文の最終行が1〜2文字だけにならないようにする
+     auto-phrase … 文節で折り返す。対応していない環境では無視される
+   いずれも対応していなければ何も起きないので、置いて害はない。
+================================================================== */
+h1,h2,h3,
+.sec-head h2,
+.trades .name,
+.rec .rec-name,
+.flow h3,
+.step h3,
+.faq summary{
+  text-wrap:balance;
+  word-break:auto-phrase;
+}
+p,li,dd,
+.lead,.lead-p,.note,.ctx,.d,
+.changes li,.troubles li,.works .d,.assure p{
+  text-wrap:pretty;
+}
+
+/* 見出しを意味のかたまりに切るための箱。
+   <span class="nb">事務所での打ち直しを、</span><span class="nb">なくしませんか</span>
+   のように囲むと、入りきるときは1行、入らないときだけ塊の境目で折り返す。
+   <br> と違って、広い画面で不必要に改行されない。 */
+.nb{display:inline-block}
