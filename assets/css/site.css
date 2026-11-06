@@ -566,3 +566,122 @@ section .note{margin-top:16px}
   .hero .duo > figure{order:-1;margin-bottom:4px}
   .hero h1{margin-top:4px}
 }
+
+/* ==================================================================
+   業種別ページ
+   「うちのあの書類だ」と自分の業務を見つけてもらうことが目的。
+   機能の説明より先に、現場の言葉で書かれた一覧を置く。
+================================================================== */
+
+/* ---------- ページの冒頭 ---------- */
+.page-hero{padding-block:clamp(34px,5vw,60px) clamp(40px,6vw,72px)}
+.page-hero .eyebrow{
+  font-size:15px;font-weight:700;color:var(--accent-ink);letter-spacing:.08em;
+  margin-bottom:12px;
+}
+.page-hero .lead{margin-top:18px;color:var(--ink-soft);max-width:34em}
+.page-hero .ctx{
+  margin-top:22px;padding:16px 20px;
+  background:var(--bg-card);border:1px solid var(--line);border-radius:var(--round);
+  font-size:15.5px;line-height:1.85;color:var(--ink-soft);max-width:34em;
+}
+
+/* ---------- こんなことはありませんか ----------------------------------
+   現場の方が実際に口にする言い方で並べる。
+   同じ形の箱を格子に置かず、話し言葉が続いて見えるように縦に積む。
+------------------------------------------------------------------ */
+.troubles{display:flex;flex-direction:column;gap:12px;margin-top:clamp(18px,3vw,26px)}
+.troubles li{
+  position:relative;padding:18px 22px 18px 54px;
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:var(--round);
+  font-size:clamp(16px,2.2vw,17.5px);line-height:1.8;
+}
+.troubles li::before{
+  content:"";position:absolute;left:22px;top:1.55em;
+  width:18px;height:2px;border-radius:2px;background:var(--accent);
+}
+
+/* ---------- 記録の地図 ------------------------------------------------
+   自社で使っている書類名を探してもらう場所。
+   業界で実際に使われている呼び方で並べ、ひとかたまりずつ見出しを付ける。
+------------------------------------------------------------------ */
+.recmap{display:grid;gap:16px;grid-template-columns:1fr;align-items:start;margin-top:clamp(18px,3vw,26px)}
+@media (min-width:760px){ .recmap{grid-template-columns:repeat(3,1fr)} }
+.recmap > div{
+  padding:20px clamp(16px,2.4vw,22px);
+  background:var(--bg-card);border:1px solid var(--line);border-radius:var(--round);
+}
+.recmap h3{
+  font-size:16px;color:var(--accent-ink);
+  padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid var(--line);
+}
+.recmap ul{display:flex;flex-wrap:wrap;gap:8px}
+.recmap li{
+  font-size:15px;line-height:1.5;
+  padding:6px 13px;border-radius:999px;
+  background:var(--bg-alt);color:var(--ink);
+}
+.recmap-note{margin-top:18px;font-size:15.5px;color:var(--ink-soft);line-height:1.85;max-width:44em}
+
+/* ---------- 記録ごとに変わること --------------------------------------
+   記録名・写真・変わること3つ、の同じ型をくり返す。
+   写真は左右交互に置いて、同じ形の繰り返しに見えないようにする。
+------------------------------------------------------------------ */
+.rec{margin-top:clamp(28px,4vw,46px)}
+.rec + .rec{padding-top:clamp(28px,4vw,46px);border-top:1px solid var(--line)}
+.rec .rec-name{
+  display:inline-block;font-size:clamp(19px,2.6vw,23px);font-weight:700;
+  padding-bottom:6px;border-bottom:3px solid var(--accent);margin-bottom:16px;
+}
+.changes{display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.changes li{
+  position:relative;padding-left:34px;
+  font-size:16px;line-height:1.8;
+}
+.changes li::before{
+  content:"";position:absolute;left:0;top:.42em;
+  width:21px;height:21px;border-radius:50%;
+  background:var(--green-pale);
+  border:1.5px solid color-mix(in srgb, var(--green) 55%, transparent);
+}
+.changes li::after{
+  /* 小さなチェック。記号の装飾ではなく、達成を示す印として使う */
+  content:"";position:absolute;left:7px;top:.72em;
+  width:5px;height:9px;border:solid var(--green);border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
+
+/* ---------- 業種別の資料 ---------- */
+.doc-dl{
+  display:grid;gap:20px clamp(20px,3vw,32px);align-items:center;
+  grid-template-columns:1fr;
+  margin-top:clamp(18px,3vw,26px);
+  padding:clamp(20px,3vw,28px);
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:var(--round-l);box-shadow:var(--shadow);
+}
+@media (min-width:640px){ .doc-dl{grid-template-columns:150px 1fr} }
+.doc-dl .cover{margin:0}
+.doc-dl .cover .photo-slot{aspect-ratio:1/1.414;min-height:0;padding:14px 10px;font-size:12.5px}
+.doc-dl p{color:var(--ink-soft);font-size:15.5px}
+
+/* ---------- 料金と補助金の要約（各ページに置く） ----------------------
+   どのページから来ても「いくらで、どう相談するか」が分かるように。
+------------------------------------------------------------------ */
+.price-brief{
+  margin-top:clamp(18px,3vw,26px);
+  padding:clamp(20px,3vw,30px);
+  background:var(--bg-card);border:1px solid var(--line);
+  border-radius:var(--round-l);
+}
+.price-brief ol{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.price-brief li{
+  display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;
+  padding-bottom:10px;border-bottom:1px dashed var(--line);
+}
+.price-brief li:last-child{border-bottom:0;padding-bottom:0}
+.price-brief .s{font-size:16px;font-weight:700;min-width:14em}
+.price-brief .p{font-size:17px;font-weight:700;color:var(--accent-ink)}
+.price-brief .p.free{color:var(--green)}
+.price-brief .k{font-size:14.5px;color:var(--ink-soft)}

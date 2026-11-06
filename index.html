@@ -79,7 +79,7 @@
 
       <figure>
         <!-- TODO: 写真を用意。長谷川本人が現場でスマートフォンかタブレットを手に、
-             相手と話している様子。自然光。작り笑顔ではなく、説明している表情。
+             相手と話している様子。自然光。作り笑顔ではなく、説明している表情。
              用意できたら、下の div をこの img に置き換えてください:
              <img src="/assets/img/hero.jpg" width="960" height="720" loading="eager"
                   decoding="async" class="photo"
@@ -260,7 +260,9 @@
 <!-- ===================== 長谷川について（短く） ===================== -->
 <section class="section about">
   <div class="wrap">
-    <div class="duo flip">
+    <!-- figure が先頭なので flip は要らない。
+         広い画面では写真が左、スマホでは顔写真が先に出る -->
+    <div class="duo">
       <figure>
         <!-- TODO: 写真を用意。本人の顔写真。笑顔で、正面寄り。自然光。
              <img src="/assets/img/hasegawa.jpg" width="640" height="640" loading="lazy"
