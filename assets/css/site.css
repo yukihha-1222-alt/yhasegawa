@@ -743,3 +743,50 @@ section .note{margin-top:16px}
 /* 段落が続くところ */
 .lead-p + .lead-p{margin-top:1.1em}
 .lead-p b{color:var(--ink)}
+
+/* ==================================================================
+   つくったもの
+================================================================== */
+.apps{display:flex;flex-direction:column;gap:16px;margin-top:clamp(18px,3vw,26px)}
+.apps li{
+  padding:clamp(20px,3vw,28px);
+  background:var(--bg-card);border:1px solid var(--line);border-radius:var(--round-l);
+}
+.apps h3{margin-bottom:4px}
+.apps .tag{
+  display:inline-block;margin-left:10px;vertical-align:2px;
+  font-size:12px;font-weight:700;letter-spacing:.1em;
+  color:#fff;background:var(--accent);padding:3px 10px;border-radius:999px;
+}
+@media (prefers-color-scheme: dark){ .apps .tag{color:#241B16} }
+.apps p{color:var(--ink-soft);font-size:15.5px;margin-top:8px;max-width:42em}
+.apps .links{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:16px}
+.apps .links > a:not(.badge){font-size:15px;font-weight:700;text-decoration:none;border-bottom:1.5px solid var(--line);padding-bottom:2px}
+.apps .links > a:not(.badge):hover{border-bottom-color:var(--accent)}
+
+/* Apple と Google の公式素材。両社の規約で図形は改変できないので、
+   拡大縮小だけにして色も比率も触らない。
+   画像は背景で敷き、読み上げ用の名前は .vh のテキストで渡している。 */
+.badge{
+  --h:42px;
+  display:inline-block;height:var(--h);border-radius:6px;
+  background-repeat:no-repeat;background-position:center;background-size:contain;
+}
+.badge:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px}
+.badge.ios{width:calc(var(--h) * 2.72129);background-image:url(/assets/store-appstore-ja.svg)}
+.badge.and{
+  width:calc(var(--h) * 3.375);
+  /* WebPはロスレスでPNGの約4分の1。解さない環境は1行目のPNGに落ちる */
+  background-image:url(/assets/store-googleplay-ja.png);
+  background-image:image-set(url(/assets/store-googleplay-ja.webp) type("image/webp"),
+                             url(/assets/store-googleplay-ja.png)  type("image/png"));
+}
+@media (max-width:560px){ .badge{--h:38px} }
+
+/* ==================================================================
+   tapuda
+================================================================== */
+.tapuda-name{
+  font-size:clamp(34px,7vw,56px);font-weight:700;letter-spacing:.02em;
+  color:var(--accent-ink);line-height:1.1;margin-bottom:14px;
+}

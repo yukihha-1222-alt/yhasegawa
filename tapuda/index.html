@@ -1,0 +1,223 @@
+<!-- ============================================================
+     このファイルは build.py が組み立てたものです。直接編集しても、
+     次のビルドで消えます。本文は pages/pages/tapuda.html、
+     共通部分は parts/ を編集して python3 build.py を実行してください。
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tapuda 法人導入｜かざすと渡せる名刺｜長谷川侑希</title>
+<meta name="description" content="スマートフォンに近づけるだけで、あなたのページが開くNFC名刺です。法人では、人数分をまとめて発行し、退職時に失効させることができます。交換の記録は本人のもので、会社からは見えません。">
+<link rel="canonical" href="https://yhasegawa.com/tapuda/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yhasegawa.com/tapuda/">
+<meta property="og:title" content="tapuda 法人導入｜かざすと渡せる名刺｜長谷川侑希">
+<meta property="og:description" content="スマートフォンに近づけるだけで、あなたのページが開くNFC名刺です。法人では、人数分をまとめて発行し、退職時に失効させることができます。交換の記録は本人のもので、会社からは見えません。">
+<meta property="og:site_name" content="長谷川侑希｜現場の業務アプリ開発">
+<meta property="og:locale" content="ja_JP">
+<!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
+<meta name="theme-color" content="#C2653A">
+<meta name="theme-color" content="#1F1A17" media="(prefers-color-scheme: dark)">
+
+<!-- 書体は Zen Kaku Gothic New ひとつ。swap を指定しているので、
+     落ちてくるまではシステムのゴシックで読める状態になる -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body data-current="tapuda">
+
+<a class="skip" href="#main">本文へ移動する</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="who" href="/">
+      <b>長谷川　侑希</b>
+      <span>現場の業務アプリ開発｜兵庫県姫路市</span>
+    </a>
+
+    <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
+         ここが折り返して出るだけなので、リンクは必ず辿れる -->
+    <nav class="nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="/#gyoshu" data-nav="gyoshu">業種から探す</a></li>
+        <li><a href="/ryokin/" data-nav="ryokin">進め方と費用</a></li>
+        <li><a href="/hojokin/" data-nav="hojokin">補助金</a></li>
+        <li><a href="/about/" data-nav="about">長谷川について</a></li>
+        <li><a href="/faq/" data-nav="faq">よくある質問</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn head-cta" href="/contact/">相談する</a>
+  </div>
+</header>
+
+
+<main id="main">
+<section class="section page-hero">
+  <div class="wrap">
+    <div class="duo">
+      <div>
+        <p class="eyebrow">自社サービス</p>
+        <p class="tapuda-name">tapuda</p>
+        <h1>かざすと、<br>名刺が渡せる。</h1>
+        <p class="lead">
+          スマートフォンに近づけるだけで、あなたのページが開くNFC名刺です。相手のスマートフォンに、アプリも登録も要りません。ブラウザが開くだけです。企画から製造、アプリ、サーバーの運営まで、自分で回しています。
+        </p>
+        <div class="btn-row">
+          <a class="btn" href="/contact/">法人での導入を相談する</a>
+          <a class="btn ghost" href="https://tapuda.app/" target="_blank" rel="noopener">tapuda のサイトを見る</a>
+        </div>
+      </div>
+
+      <figure>
+        <!-- TODO: 写真を用意。tapuda のカードを相手のスマートフォンにかざしている
+             手元のアップ。自然光。
+             <img src="/assets/img/tapuda-hero.jpg" width="960" height="720"
+                  loading="eager" decoding="async" class="photo"
+                  alt="tapuda のカードを相手のスマートフォンにかざしている手元"> -->
+        <div class="photo-slot" role="img" aria-label="写真（準備中）カードをスマートフォンにかざしている手元">
+          <b>写真が入ります</b>
+          カードを相手のスマートフォンにかざしている手元のアップ
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>会社でお使いいただくとき</h2>
+      <p>社員の方の分をまとめて発行し、会社側で管理できます。</p>
+    </div>
+
+    <ul class="assure">
+      <li>
+        <h3>人数分をまとめて発行できます</h3>
+        <p>一枚ずつ申し込む必要はありません。会社でまとめて発行し、配っていただけます。</p>
+      </li>
+      <li>
+        <h3>退職されたときに、失効させられます</h3>
+        <p>カードを回収できなかった場合でも、中身を止められます。かざしても何も出なくなります。</p>
+      </li>
+      <li>
+        <h3>交換の記録は、ご本人のものです</h3>
+        <p>
+          誰と名刺を交換したかは、会社からは見えません。管理できるのはカードの発行と失効までで、そこから先には立ち入らない作りにしています。
+        </p>
+      </li>
+      <li>
+        <h3>配ったあとも、中身を直せます</h3>
+        <p>部署名や連絡先が変わっても、カードはそのままで中身だけ更新できます。刷り直しが要りません。</p>
+      </li>
+    </ul>
+
+    <p class="note">
+      カードは1枚ずつ固有の番号を持っていて、国内で製造・検品しています。
+      <!-- TODO: 法人向けの価格（枚数ごとの単価、初期費用、月額の有無）を決めて
+           ここに載せる。個人向けの価格は tapuda.app にあるので、
+           ここに重ねて書かないこと -->
+      法人でのご導入は、枚数や運用の形によって変わりますので、お問い合わせいただければお見積りします。
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <h2>おひとりでお使いになる場合</h2>
+    </div>
+    <p class="lead-p">
+      個人でお使いいただく分の価格とご購入は、tapuda のサイトにまとめています。
+      1枚からお求めいただけます。
+    </p>
+    <div class="btn-row">
+      <a class="btn ghost" href="https://tapuda.app/" target="_blank" rel="noopener">tapuda のサイトへ</a>
+    </div>
+  </div>
+</section>
+
+<!-- 全ページの末尾に入る相談ブロック。
+     パートナーが業種別ページのURLを直接送る想定なので、
+     どのページで読み終わっても、次の一歩がここにある -->
+<section class="section tint" id="soudan">
+  <div class="wrap narrow">
+    <h2>まずは、無料で現場を見てもらいませんか</h2>
+    <p class="lead-p">
+      ご相談と、半日ほどの現場の見学は無料です。見せていただいたうえで、アプリで解決したほうがいいのか、それとも今のやり方を少し変えれば済むのかを、正直にお伝えします。作らないほうがいい場合は、そうお伝えします。
+    </p>
+    <div class="btn-row">
+      <a class="btn" href="/contact/">まずは無料で見てもらう</a>
+      <a class="btn ghost" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
+    </div>
+    <p class="note">
+      兵庫・大阪・岡山あたりの、日帰りで伺える範囲が対象です。「これはアプリで解決することなのか」という段階のご相談で構いません。
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="name">長谷川　侑希</p>
+    <p class="tag">兵庫県姫路市を拠点に、現場で使う業務アプリをつくっています。</p>
+
+    <nav aria-label="フッターメニュー">
+      <a href="/">ホーム</a>
+      <a href="/kensetsu/">建設・設備工事</a>
+      <a href="/shokuhin/">食品工場</a>
+      <a href="/butsuryu/">物流・配送</a>
+      <a href="/seizo/">その他の製造業</a>
+      <a href="/ryokin/">進め方と費用</a>
+      <a href="/hojokin/">補助金のご案内</a>
+      <a href="/about/">長谷川について</a>
+      <a href="/faq/">よくあるご質問</a>
+      <a href="/works/">つくったもの</a>
+      <a href="/tapuda/">tapuda 法人導入</a>
+      <a href="/contact/">ご相談</a>
+    </nav>
+
+    <dl>
+      <dt>お電話</dt>
+      <dd><a href="tel:08062061245">080-6206-1245</a></dd>
+      <!-- TODO: info@yhasegawa.com などに変更。Cloudflare Email Routing の
+           転送設定が済むまでは、届かなくなるので切り替えないこと -->
+      <dt>メール</dt>
+      <dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
+      <dt>活動拠点</dt>
+      <dd>兵庫県姫路市（播磨エリアを中心に、現場へ伺います）</dd>
+      <dt>所在地</dt>
+      <dd>
+        〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室<br>
+        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言。
+             バーチャルオフィスであることをどこまで書くかは本人の判断 -->
+        <span class="why-addr">事務所の所在地と、普段うかがっている地域が異なります。</span>
+      </dd>
+    </dl>
+
+    <p class="cr">©長谷川侑希</p>
+  </div>
+</footer>
+
+
+<!-- スマホの画面下に固定する。本文を隠さないよう高さは抑え、
+     iPhone のホームバーにかからないよう safe-area を見ている -->
+<div class="mobilebar" aria-label="お問い合わせ">
+  <a href="tel:08062061245">電話する</a>
+  <a class="primary" href="/contact/">相談する</a>
+</div>
+
+
+<script src="/assets/js/site.js" defer></script>
+<!-- Cloudflare Web Analytics。Cookie を使わないので同意バナーは不要 -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
+</body>
+</html>
