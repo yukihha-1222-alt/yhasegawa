@@ -1,0 +1,419 @@
+<!-- ============================================================
+     このファイルは build.py が組み立てたものです。直接編集しても、
+     次のビルドで消えます。本文は pages/pages/butsuryu.html、
+     共通部分は parts/ を編集して python3 build.py を実行してください。
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>物流・配送の現場へ｜帰ってからの日報書きをなくす｜長谷川侑希</title>
+<meta name="description" content="配送日報、積込記録、点呼や車両点検の記録。配送が終わったその場で入力できれば、帰ってから書く時間も、事務所で集計する時間もなくなります。兵庫県姫路市から、現場で使う業務アプリをおつくりしています。ご相談と現場の見学は無料です。">
+<link rel="canonical" href="https://yhasegawa.com/butsuryu/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yhasegawa.com/butsuryu/">
+<meta property="og:title" content="物流・配送の現場へ｜帰ってからの日報書きをなくす｜長谷川侑希">
+<meta property="og:description" content="配送日報、積込記録、点呼や車両点検の記録。配送が終わったその場で入力できれば、帰ってから書く時間も、事務所で集計する時間もなくなります。兵庫県姫路市から、現場で使う業務アプリをおつくりしています。ご相談と現場の見学は無料です。">
+<meta property="og:site_name" content="長谷川侑希｜現場の業務アプリ開発">
+<meta property="og:locale" content="ja_JP">
+<!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
+<meta name="theme-color" content="#C2653A">
+<meta name="theme-color" content="#1F1A17" media="(prefers-color-scheme: dark)">
+
+<!-- 書体は Zen Kaku Gothic New ひとつ。swap を指定しているので、
+     落ちてくるまではシステムのゴシックで読める状態になる -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body data-current="butsuryu">
+
+<a class="skip" href="#main">本文へ移動する</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="who" href="/">
+      <b>長谷川　侑希</b>
+      <span>現場の業務アプリ開発｜兵庫県姫路市</span>
+    </a>
+
+    <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
+         ここが折り返して出るだけなので、リンクは必ず辿れる -->
+    <nav class="nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="/#gyoshu" data-nav="gyoshu">業種から探す</a></li>
+        <li><a href="/ryokin/" data-nav="ryokin">進め方と費用</a></li>
+        <li><a href="/hojokin/" data-nav="hojokin">補助金</a></li>
+        <li><a href="/about/" data-nav="about">長谷川について</a></li>
+        <li><a href="/faq/" data-nav="faq">よくある質問</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn head-cta" href="/contact/">相談する</a>
+  </div>
+</header>
+
+
+<main id="main">
+<!-- ============ 1. 業種名と、変化の一言 ============ -->
+<section class="section page-hero">
+  <div class="wrap">
+    <div class="duo">
+      <div>
+        <p class="eyebrow">物流・配送の現場へ</p>
+        <h1>帰ってからの<br>日報書きを、<br>なくしませんか</h1>
+        <p class="lead">
+          配送が終わったその場で入力できれば、事務所に戻ってから書く時間も、集まった日報をまとめて集計する時間も、どちらもなくなります。
+        </p>
+        <p class="ctx">
+          ドライバーの方が戻ってくるまで、現場で何があったか分からない。この業種では、このご相談が一番多いです。記録がその場で入るようになると、同じものが事務所からも見えるようになります。
+        </p>
+      </div>
+
+      <figure>
+        <!-- TODO: 写真を用意。トラックの積込の様子、または配送先での荷降ろし。
+             自然光。人が写る場合は手元か後ろ姿で。
+             <img src="/assets/img/butsuryu-hero.jpg" width="960" height="720"
+                  loading="eager" decoding="async" class="photo"
+                  alt="配送先で、ドライバーがスマートフォンに積込の記録を入力している様子"> -->
+        <div class="photo-slot" role="img"
+             aria-label="写真（準備中）トラックの積込や配送の現場">
+          <b>写真が入ります</b>
+          トラックの積込の様子、または配送先での荷降ろし
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. こんなことはありませんか ============ -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>こんなことは、ありませんか</h2>
+      <p>どれかひとつでも心当たりがあれば、お役に立てるかもしれません。</p>
+    </div>
+    <ul class="troubles">
+      <li>ドライバーが戻ってくるまで、現場で何があったか分からない。</li>
+      <li>集まった紙の日報を、事務所でまとめて集計している。</li>
+      <li>日報を出すためだけに、ドライバーが事務所へ寄っている。</li>
+      <li>月末になって、記入が抜けている日報が見つかる。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 3. 対象になる記録（記録の地図） ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>こういった記録を、現場で扱えます</h2>
+      <p>
+        御社でお使いの記録の名前が、この中にありませんか。呼び方は会社ごとに違いますので、近いものがあれば大丈夫です。
+      </p>
+    </div>
+
+    <div class="recmap">
+      <div>
+        <h3>日々の報告</h3>
+        <ul>
+          <li>配送日報</li>
+          <li>積込記録</li>
+        </ul>
+      </div>
+      <div>
+        <h3>点呼・車両</h3>
+        <ul>
+          <li>点呼の記録</li>
+          <li>アルコールチェックの記録</li>
+          <li>車両点検の記録</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="recmap-note">
+      ここに無い記録でも、現場で紙に書いて事務所で入力し直しているものなら、同じように扱えます。これらの記録にもお使いいただけますが、様式や保存の方法について決まりがある場合は、そちらに合わせてお作りします。どこまで紙を残すかは、現場を見せていただいてから一緒に決めましょう。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 4. 記録ごとに、変わること ============ -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>記録ごとに、どう変わるか</h2>
+      <p>よくご相談いただく3つについて、使ったあとの姿を書きました。</p>
+    </div>
+
+    <!-- 配送日報 -->
+    <div class="rec">
+      <div class="duo">
+        <div>
+          <span class="rec-name">配送日報</span>
+          <ul class="changes">
+            <li>配送が終わったその場で入力できるので、帰ってから書かずに済みます。</li>
+            <li>集まった日報を、事務所で集計し直す作業がなくなります。</li>
+            <li>走行の記録があとからまとめて見られるようになります。</li>
+          </ul>
+        </div>
+        <figure>
+          <!-- TODO: 写真かアプリ画面を用意。運転席で、ドライバーが手元の
+               スマートフォンに入力している様子（停車中であることが分かる構図で）。
+               <img src="/assets/img/butsuryu-nippo.jpg" width="800" height="600"
+                    loading="lazy" decoding="async" class="photo"
+                    alt="停車中の運転席で、手元のスマートフォンに配送日報を入力している様子"> -->
+          <div class="photo-slot" role="img" aria-label="写真（準備中）ドライバーがスマートフォンに入力している様子">
+            <b>写真が入ります</b>
+            停車中の運転席で、手元のスマートフォンに入力している様子
+          </div>
+        </figure>
+      </div>
+    </div>
+
+    <!-- 積込記録 -->
+    <div class="rec">
+      <div class="duo flip">
+        <div>
+          <span class="rec-name">積込記録</span>
+          <ul class="changes">
+            <li>積み込んだその場で記録できるので、あとで思い出さずに済みます。</li>
+            <li>何をどこへ運んでいるかが、戻ってくる前に事務所からも見えます。</li>
+            <li>行き違いに気づいたとき、現場にいるうちに直せます。</li>
+          </ul>
+        </div>
+        <figure>
+          <!-- TODO: 写真を用意。トラックへの積込作業、または荷台の様子。
+               <img src="/assets/img/butsuryu-tsumikomi.jpg" width="800" height="600"
+                    loading="lazy" decoding="async" class="photo"
+                    alt="トラックへ荷物を積み込んでいる様子"> -->
+          <div class="photo-slot" role="img" aria-label="写真（準備中）トラックへの積込作業">
+            <b>写真が入ります</b>
+            トラックへの積込作業、または荷台の様子
+          </div>
+        </figure>
+      </div>
+    </div>
+
+    <!-- 点呼・車両点検の記録 -->
+    <div class="rec">
+      <div class="duo">
+        <div>
+          <span class="rec-name">点呼・車両点検の記録</span>
+          <ul class="changes">
+            <li>確認する項目が最初から並んでいるので、抜けが減ります。</li>
+            <li>誰がいつ確認したかが、書かなくても残ります。</li>
+            <li>用紙を綴じて保管する手間がなくなります。</li>
+          </ul>
+        </div>
+        <figure>
+          <!-- TODO: 写真を用意。出庫前の点検の様子、または点呼の場面。
+               <img src="/assets/img/butsuryu-tenko.jpg" width="800" height="600"
+                    loading="lazy" decoding="async" class="photo"
+                    alt="出庫前に車両を点検している様子"> -->
+          <div class="photo-slot" role="img" aria-label="写真（準備中）出庫前の点検の様子">
+            <b>写真が入ります</b>
+            出庫前の点検の様子、または点呼の場面
+          </div>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. こんな画面になります ============
+     TODO: 物流・配送向けの土台アプリができたら、ここに画面イメージを入れる。
+     「この土台を、御社の帳票に合わせて調整します」と添える。
+     土台が無いうちに想像図を置くと、実物と違ったときに信用を落とすので、
+     できるまでは出さない。
+============================================================ -->
+
+<!-- ============ 6. これまでの仕事 ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>これまでの仕事</h2>
+      <p>
+        正直に申し上げると、物流の現場でのお仕事はこれからです。ただ「現場で紙に書いて、事務所で集計し直す」という形は、下の仕事とまったく同じでした。
+      </p>
+    </div>
+
+    <ul class="works">
+      <li>
+        <span class="t">食品商社グループ｜製造記録アプリ（iPad）</span>
+        <span class="role">要件設計・開発リーダー</span>
+        <span class="d">
+          製造現場で紙に書いていた記録を、iPadで入力・保存できるようにしました。事務所で打ち直す作業がなくなり、記入漏れも出なくなりました。
+        </span>
+      </li>
+      <li>
+        <span class="t">公共インフラ企業｜待ち番号表示システム</span>
+        <span class="role">システム開発</span>
+        <span class="d">
+          窓口の待ち番号を表示する仕組みをつくりました。現場の状況を離れた場所の画面に映す、という点では近い仕事です。
+        </span>
+      </li>
+      <li>
+        <span class="t">大手銀行／大手家電量販店｜公式スマートフォンアプリ</span>
+        <span class="role">iOS開発</span>
+        <span class="d">多くの方が毎日お使いになるアプリを、チームの一員として担当しました。</span>
+      </li>
+    </ul>
+    <p class="nda">
+      受託開発会社に所属していたころに担当したものです。守秘義務のため、社名は伏せています。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 7. 業種別の資料 ============ -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>資料をお持ち帰りいただけます</h2>
+      <p>社内で回していただいたり、顧問の先生にご相談いただくときにお使いください。</p>
+    </div>
+
+    <div class="doc-dl">
+      <figure class="cover">
+        <!-- TODO: 業種別PDFを用意（物流・配送向けのご案内）。表紙のサムネイルも。
+             税理士・社労士などのパートナーが顧問先に渡す資料と同じものにすること。
+             <img src="/assets/img/doc-butsuryu.png" width="300" height="424"
+                  loading="lazy" decoding="async" alt="物流・配送向けのご案内の表紙"> -->
+        <div class="photo-slot" role="img" aria-label="資料の表紙（準備中）">
+          <b>表紙</b>準備中
+        </div>
+      </figure>
+      <div>
+        <h3>物流・配送向けのご案内（PDF）</h3>
+        <p>
+          このページの内容に、進め方と費用、補助金の注意点をまとめたものです。
+          <!-- TODO: 業種別PDFを用意。用意できたら下のボタンを
+               <a class="btn" href="/assets/doc/butsuryu.pdf" download>資料をダウンロード（PDF）</a>
+               に差し替える -->
+        </p>
+        <p class="note">ただいま準備中です。お急ぎの場合は、お電話いただければお送りします。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. 進め方と費用・補助金の要約（共通部品） ============ -->
+<!-- 各ページに置く費用の要約。
+     税理士などのパートナーが業種別ページのURLを直接送る想定なので、
+     トップを経由しなくても「いくらで、どう相談するか」が分かるようにする。
+     金額を変えるときは、ここと pages/index.html と /ryokin/ の3箇所。 -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>進め方と費用</h2>
+      <p>最初の一歩は無料です。お金がかかるのは、動くものを試していただくときからです。</p>
+    </div>
+
+    <div class="price-brief">
+      <ol>
+        <li>
+          <span class="s">まず、ご相談と現場の見学</span>
+          <span class="p free">無料</span>
+        </li>
+        <li>
+          <span class="s">次に、お試し版（プロトタイプ）</span>
+          <span class="p">約30万円</span>
+          <span class="k">合格条件を満たさなければ、いただきません</span>
+        </li>
+        <li>
+          <span class="s">そのあと、本開発と運用</span>
+          <span class="p">初期約100〜200万円</span>
+          <span class="k">月額約5万円</span>
+        </li>
+      </ol>
+      <p class="k">
+        金額は税別の目安です。本開発には補助金を使える場合がありますが、多くの制度では交付が決まる前に契約したものは対象外です。お使いになりたい場合は、契約の前にご相談ください。
+      </p>
+      <div class="btn-row">
+        <a class="btn ghost" href="/ryokin/">進め方と費用をくわしく見る</a>
+        <a class="btn ghost" href="/hojokin/">補助金のご案内</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 全ページの末尾に入る相談ブロック。
+     パートナーが業種別ページのURLを直接送る想定なので、
+     どのページで読み終わっても、次の一歩がここにある -->
+<section class="section tint" id="soudan">
+  <div class="wrap narrow">
+    <h2>まずは、無料で現場を見てもらいませんか</h2>
+    <p class="lead-p">
+      ご相談と、半日ほどの現場の見学は無料です。見せていただいたうえで、アプリで解決したほうがいいのか、それとも今のやり方を少し変えれば済むのかを、正直にお伝えします。作らないほうがいい場合は、そうお伝えします。
+    </p>
+    <div class="btn-row">
+      <a class="btn" href="/contact/">まずは無料で見てもらう</a>
+      <a class="btn ghost" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
+    </div>
+    <p class="note">
+      兵庫・大阪・岡山あたりの、日帰りで伺える範囲が対象です。「これはアプリで解決することなのか」という段階のご相談で構いません。
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="name">長谷川　侑希</p>
+    <p class="tag">兵庫県姫路市を拠点に、現場で使う業務アプリをつくっています。</p>
+
+    <nav aria-label="フッターメニュー">
+      <a href="/">ホーム</a>
+      <a href="/kensetsu/">建設・設備工事</a>
+      <a href="/shokuhin/">食品工場</a>
+      <a href="/butsuryu/">物流・配送</a>
+      <a href="/seizo/">その他の製造業</a>
+      <a href="/ryokin/">進め方と費用</a>
+      <a href="/hojokin/">補助金のご案内</a>
+      <a href="/about/">長谷川について</a>
+      <a href="/faq/">よくあるご質問</a>
+      <a href="/works/">つくったもの</a>
+      <a href="/tapuda/">tapuda 法人導入</a>
+      <a href="/contact/">ご相談</a>
+    </nav>
+
+    <dl>
+      <dt>お電話</dt>
+      <dd><a href="tel:08062061245">080-6206-1245</a></dd>
+      <!-- TODO: info@yhasegawa.com などに変更。Cloudflare Email Routing の
+           転送設定が済むまでは、届かなくなるので切り替えないこと -->
+      <dt>メール</dt>
+      <dd><a href="mailto:pokonavi.info@gmail.com">pokonavi.info@gmail.com</a></dd>
+      <dt>活動拠点</dt>
+      <dd>兵庫県姫路市（播磨エリアを中心に、現場へ伺います）</dd>
+      <dt>所在地</dt>
+      <dd>
+        〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室<br>
+        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言。
+             バーチャルオフィスであることをどこまで書くかは本人の判断 -->
+        <span class="why-addr">事務所の所在地と、普段うかがっている地域が異なります。</span>
+      </dd>
+    </dl>
+
+    <p class="cr">©長谷川侑希</p>
+  </div>
+</footer>
+
+
+<!-- スマホの画面下に固定する。本文を隠さないよう高さは抑え、
+     iPhone のホームバーにかからないよう safe-area を見ている -->
+<div class="mobilebar" aria-label="お問い合わせ">
+  <a href="tel:08062061245">電話する</a>
+  <a class="primary" href="/contact/">相談する</a>
+</div>
+
+
+<script src="/assets/js/site.js" defer></script>
+<!-- Cloudflare Web Analytics。Cookie を使わないので同意バナーは不要 -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
+</body>
+</html>

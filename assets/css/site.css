@@ -606,8 +606,12 @@ section .note{margin-top:16px}
    自社で使っている書類名を探してもらう場所。
    業界で実際に使われている呼び方で並べ、ひとかたまりずつ見出しを付ける。
 ------------------------------------------------------------------ */
-.recmap{display:grid;gap:16px;grid-template-columns:1fr;align-items:start;margin-top:clamp(18px,3vw,26px)}
-@media (min-width:760px){ .recmap{grid-template-columns:repeat(3,1fr)} }
+/* 分類の数は業種によって2つだったり3つだったりする。
+   3列で固定すると、2つの業種で右端が空く。中身の数に合わせて並べる。 */
+.recmap{
+  display:grid;gap:16px;align-items:start;margin-top:clamp(18px,3vw,26px);
+  grid-template-columns:repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+}
 .recmap > div{
   padding:20px clamp(16px,2.4vw,22px);
   background:var(--bg-card);border:1px solid var(--line);border-radius:var(--round);
