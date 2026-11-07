@@ -284,16 +284,12 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
 .trades .go::after{content:" →"}
 
 @media (min-width:768px){
+  /* カードを2列に並べ、中は写真を左に置いたまま少し大きくする。
+     写真を上に横長で置くと、1行1枚だったときより背が高くなってしまう。 */
   .trades{grid-template-columns:1fr 1fr;gap:18px}
-  /* カードの中は縦積みに戻し、写真を上へ */
-  .trades a{grid-template-columns:1fr;gap:14px;padding:clamp(14px,2vw,18px);align-items:start}
-  /* 483px幅に16:9だと272pxになる。高さを抑えて帯に近い見え方にする。
-     .photo-slot の min-height は max-height より強いので、ここで打ち消す */
-  .trades .thumb img,.trades .thumb .photo-slot{
-    aspect-ratio:16/9;min-height:0;max-height:150px;object-fit:cover;border-radius:var(--round);
-  }
-  .trades .name{font-size:clamp(18px,2.2vw,21px)}
-  .trades .what{font-size:15px;max-width:30em}
+  .trades a{grid-template-columns:120px 1fr;gap:16px;padding:clamp(16px,2vw,20px);align-items:start}
+  .trades .name{font-size:clamp(17px,2vw,19px)}
+  .trades .what{font-size:14.5px}
 }
 
 /* ---------- 変わること ---------- */
@@ -840,3 +836,62 @@ p,li,dd,
    のように囲むと、入りきるときは1行、入らないときだけ塊の境目で折り返す。
    <br> と違って、広い画面で不必要に改行されない。 */
 .nb{display:inline-block}
+
+/* ==================================================================
+   トップの要点だけの帯
+   詳しい話はそれぞれの専用ページにある。トップは要点とリンクに徹する。
+================================================================== */
+/* 帯の節は余白も浅くする */
+.section.tight{padding-block:clamp(32px,4vw,46px)}
+.section.tight h2{margin-bottom:clamp(14px,2vw,18px)}
+
+/* 進め方の3段階。広い画面では横一列 */
+.flowbar{
+  display:grid;gap:10px;grid-template-columns:1fr;
+  border:1px solid var(--line);border-radius:var(--round-l);
+  background:var(--bg-card);overflow:hidden;
+}
+.flowbar li{padding:14px clamp(16px,2.2vw,20px)}
+.flowbar li + li{border-top:1px solid var(--line)}
+.flowbar .when{
+  display:block;font-size:12.5px;font-weight:700;letter-spacing:.1em;color:var(--ink-faint);
+}
+.flowbar .s{display:block;font-size:16px;font-weight:700;line-height:1.5;margin-top:2px}
+.flowbar .p{
+  display:block;font-size:18px;font-weight:700;color:var(--accent-ink);
+  line-height:1.4;margin-top:4px;
+}
+.flowbar .p.free{color:var(--green)}
+.flowbar .k{display:block;font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin-top:2px}
+@media (min-width:768px){
+  .flowbar{grid-template-columns:repeat(3,1fr);gap:0}
+  .flowbar li{padding:16px clamp(16px,1.8vw,20px)}
+  .flowbar li + li{border-top:0;border-left:1px solid var(--line)}
+  /* 最初の段だけ「無料」が目に入るように、ごく薄く色を敷く */
+  .flowbar li:first-child{background:var(--green-pale)}
+}
+
+/* 帯の下に置く1行。強調は太字の一文だけに任せる */
+.barnote{
+  display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;
+  margin-top:12px;font-size:15px;line-height:1.75;color:var(--ink-soft);
+}
+.barnote b{color:var(--ink)}
+.barnote a{font-weight:700;white-space:nowrap}
+.barnote a::after{content:" →"}
+.barnote.strong{font-size:15.5px}
+.section.tight .price-note{margin-top:12px;font-size:13.5px}
+
+/* 長谷川の帯。顔写真を小さく左に置く */
+.meband{display:grid;gap:14px 22px;grid-template-columns:1fr;align-items:center}
+@media (min-width:600px){ .meband{grid-template-columns:140px 1fr} }
+.meband figure{margin:0}
+.meband .photo-slot,.meband img{
+  width:140px;max-width:140px;aspect-ratio:1/1;min-height:0;
+  border-radius:50%;object-fit:cover;padding:0;font-size:12px;
+}
+.meband h2{margin-bottom:8px}
+.meband p{color:var(--ink-soft);font-size:15.5px;max-width:40em}
+.meband .go{margin-top:10px}
+.meband .go a{font-weight:700}
+.meband .go a::after{content:" →"}
