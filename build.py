@@ -27,10 +27,15 @@ import io, os, re, sys, shutil
 
 # ------------------------------------------------------------------
 # サイト全体で使う値。ページや部品の中で {{mail}} と書けば差し込まれる。
-# TODO: info@yhasegawa.com などに変更
-#   Cloudflare Email Routing の転送設定が済むまでは切り替えないこと。
-#   先に変えると、メールが誰にも届かなくなる。
-MAIL = 'pokonavi.info@gmail.com'
+#
+# 受信は Cloudflare Email Routing の転送。
+#   hasegawa@yhasegawa.com → 本人のGmail（転送先はサイトには出さない）
+#   設定は dash.cloudflare.com → yhasegawa.com → メール → Email Routing
+#   転送先を変えるときもダッシュボード側だけでよく、ここは触らない。
+#
+# 【注意】返信すると差出人はGmailのままになる。
+#   Gmailのエイリアス送信が使えるか、別のSMTPを用意するかは未定。
+MAIL = 'hasegawa@yhasegawa.com'
 # ------------------------------------------------------------------
 
 ROOT  = os.path.dirname(os.path.abspath(__file__))
