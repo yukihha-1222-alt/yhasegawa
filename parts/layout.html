@@ -13,14 +13,15 @@
 <meta property="og:site_name" content="長谷川侑希｜現場の業務アプリ開発">
 <meta property="og:locale" content="ja_JP">
 <!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
-<meta name="theme-color" content="#C2653A">
-<meta name="theme-color" content="#1F1A17" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#173F35">
+<meta name="theme-color" content="#0F1A17" media="(prefers-color-scheme: dark)">
 
-<!-- 書体は Zen Kaku Gothic New ひとつ。swap を指定しているので、
-     落ちてくるまではシステムのゴシックで読める状態になる -->
+<!-- 日本語は BIZ UDPGothic。読みやすさのためにつくられた書体で、
+     年配の方にも読みやすい。数字だけ Barlow を使う。
+     swap を指定しているので、落ちてくるまではシステムの書体で読める。 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&amp;family=Barlow:wght@600;700&amp;display=swap">
 <link rel="stylesheet" href="/assets/css/site.css">
 <!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
 <script>document.documentElement.className+=" js";</script>
@@ -34,7 +35,7 @@
 <main id="main">
 {{body}}
 
-{{contact}}
+{{tail}}
 </main>
 
 {{footer}}

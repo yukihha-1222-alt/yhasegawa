@@ -36,6 +36,11 @@ import io, os, re, sys, shutil
 # 【注意】返信すると差出人はGmailのままになる。
 #   Gmailのエイリアス送信が使えるか、別のSMTPを用意するかは未定。
 MAIL = 'hasegawa@yhasegawa.com'
+
+# サービス名はまだ決まっていない。本文では {{service}} と書く。
+# 決まったらここ1行を変えれば全ページ切り替わる。
+# TODO: サービス名が決まったら更新
+SERVICE = '[サービス名]'
 # ------------------------------------------------------------------
 
 ROOT  = os.path.dirname(os.path.abspath(__file__))
@@ -160,14 +165,16 @@ def main():
     # サイト共通の値を先に部品へ埋める。
     # 部品は本文に差し込まれたあと走査されないので、ここで埋めておかないと
     # footer の {{mail}} がそのまま残ってしまう。
-    scalars = {'mail': MAIL}
+    scalars = {'mail': MAIL, 'service': SERVICE}
     common = {name: fill(read(os.path.join(PARTS, name + '.html')), scalars, strict=False)
-              for name in ('header', 'contact', 'footer', 'mobilebar', 'pricebrief')}
+              for name in ('header', 'footer', 'mobilebar',
+                           'tail_monitor', 'tail_soudan')}
     common.update(scalars)
 
     built = []
     for fn in sorted(os.listdir(PAGES)):
-        if not fn.endswith('.html'):
+        # 頭に _ の付くファイルは出力しない。消さずに取っておくための印。
+        if not fn.endswith('.html') or fn.startswith('_'):
             continue
         src = os.path.join(PAGES, fn)
         try:
@@ -189,10 +196,16 @@ def main():
             sys.exit('%s: %s' % (fn, e))
 
         values = dict(common)
-        # ご相談ページ自身には、末尾の相談ブロックを入れない。
-        # 同じ見出しと同じボタンが1枚の中に二度出てしまう。
-        if meta.get('contact', 'yes') == 'no':
-            values['contact'] = ''
+        # ページの末尾に置くブロックを選ぶ。
+        #   monitor … 先行モニターの申し込み（プラットフォーム側のページ）
+        #   soudan  … ご相談（受託・補助金など、受託側のページ）
+        #   no      … 置かない（申し込みページと相談ページ自身）
+        tail = meta.get('tail', 'monitor')
+        values['tail'] = {'monitor': common['tail_monitor'],
+                          'soudan':  common['tail_soudan'],
+                          'no':      ''}.get(tail)
+        if values['tail'] is None:
+            sys.exit('%s: tail は monitor / soudan / no のどれか' % fn)
         values.update({
             'title':       meta['title'],
             'description': meta['description'],

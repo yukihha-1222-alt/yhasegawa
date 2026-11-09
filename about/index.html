@@ -18,14 +18,15 @@
 <meta property="og:site_name" content="長谷川侑希｜現場の業務アプリ開発">
 <meta property="og:locale" content="ja_JP">
 <!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
-<meta name="theme-color" content="#C2653A">
-<meta name="theme-color" content="#1F1A17" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#173F35">
+<meta name="theme-color" content="#0F1A17" media="(prefers-color-scheme: dark)">
 
-<!-- 書体は Zen Kaku Gothic New ひとつ。swap を指定しているので、
-     落ちてくるまではシステムのゴシックで読める状態になる -->
+<!-- 日本語は BIZ UDPGothic。読みやすさのためにつくられた書体で、
+     年配の方にも読みやすい。数字だけ Barlow を使う。
+     swap を指定しているので、落ちてくるまではシステムの書体で読める。 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&amp;family=Barlow:wght@600;700&amp;display=swap">
 <link rel="stylesheet" href="/assets/css/site.css">
 <!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
 <script>document.documentElement.className+=" js";</script>
@@ -38,22 +39,21 @@
   <div class="wrap">
     <a class="who" href="/">
       <b>長谷川　侑希</b>
-      <span>現場の業務アプリ開発｜兵庫県姫路市</span>
+      <span>研修動画のしくみと、現場の業務アプリ</span>
     </a>
 
     <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
          ここが折り返して出るだけなので、リンクは必ず辿れる -->
     <nav class="nav" aria-label="メインメニュー">
       <ul>
-        <li><a href="/#gyoshu" data-nav="gyoshu">業種から探す</a></li>
-        <li><a href="/ryokin/" data-nav="ryokin">進め方と費用</a></li>
-        <li><a href="/hojokin/" data-nav="hojokin">補助金</a></li>
+        <li><a href="/#shikumi" data-nav="shikumi">しくみ</a></li>
+        <li><a href="/partner/" data-nav="partner">顧問の先生へ</a></li>
+        <li><a href="/jutaku/" data-nav="jutaku">受託開発</a></li>
         <li><a href="/about/" data-nav="about">長谷川について</a></li>
-        <li><a href="/faq/" data-nav="faq">よくある質問</a></li>
       </ul>
     </nav>
 
-    <a class="btn head-cta" href="/contact/">相談する</a>
+    <a class="btn btn-apply head-cta" href="/monitor/">先行モニターに申し込む</a>
   </div>
 </header>
 
@@ -211,22 +211,23 @@
   </div>
 </section>
 
-<!-- 全ページの末尾に入る相談ブロック。
-     パートナーが業種別ページのURLを直接送る想定なので、
-     どのページで読み終わっても、次の一歩がここにある -->
-<section class="section tint" id="soudan">
+<!-- プラットフォーム側のページの末尾。
+     まだ開発前なので、売り込みではなく「一緒に試してくれる会社を探している」
+     という書き方にする。 -->
+<section class="section brand" id="apply">
   <div class="wrap narrow">
-    <h2>まずは、無料で現場を見てもらいませんか</h2>
+    <h2>先行モニターを募集しています</h2>
     <p class="lead-p">
-      ご相談と、半日ほどの現場の見学は無料です。見せていただいたうえで、アプリで解決したほうがいいのか、それとも今のやり方を少し変えれば済むのかを、正直にお伝えします。作らないほうがいい場合は、そうお伝えします。
+      [サービス名] は、これから開発するしくみです。実際の現場で使っていただきながら、形を決めていきたいと思っています。
+      <b>先行モニターの期間中は無料です。</b>
+      使ってみた感想をお聞かせいただけると助かります。
     </p>
     <div class="btn-row">
-      <a class="btn" href="/contact/">まずは無料で見てもらう</a>
-      <a class="btn ghost" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
+      <a class="btn btn-apply" href="/monitor/">先行モニターに申し込む</a>
+      <a class="btn ghost on-brand" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
     </div>
-    <p class="note">
-      兵庫・大阪・岡山あたりの、日帰りで伺える範囲が対象です。「これはアプリで解決することなのか」という段階のご相談で構いません。
-    </p>
+    <!-- TODO: 料金が決まったら更新 -->
+    <p class="note on-brand">正式な料金は、決まり次第お知らせします。</p>
   </div>
 </section>
 
@@ -235,15 +236,13 @@
 <footer class="site-foot">
   <div class="wrap">
     <p class="name">長谷川　侑希</p>
-    <p class="tag">兵庫県姫路市を拠点に、現場で使う業務アプリをつくっています。</p>
+    <p class="tag">研修動画のしくみと、現場で使う業務アプリをつくっています。</p>
 
     <nav aria-label="フッターメニュー">
       <a href="/">ホーム</a>
-      <a href="/kensetsu/">建設・設備工事</a>
-      <a href="/shokuhin/">食品工場</a>
-      <a href="/butsuryu/">物流・配送</a>
-      <a href="/seizo/">その他の製造業</a>
-      <a href="/ryokin/">進め方と費用</a>
+      <a href="/monitor/">先行モニター申し込み</a>
+      <a href="/partner/">顧問の先生へ</a>
+      <a href="/jutaku/">受託開発</a>
       <a href="/hojokin/">補助金のご案内</a>
       <a href="/about/">長谷川について</a>
       <a href="/faq/">よくあるご質問</a>
@@ -263,8 +262,7 @@
       <dt>所在地</dt>
       <dd>
         〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室<br>
-        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言。
-             バーチャルオフィスであることをどこまで書くかは本人の判断 -->
+        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言 -->
         <span class="why-addr">事務所の所在地と、普段うかがっている地域が異なります。</span>
       </dd>
     </dl>
@@ -274,11 +272,11 @@
 </footer>
 
 
-<!-- スマホの画面下に固定する。本文を隠さないよう高さは抑え、
+<!-- スマホの画面下に固定する。高さは抑え、
      iPhone のホームバーにかからないよう safe-area を見ている -->
 <div class="mobilebar" aria-label="お問い合わせ">
   <a href="tel:08062061245">電話する</a>
-  <a class="primary" href="/contact/">相談する</a>
+  <a class="primary" href="/monitor/">先行モニターに申し込む</a>
 </div>
 
 
