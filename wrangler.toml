@@ -1,0 +1,47 @@
+# Cloudflare Workers の設定
+#
+# これを置くと、いままでダッシュボードだけで決まっていた配信の設定を、
+# このファイルが上書きします。入れ替えは慎重に。
+#
+# 【確認してください】name は、いまダッシュボードにある Worker の名前と
+# 同じでなければいけません。違う名前にすると、別の Worker が新しく作られ、
+# yhasegawa.com はいまのまま（古いサイト）になります。
+# Compute (Workers) の一覧に出ている名前をそのまま書いてください。
+name = "yhasegawa"
+
+main = "worker/index.js"
+compatibility_date = "2026-11-10"
+
+# ------------------------------------------------------------------
+# 配信するのは dist/ の中だけ。
+# pages/ parts/ vendor/ build.py check.py *.md は入らないので、
+# URL を打っても 404 になります。
+# ------------------------------------------------------------------
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+# 知らないURLのときに dist/404.html を返す
+not_found_handling = "404-page"
+
+# /api/ だけ先に worker/index.js へ。それ以外は静的ファイルが直接返る
+# （静的ファイルの配信は Workers のリクエスト数に数えられない）
+run_worker_first = ["/api/*"]
+
+# ------------------------------------------------------------------
+# フォームの送信先。
+# Email Routing で Verified になっているアドレスしか指定できない。
+# 届く場所は、いま hasegawa@yhasegawa.com を転送している先と同じ。
+# ------------------------------------------------------------------
+[[send_email]]
+name = "MAIL"
+destination_address = "sakamotoyuki.develop@gmail.com"
+
+[vars]
+# 画面に出る鍵。公開してよい
+TURNSTILE_SITEKEY = "0x4AAAAAAF6EyfFEgIfvcIj9"
+# メールの宛先。send_email の destination_address と同じにする
+MAIL_TO = "sakamotoyuki.develop@gmail.com"
+
+# TURNSTILE_SECRET はここに書かない。
+# ダッシュボードの Settings → Variables and Secrets から Secret として入れる。

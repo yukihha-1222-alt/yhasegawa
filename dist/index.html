@@ -1,0 +1,354 @@
+<!-- ============================================================
+     このファイルは build.py が組み立てたものです。直接編集しても、
+     次のビルドで消えます。本文は pages/pages/index.html、
+     共通部分は parts/ を編集して python3 build.py を実行してください。
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VideoTask｜見たか、分かったかまで分かる動画のしくみ｜長谷川侑希（兵庫県姫路市）</title>
+<meta name="description" content="VideoTask（ビデオタスク）は、動画を配ったあとに「まだ見ていない人」が分かるしくみです。社内の研修にも、お客様への説明にも使えます。確認問題で分かったかまで確かめられます。いま先行モニターを募集しています。期間中は無料です。">
+<link rel="canonical" href="https://yhasegawa.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yhasegawa.com/">
+<meta property="og:title" content="VideoTask｜見たか、分かったかまで分かる動画のしくみ｜長谷川侑希（兵庫県姫路市）">
+<meta property="og:description" content="VideoTask（ビデオタスク）は、動画を配ったあとに「まだ見ていない人」が分かるしくみです。社内の研修にも、お客様への説明にも使えます。確認問題で分かったかまで確かめられます。いま先行モニターを募集しています。期間中は無料です。">
+<meta property="og:site_name" content="長谷川侑希｜動画のしくみ VideoTask と、業務アプリの受託開発">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://yhasegawa.com/assets/img/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VideoTask｜動画を配ったら、まだ見ていない人がすぐ分かる。">
+<meta name="twitter:card" content="summary_large_image">
+<!-- TODO: 本人の写真が用意できたら、文字だけの ogp.png を差し替える -->
+
+<!-- タブとホーム画面の印。SVG が読めない古いブラウザのために 32px の PNG も置く -->
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<meta name="theme-color" content="#173F35">
+<meta name="theme-color" content="#0F1A17" media="(prefers-color-scheme: dark)">
+
+<!-- 日本語は BIZ UDPGothic。読みやすさのためにつくられた書体で、
+     年配の方にも読みやすい。数字だけ Barlow を使う。
+     swap を指定しているので、落ちてくるまではシステムの書体で読める。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&amp;family=Barlow:wght@600;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body data-current="index">
+
+<a class="skip" href="#main">本文へ<wbr>移動する</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="who" href="/">
+      <b>長谷川　侑希</b>
+      <span>動画のしくみ VideoTask と、<wbr>業務アプリの<wbr>受託開発</span>
+    </a>
+
+    <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
+         ここが折り返して出るだけなので、リンクは必ず辿れる -->
+    <nav class="nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="/shikumi/" data-nav="shikumi">しくみ</a></li>
+        <li><a href="/partner/" data-nav="partner">顧問の<wbr>先生へ</a></li>
+        <li><a href="/jutaku/" data-nav="jutaku">受託開発</a></li>
+        <li><a href="/about/" data-nav="about">長谷川について</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn btn-apply head-cta" href="/monitor/">先行モニターに<wbr>申し込む</a>
+  </div>
+</header>
+
+
+<main id="main">
+<!-- ===================== 1. ファーストビュー ===================== -->
+<section class="section hero">
+  <div class="wrap">
+    <div class="duo">
+      <div>
+        <p class="wip-line"><span class="wip">開発中</span></p>
+        <h1><span class="nb">動画を<wbr>配ったら、</span><span class="nb">まだ<wbr>見ていない<wbr>人が</span><span class="nb">すぐ<wbr>分かる。</span></h1>
+        <p class="lead">
+          社内の<wbr>研修にも、<wbr>お客様への<wbr>説明にも。<wbr>見たかどうか、<wbr>分かったかまで<wbr>確かめられる<wbr>動画のしくみ、<wbr>VideoTask<wbr>（ビデオタスク）です。<wbr>いま、<wbr>先行モニターを<wbr>募集しています。
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-apply" href="/monitor/">先行モニターに<wbr>申し込む</a>
+          <a class="btn ghost" href="#dekiru">しくみを<wbr>見る</a>
+        </div>
+      </div>
+
+      <figure>
+        <picture>
+            <source media="(max-width:600px)" srcset="/assets/img/platform/admin-home-row.webp" type="image/webp" width="565" height="200">
+            <source media="(max-width:600px)" srcset="/assets/img/platform/admin-home-row.png" width="565" height="200">
+            <source srcset="/assets/img/platform/admin-home-card.webp" type="image/webp">
+            <img src="/assets/img/platform/admin-home-card.png" width="1000" height="473" loading="eager" decoding="async" class="shot" alt="管理画面の「まだ見ていない人」のカード。動画ごとに、まだ見ていない人の名前と、その場で催促を送るボタンが並んでいる">
+          </picture>
+        <figcaption class="wip-cap">開発中の<wbr>画面イメージです。<wbr>実際の<wbr>画面とは<wbr>異なる<wbr>場合があります。</figcaption>
+      </figure>
+
+      <!-- TODO: 料金が決まったら更新 -->
+      <!-- 画像の後ろに置いてある。ボタンのすぐ下に置くと、
+           小さい画面で画像が最初の画面から押し出されるため。 -->
+      <p class="note">先行モニターの<wbr>期間中は<wbr>無料です。<wbr>正式な<wbr>料金は<wbr>決まり<wbr>次第お知らせします。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 2. よくある困りごと ===================== -->
+<section class="section alt tight">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>こんなことは、<wbr>ありませんか</h2>
+    </div>
+    <ul class="troubles">
+      <li>研修動画を<wbr>配っても、<wbr>誰が<wbr>見たか<wbr>分からない。</li>
+      <li>見たと<wbr>言われても、<wbr>分かっているかまでは<wbr>分からない。</li>
+      <li>お客様に<wbr>動画を<wbr>送っても、<wbr>見てもらえたか<wbr>分からない。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== 3. できること ===================== -->
+<section class="section" id="dekiru">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="wip-line"><span class="wip">開発中</span></p>
+      <h2>できること</h2>
+      <p>中心にあるのは、<wbr>この<wbr>3つです。</p>
+    </div>
+
+    <div class="can">
+      <div class="duo">
+        <div>
+          <h3>誰がまだ<wbr>見ていないかが<wbr>分かります</h3>
+          <p>
+            配った<wbr>動画ごとに、<wbr>まだ<wbr>見ていない<wbr>人の<wbr>名前が<wbr>並びます。<wbr>その<wbr>画面から、<wbr>そのまま<wbr>催促を<wbr>送れます。
+            <span class="hl">声をかける<wbr>相手</span>を<wbr>探さなくて<wbr>済みます。
+          </p>
+        </div>
+        <figure>
+          <picture>
+            <source srcset="/assets/img/platform/admin-people.webp" type="image/webp">
+            <img src="/assets/img/platform/admin-people.png" width="1280" height="613" loading="lazy" decoding="async" class="shot" alt="受講状況の一覧。まだ見ていない人に印が付き、催促するボタンが並んでいる">
+          </picture>
+          <figcaption class="wip-cap">開発中の<wbr>画面イメージです。<wbr>実際の<wbr>画面とは<wbr>異なる<wbr>場合があります。</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="can">
+      <div class="duo flip">
+        <div>
+          <h3>「見た」だけでなく<wbr>「分かった」まで<wbr>分かります</h3>
+          <p>
+            動画の<wbr>最後に、<wbr>確認問題を<wbr>置けます。<wbr>どの<wbr>問いでつまずいた<wbr>人が<wbr>多いかが、<wbr>動画ごとに<wbr>分かります。<wbr>伝わっていない<wbr>箇所が<wbr>見えるので、<wbr>次の<wbr>動画を<wbr>直せます。
+          </p>
+        </div>
+        <figure>
+          <picture>
+            <source srcset="/assets/img/platform/admin-video.webp" type="image/webp">
+            <img src="/assets/img/platform/admin-video.png" width="1280" height="1045" loading="lazy" decoding="async" class="shot" alt="動画ごとの分析。確認問題の正答率と、つまずいた問いが並んでいる">
+          </picture>
+          <figcaption class="wip-cap">開発中の<wbr>画面イメージです。<wbr>実際の<wbr>画面とは<wbr>異なる<wbr>場合があります。</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="can">
+      <div class="duo">
+        <div>
+          <h3>身についているかが<wbr>分かります</h3>
+          <p>
+            1か月後に、<wbr>同じ<wbr>内容の<wbr>確認問題をもう<wbr>一度<wbr>出します。<wbr>そのときに<wbr>答えられるかどうかで、<span class="hl">身についたかどうか</span>が<wbr>分かります。<wbr>受けた<wbr>直後だけ<wbr>覚えている<wbr>状態と、<wbr>区別できます。
+          </p>
+        </div>
+        <figure>
+          <picture>
+            <source srcset="/assets/img/platform/admin-retention.webp" type="image/webp">
+            <img src="/assets/img/platform/admin-retention.png" width="479" height="412" loading="lazy" decoding="async" class="shot" alt="身についているかのカード。1か月後の再確認の結果が並んでいる">
+          </picture>
+          <figcaption class="wip-cap">開発中の<wbr>画面イメージです。<wbr>実際の<wbr>画面とは<wbr>異なる<wbr>場合があります。</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <p class="go center-go">
+      <a href="/shikumi/">ほかにできることと、<wbr>社員の<wbr>画面を<wbr>見る</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============== 5. お客様に見てもらう動画 ============== -->
+<section class="section alt" id="okyakusama">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="wip-line"><span class="wip">開発中</span></p>
+      <h2>お客様に<wbr>見てもらう<wbr>動画にも</h2>
+    </div>
+
+    <div class="can">
+      <div class="duo flip">
+        <div>
+          <p>
+            商品の<wbr>説明や<wbr>工場の<wbr>紹介を、<wbr>お客様に<wbr>動画で<wbr>送れます。<wbr>会社ごとに<wbr>期限付きの<wbr>リンクを<wbr>出すので、<wbr>どの<wbr>会社が<wbr>何回見たかが<wbr>分かります。<wbr>最後まで<wbr>見てもらえたら、<wbr>担当の<wbr>営業にお知らせが<wbr>届きます。
+          </p>
+
+          <ul class="feats lines">
+            <li>
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              <span class="t">会社ごとの<wbr>リンクに、<wbr>有効期限を<wbr>付けられる</span>
+            </li>
+            <li>
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V5M16 20v-7M22 20h-20"/></svg>
+              <span class="t">どの<wbr>会社が、<wbr>どの<wbr>動画を、<wbr>何回見たかが<wbr>分かる</span>
+            </li>
+            <li>
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="14" height="14" rx="2"/><path d="M18 9a4 4 0 010 6M21 7a7 7 0 010 10"/></svg>
+              <span class="t">かざすと<wbr>渡せる<wbr>名刺<a href="/tapuda/">「tapuda」</a>から、<wbr>商品の<wbr>動画を<wbr>開ける</span>
+            </li>
+          </ul>
+        </div>
+        <figure>
+          <picture>
+            <source srcset="/assets/img/platform/admin-customers.webp" type="image/webp">
+            <img src="/assets/img/platform/admin-customers.png" width="976" height="244" loading="lazy" decoding="async" class="shot" alt="お客様ごとに、見た動画と回数、次に連絡すべきかどうかが並んだ一覧">
+          </picture>
+          <figcaption class="wip-cap">開発中の<wbr>画面イメージです。<wbr>実際の<wbr>画面とは<wbr>異なる<wbr>場合があります。</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6. 先行モニター募集 ===================== -->
+<section class="section brand" id="monitor">
+  <div class="wrap narrow">
+    <h2>先行モニターを<wbr>募集しています</h2>
+    <p class="lead-p">
+      VideoTask は、<wbr>これから<wbr>開発するしくみです。<wbr>実際の<wbr>現場で<wbr>使っていただきながら、<wbr>形を<wbr>決めていきたいと<wbr>思っています。<wbr>社内研修や<wbr>新人教育の<wbr>動画を<wbr>配りたい<wbr>会社の<wbr>方に、<wbr>お使いいただければと<wbr>思います。
+    </p>
+    <p class="lead-p">
+      VideoTask は<wbr>現在開発中です。<wbr>できあがった<wbr>機能から、<wbr>先行モニターの<wbr>皆さまに<wbr>順にお使いいただきます。
+    </p>
+    <p class="lead-p">
+      <b>先行モニターの<wbr>期間中は<wbr>無料です。</b>
+      そのかわり、<wbr>使ってみた<wbr>感想をお聞かせいただけると<wbr>助かります。<wbr>使いにくいところや、<wbr>足りない<wbr>機能を<wbr>教えてください。
+    </p>
+    <div class="btn-row">
+      <a class="btn btn-apply" href="/monitor/">先行モニターに<wbr>申し込む</a>
+      <a class="btn ghost on-brand" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
+    </div>
+    <!-- TODO: 料金が決まったら更新 -->
+    <p class="note on-brand">正式な<wbr>料金は、<wbr>決まり<wbr>次第お知らせします。</p>
+  </div>
+</section>
+
+<!-- ===================== 7・8. 顧問の先生へ／受託開発 ===================== -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="bridges">
+      <div class="bridge">
+        <h2>顧問の<wbr>先生へ</h2>
+        <p>
+          社労士や<wbr>税理士の<wbr>先生が<wbr>研修動画を<wbr>1本つくると、<wbr>顧問先のどの<wbr>会社にも<wbr>配れます。<wbr>顧問先が<wbr>共有を<wbr>許可した<wbr>場合だけ、<wbr>受講率と<wbr>合格率をご覧いただけます。<wbr>社員の<wbr>名前や<wbr>個別の<wbr>記録は<wbr>見えません。
+        </p>
+        <p class="go"><a href="/partner/">顧問の<wbr>先生へのご案内</a></p>
+      </div>
+
+      <div class="bridge">
+        <h2>もっと<wbr>深く<wbr>使いたい<wbr>会社へ</h2>
+        <p>
+          使っていくうちに<wbr>「既存の<wbr>システムとつなぎたい」<wbr>「自社専用の<wbr>画面や<wbr>記録がほしい」といったご相談が<wbr>出てくることがあります。<wbr>そういった<wbr>場合は、<wbr>受託開発としてお受けしています。
+        </p>
+        <p class="go"><a href="/jutaku/">受託開発について</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 9. 長谷川について ===================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="meband">
+<div>
+        <h2>つくっているのは、<wbr>私ひとりです</h2>
+        <p>
+          兵庫県姫路市で、<wbr>現場で<wbr>使うしくみをつくっています。<wbr>以前は<wbr>受託開発の<wbr>会社で、<wbr>製造記録アプリなどを<wbr>担当していました。<wbr>
+          VideoTask も、<wbr>企画から<wbr>開発まで<wbr>自分で<wbr>進めています。
+        </p>
+        <p class="go"><a href="/about/">長谷川について</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="name">長谷川　侑希</p>
+    <p class="tag">動画のしくみ VideoTask と、<wbr>現場で<wbr>使う<wbr>業務アプリをつくっています。</p>
+
+    <nav aria-label="フッターメニュー">
+      <a href="/">ホーム</a>
+      <a href="/shikumi/">しくみのくわしい<wbr>話</a>
+      <a href="/monitor/">先行モニター申し込み</a>
+      <a href="/partner/">顧問の<wbr>先生へ</a>
+      <a href="/jutaku/">受託開発</a>
+      <a href="/hojokin/">補助金のご案内</a>
+      <a href="/about/">長谷川について</a>
+      <a href="/faq/">よくあるご質問</a>
+      <a href="/works/">つくったもの</a>
+      <a href="/tapuda/">tapuda 法人導入</a>
+      <a href="/contact/">ご相談</a>
+      <a href="/privacy/">プライバシーポリシー</a>
+    </nav>
+
+    <dl>
+      <dt>お電話</dt>
+      <dd><a href="tel:08062061245">080-6206-1245</a></dd>
+      <!-- アドレスは build.py の MAIL ひとつで決まる。ここでは書かない -->
+      <dt>メール</dt>
+      <dd><a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a></dd>
+      <dt>活動拠点</dt>
+      <dd>兵庫県姫路市<wbr>（播磨エリアを<wbr>中心に、<wbr>現場へ<wbr>伺います）</dd>
+      <dt>所在地</dt>
+      <dd>
+        〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室<br>
+        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言 -->
+        <span class="why-addr">事務所の<wbr>所在地と、<wbr>普段うかがっている<wbr>地域が<wbr>異なります。</span>
+      </dd>
+    </dl>
+
+    <!-- TODO: 法人化後に運営会社名を追記
+         登記が済むまでは会社名を書かないこと。 -->
+    <p class="cr">© 長谷川 侑希</p>
+  </div>
+</footer>
+
+
+<!-- スマホの画面下に固定する。高さは抑え、
+     iPhone のホームバーにかからないよう safe-area を見ている -->
+<div class="mobilebar" aria-label="お問い合わせ">
+  <a href="tel:08062061245">電話する</a>
+  <a class="primary" href="/monitor/">モニターに<wbr>申し込む</a>
+</div>
+
+
+<script src="/assets/js/site.js" defer></script>
+
+<!-- Cloudflare Web Analytics。Cookie を使わないので同意バナーは不要 -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
+</body>
+</html>

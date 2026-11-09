@@ -46,6 +46,14 @@ import budoux
 #   Gmailのエイリアス送信が使えるか、別のSMTPを用意するかは未定。
 MAIL = 'hasegawa@yhasegawa.com'
 
+# 正式なURL。sitemap と canonical で使う
+SITE = 'https://yhasegawa.com'
+
+# Turnstile（いたずら送信よけ）の、画面に出るほうの鍵。
+# 公開してよい。相方の Secret Key は Cloudflare のダッシュボードに入れる。
+# 空にすると、ウィジェットも読み込みも出力されない（手元で確認するとき用）。
+TURNSTILE_SITEKEY = '0x4AAAAAAF6EyfFEgIfvcIj9'
+
 # サービス名。ページでは常に {{service}} と書けばよい。
 # 「各ページで最初の1回だけ読みを添える」のは build.py がやる（first_full）。
 # 手で書き分けると、共通の末尾ブロックが先に来るページで取りこぼす。
@@ -412,12 +420,33 @@ def place_images(body, keep):
                  'decoding="async"', 'class="shot"', 'alt="%s"' % _attr(tag, 'data-alt')]
         img = '<img ' + ' '.join(attrs) + '>'
 
+        sources = []
+
+        # data-img-sp があれば、狭い画面だけ別の切り出しを出す。
+        # 管理画面のような横長の図は、スマホ幅まで縮めると文字が読めない。
+        # 幅と高さを <source> 側にも書く（比が変わるので、書かないと跳ねる）
+        sp = _attr(tag, 'data-img-sp')
+        if sp and os.path.isfile(os.path.join(IMG_DIR, sp)):
+            ssize = image_size(os.path.join(IMG_DIR, sp))
+            sscale = int(_attr(tag, 'data-scale-sp') or scale)
+            sw, sh = ssize[0] // sscale, ssize[1] // sscale
+            sp_webp = os.path.splitext(sp)[0] + '.webp'
+            if os.path.isfile(os.path.join(IMG_DIR, sp_webp)):
+                sources.append('<source media="(max-width:600px)" srcset="/assets/img/%s"'
+                               ' type="image/webp" width="%d" height="%d">' % (sp_webp, sw, sh))
+            sources.append('<source media="(max-width:600px)" srcset="/assets/img/%s"'
+                           ' width="%d" height="%d">' % (sp, sw, sh))
+        elif sp:
+            missing.append(sp)
+
         webp = os.path.splitext(rel)[0] + '.webp'
         if os.path.isfile(os.path.join(IMG_DIR, webp)):
-            img = ('<picture>\n'
-                   '            <source srcset="/assets/img/%s" type="image/webp">\n'
-                   '            %s\n'
-                   '          </picture>' % (webp, img))
+            sources.append('<source srcset="/assets/img/%s" type="image/webp">' % webp)
+
+        if sources:
+            img = ('<picture>\n            '
+                   + '\n            '.join(sources)
+                   + '\n            ' + img + '\n          </picture>')
         return block.replace(slot.group(0), img)
 
     body = FIGURE.sub(one_figure, body)
@@ -455,6 +484,82 @@ def fill(template, values, strict=True):
 
 PREVIEW = os.path.join(ROOT, '_preview')
 
+# ------------------------------------------------------------------
+# 配信するものは dist/ の中だけ
+#
+# Workers Static Assets は、指定したフォルダの中身をそのままURLにする。
+# いままではリポジトリ直下を指していたので、pages/ parts/ vendor/
+# build.py まで読めてしまっていた。
+# 書き出したページと資材だけを dist/ に入れ、そこだけを配ることにする。
+# ------------------------------------------------------------------
+DIST = os.path.join(ROOT, 'dist')
+
+# dist/ に入れる資材。ここに無いものは配信されない。
+ASSETS = (
+    'assets/css/site.css',
+    'assets/js/site.js',
+    'assets/favicon.svg',
+    'assets/favicon-32.png',
+    'assets/apple-touch-icon.png',
+    'assets/store-appstore-ja.svg',
+    'assets/store-googleplay-ja.png',
+    'assets/store-googleplay-ja.webp',
+)
+ASSET_DIRS = ('assets/img', 'assets/qr')
+
+# 切り出しの元として置いてあるだけで、ページからは参照していないもの。
+# 配信すると無駄に重いので dist/ には入れない。
+NO_SHIP = ('assets/img/platform/admin-home.png',
+           'assets/img/platform/admin-home.webp')
+
+
+def clean_dist():
+    """dist/ を毎回まっさらにする。
+
+    消し忘れたページが残っていると、本文を削ったつもりでも
+    URLからは読めたままになる。"""
+    if os.path.isdir(DIST):
+        shutil.rmtree(DIST)
+    os.makedirs(DIST)
+
+
+def copy_assets():
+    for rel in ASSETS:
+        src = os.path.join(ROOT, rel)
+        if os.path.isfile(src):
+            dst = os.path.join(DIST, rel)
+            d = os.path.dirname(dst)
+            if not os.path.isdir(d):
+                os.makedirs(d)
+            shutil.copy(src, dst)
+    for rel in ASSET_DIRS:
+        for src in glob.glob(os.path.join(ROOT, rel, '**', '*'), recursive=True):
+            if os.path.isfile(src):
+                if os.path.relpath(src, ROOT).replace(os.sep, '/') in NO_SHIP:
+                    continue
+                dst = os.path.join(DIST, os.path.relpath(src, ROOT))
+                d = os.path.dirname(dst)
+                if not os.path.isdir(d):
+                    os.makedirs(d)
+                shutil.copy(src, dst)
+
+
+def write_robots_sitemap(urls):
+    """robots.txt と sitemap.xml を書く。URLはビルドした実物から作る。"""
+    write(os.path.join(DIST, 'robots.txt'),
+          'User-agent: *\n'
+          'Allow: /\n'
+          'Sitemap: %s/sitemap.xml\n' % SITE)
+    today = __import__('datetime').date.today().isoformat()
+    body = ['<?xml version="1.0" encoding="UTF-8"?>',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for u in urls:
+        if u == '/404.html':
+            continue
+        body.append('  <url><loc>%s%s</loc><lastmod>%s</lastmod></url>' % (SITE, u, today))
+    body.append('</urlset>')
+    write(os.path.join(DIST, 'sitemap.xml'), '\n'.join(body) + '\n')
+
 
 def to_preview(html, slug):
     """見せるためだけの、持ち出せる形に書き換える。
@@ -476,6 +581,9 @@ def to_preview(html, slug):
     html = html.replace('href="/assets/', 'href="assets/')
     html = html.replace('src="/assets/', 'src="assets/')
     html = html.replace('srcset="/assets/', 'srcset="assets/')
+    # プレビューには /api/form を受けるものがない。押しても何も起きないので、
+    # 送信の口だけ外して、フォームの見た目の確認に徹する。
+    html = html.replace(' method="post" action="/api/form"', ' data-preview-only')
     return html
 
 
@@ -491,11 +599,22 @@ def main():
     # サイト共通の値を先に部品へ埋める。
     # 部品は本文に差し込まれたあと走査されないので、ここで埋めておかないと
     # footer の {{mail}} がそのまま残ってしまう。
-    scalars = {'mail': MAIL, 'service': SERVICE, 'service_full': SERVICE_FULL}
+    scalars = {'mail': MAIL, 'service': SERVICE, 'service_full': SERVICE_FULL,
+               'turnstile_sitekey': TURNSTILE_SITEKEY}
     common = {name: fill(read(os.path.join(PARTS, name + '.html')), scalars, strict=False)
               for name in ('header', 'footer', 'mobilebar',
-                           'tail_monitor', 'tail_soudan')}
+                           'tail_monitor', 'tail_soudan', 'turnstile')}
     common.update(scalars)
+    # 鍵を入れていないときは、ウィジェットごと出さない
+    if not TURNSTILE_SITEKEY:
+        common['turnstile'] = ''
+    # Turnstile の読み込みは、ウィジェットを置いたページだけに入れる。
+    # 全ページに入れると、フォームの無いページまで外部の JS を読んでしまう。
+    turnstile_script = (
+        '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js"'
+        ' async defer></script>' if TURNSTILE_SITEKEY else '')
+
+    clean_dist()
 
     built = []
     for fn in sorted(os.listdir(PAGES)):
@@ -512,11 +631,11 @@ def main():
         # トップだけは直下。ほかは /<slug>/index.html に置き、URLの末尾を / にする
         # 404 だけは Cloudflare が /404.html を見るので、直下に置く
         if slug == 'index':
-            out, url = os.path.join(ROOT, 'index.html'), '/'
+            out, url = os.path.join(DIST, 'index.html'), '/'
         elif slug == '404':
-            out, url = os.path.join(ROOT, '404.html'), '/404.html'
+            out, url = os.path.join(DIST, '404.html'), '/404.html'
         else:
-            out, url = os.path.join(ROOT, slug, 'index.html'), '/%s/' % slug
+            out, url = os.path.join(DIST, slug, 'index.html'), '/%s/' % slug
 
         # 本文の中の {{pricebrief}} などを先に埋める。
         # layout を埋めたあとでは、差し込んだ本文は走査されない。
@@ -539,6 +658,7 @@ def main():
                           'no':      ''}.get(tail)
         if values['tail'] is None:
             sys.exit('%s: tail は monitor / soudan / no のどれか' % fn)
+        values['turnstile_script'] = turnstile_script if 'cf-turnstile' in body else ''
         values.update({
             # title と description にも {{service}} と書ける。
             # layout に差し込んだあとは走査されないので、ここで埋める。
@@ -554,6 +674,9 @@ def main():
 
         if preview:
             write(os.path.join(PREVIEW, slug + '.html'), to_preview(page, slug))
+
+    copy_assets()
+    write_robots_sitemap([u for u, _, _ in built])
 
     if preview:
         # CSS の中の画像も相対に直す。site.css は assets/css/ にあるので1つ上
@@ -593,13 +716,23 @@ def main():
             print('    ※ いまは枠ごと出力していません。'
                   '--with-placeholders で枠を見られます')
 
-    # 置き去りになった古い出力に気づけるように
-    known = {p for _, p, _ in built}
-    for d in sorted(os.listdir(ROOT)):
-        p = os.path.join(d, 'index.html')
-        if os.path.isdir(os.path.join(ROOT, d)) and d not in ('.git', 'assets', 'parts', 'pages', '_preview') \
-           and os.path.isfile(os.path.join(ROOT, p)) and p not in known:
-            print('  ※ pages/ に対応がない出力が残っています: ' + p)
+    # 直下に古い出力が残っていたら知らせる。
+    # dist/ に移したので、リポジトリ直下にHTMLがあってはいけない。
+    stray = [f for f in sorted(os.listdir(ROOT))
+             if f.endswith('.html') and f != 'index.html'] \
+            + [d for d in sorted(os.listdir(ROOT))
+               if os.path.isdir(os.path.join(ROOT, d))
+               and d not in ('.git', 'assets', 'parts', 'pages', 'worker',
+                             'vendor', 'dist', '_preview', '.chrome-check',
+                             '__pycache__', '.vscode')
+               and os.path.isfile(os.path.join(ROOT, d, 'index.html'))]
+    if os.path.isfile(os.path.join(ROOT, 'index.html')):
+        stray.append('index.html')
+    if stray:
+        print()
+        print('  ※ 直下に古い出力が残っています（配信はされませんが紛らわしいので消してください）')
+        for f in stray:
+            print('     ' + f)
 
 
 if __name__ == '__main__':

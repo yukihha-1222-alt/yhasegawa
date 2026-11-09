@@ -9,3 +9,5 @@ _preview/
 
 # Pythonの中間ファイル
 __pycache__/
+
+# dist/ は配信するものなのでコミットする（.gitignore に入れないこと）

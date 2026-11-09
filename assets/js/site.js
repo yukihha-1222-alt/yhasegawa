@@ -61,62 +61,57 @@
   }
 
   /* ---- 3. フォーム --------------------------------------------------
-     Workers Static Assets はサーバー処理を持たないため、入力内容を
-     本文に入れたメールを立ち上げる形にしている。
-     外部のフォームに移すときは、この節ごと差し替えること。
+     送信先は同じドメインの /api/form。受けているのは worker/index.js。
 
-     質問のかたまりに data-q="見出し" を付けておけば、
-     ご相談でも申し込みでも同じ処理で組み立てられる。
-     TODO: 送信先を確認 */
-  function collect(form) {
-    var lines = [];
-    var groups = form.querySelectorAll('[data-q]');
-    for (var i = 0; i < groups.length; i++) {
-      var g = groups[i];
-      var q = g.getAttribute('data-q');
-      var boxes = g.querySelectorAll('input[type=radio],input[type=checkbox]');
-      var val;
-      if (boxes.length) {
-        var picked = [];
-        for (var k = 0; k < boxes.length; k++) {
-          if (boxes[k].checked) {
-            /* ラベルの文字から、入力そのものの文字を除いたものを拾う */
-            var lab = boxes[k].closest('label');
-            picked.push(lab ? lab.textContent.trim() : boxes[k].value);
-          }
-        }
-        val = picked.join('、');
-      } else {
-        var one = g.querySelector('input,textarea,select');
-        val = one ? one.value.trim() : '';
-      }
-      lines.push('■ ' + q, val || '（未記入）', '');
-    }
-    return lines.join('\n');
-  }
-
-  var forms = document.querySelectorAll('form[data-mailto]');
-  var mailLink = document.querySelector('a[href^="mailto:"]');
+     <form> には method と action を書いてあるので、JavaScript が動かなくても
+     そのまま送れる。ここでやるのは「ページを離れずに送る」ことだけ。
+     つまり、この節が丸ごと動かなくても、入力は失われない。 */
+  var forms = document.querySelectorAll('form[action="/api/form"]');
   Array.prototype.forEach.call(forms, function (form) {
-    if (!mailLink) return;
+    var btn = form.querySelector('[type=submit]');
+
     form.addEventListener('submit', function (e) {
+      /* fetch が無い古いブラウザは、ふつうの送信に任せる */
+      if (!window.fetch || !window.FormData) return;
       e.preventDefault();
-      var to = mailLink.getAttribute('href').replace(/^mailto:/, '');
-      var subject = form.getAttribute('data-subject') || 'お問い合わせ';
-      var first = form.querySelector('[data-q] input,[data-q] textarea');
-      var body = collect(form) + '\n----\nyhasegawa.com のフォームから';
-      window.location.href = 'mailto:' + to
-        + '?subject=' + encodeURIComponent(subject + (first && first.value ? '｜' + first.value.trim() : ''))
-        + '&body=' + encodeURIComponent(body);
-      /* メールソフトが開いたあと、このページに何が起きたか分かるようにする */
-      var thanks = document.getElementById(form.getAttribute('data-thanks') || '');
-      if (thanks) {
-        thanks.classList.add('shown');
-        thanks.setAttribute('tabindex', '-1');
-        thanks.focus();
-      }
+
+      var label = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = '送信しています…'; }
+      var old = form.querySelector('.form-error');
+      if (old) old.remove();
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      }).then(function (r) {
+        return r.json().catch(function () { return { ok: r.ok }; });
+      }).then(function (j) {
+        if (!j.ok) throw new Error(j.error || '送信できませんでした。');
+        var thanks = document.getElementById(form.getAttribute('data-thanks'));
+        if (thanks) {
+          form.hidden = true;
+          thanks.classList.add('shown');
+          thanks.scrollIntoView({ block: 'center' });
+        } else {
+          form.submit();
+        }
+      }).catch(function (err) {
+        /* 失敗しても入力はそのまま。やり直せることを伝える */
+        if (btn) { btn.disabled = false; btn.textContent = label; }
+        var p = document.createElement('p');
+        p.className = 'form-error';
+        p.setAttribute('role', 'alert');
+        p.textContent = String(err.message || err) +
+          ' 入力はそのまま残っています。もう一度お試しいただくか、' +
+          'お電話（080-6206-1245）でもお受けします。';
+        form.appendChild(p);
+        /* Turnstile は1回しか使えないので、作り直す */
+        if (window.turnstile) { try { window.turnstile.reset(); } catch (e) {} }
+      });
     });
   });
+
 
   /* ---- 4. 本文の出現 ------------------------------------------------ */
   var slow = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -1,0 +1,231 @@
+<!-- ============================================================
+     このファイルは build.py が組み立てたものです。直接編集しても、
+     次のビルドで消えます。本文は pages/pages/works.html、
+     共通部分は parts/ を編集して python3 build.py を実行してください。
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>つくったもの｜企画から審査、運用までひとりで｜VideoTask・長谷川侑希</title>
+<meta name="description" content="App Store と Google Play に出している自分のアプリです。企画から申請、審査、出したあとの運用まで、ひとりで回しています。受託でおつくりするものも、VideoTask も、同じ手でつくっています。">
+<link rel="canonical" href="https://yhasegawa.com/works/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yhasegawa.com/works/">
+<meta property="og:title" content="つくったもの｜企画から審査、運用までひとりで｜VideoTask・長谷川侑希">
+<meta property="og:description" content="App Store と Google Play に出している自分のアプリです。企画から申請、審査、出したあとの運用まで、ひとりで回しています。受託でおつくりするものも、VideoTask も、同じ手でつくっています。">
+<meta property="og:site_name" content="長谷川侑希｜動画のしくみ VideoTask と、業務アプリの受託開発">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://yhasegawa.com/assets/img/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VideoTask｜動画を配ったら、まだ見ていない人がすぐ分かる。">
+<meta name="twitter:card" content="summary_large_image">
+<!-- TODO: 本人の写真が用意できたら、文字だけの ogp.png を差し替える -->
+
+<!-- タブとホーム画面の印。SVG が読めない古いブラウザのために 32px の PNG も置く -->
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<meta name="theme-color" content="#173F35">
+<meta name="theme-color" content="#0F1A17" media="(prefers-color-scheme: dark)">
+
+<!-- 日本語は BIZ UDPGothic。読みやすさのためにつくられた書体で、
+     年配の方にも読みやすい。数字だけ Barlow を使う。
+     swap を指定しているので、落ちてくるまではシステムの書体で読める。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&amp;family=Barlow:wght@600;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body data-current="works">
+
+<a class="skip" href="#main">本文へ<wbr>移動する</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="who" href="/">
+      <b>長谷川　侑希</b>
+      <span>動画のしくみ VideoTask と、<wbr>業務アプリの<wbr>受託開発</span>
+    </a>
+
+    <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
+         ここが折り返して出るだけなので、リンクは必ず辿れる -->
+    <nav class="nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="/shikumi/" data-nav="shikumi">しくみ</a></li>
+        <li><a href="/partner/" data-nav="partner">顧問の<wbr>先生へ</a></li>
+        <li><a href="/jutaku/" data-nav="jutaku">受託開発</a></li>
+        <li><a href="/about/" data-nav="about">長谷川について</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn btn-apply head-cta" href="/monitor/">先行モニターに<wbr>申し込む</a>
+  </div>
+</header>
+
+
+<main id="main">
+<section class="section page-hero">
+  <div class="wrap narrow">
+    <p class="eyebrow">つくったもの</p>
+    <h1><span class="nb">企画から<wbr>審査、<wbr>運用まで</span><span class="nb">ひとりで<wbr>出しています</span></h1>
+    <p class="lead">
+      自分で<wbr>企画して、<wbr>App Store と<wbr> Google Play に<wbr>出している<wbr>アプリです。<wbr>受託でおつくりするものも、<wbr>同じ<wbr>手でつくっています。<wbr>出して<wbr>終わりにせず、<wbr>いまも動かし続けています。
+    </p>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap">
+    <ul class="apps">
+      <li>
+        <h3>tapuda<span class="tag">自社サービス</span></h3>
+        <p>
+          かざすと<wbr>渡せる<wbr>NFC名刺です。<wbr>カードは<wbr>1枚ずつ固有の<wbr>番号を<wbr>持たせ、<wbr>国内で<wbr>製造・検品しています。<wbr>企画から<wbr>製造、<wbr>アプリ、<wbr>サーバーの<wbr>運営まで<wbr>自分で<wbr>回しています。
+        </p>
+        <p class="links">
+          <a href="/tapuda/">法人での<wbr>導入について</a>
+          <a href="https://tapuda.app/" target="_blank" rel="noopener">tapuda.app</a>
+          <a class="badge ios" href="https://apps.apple.com/jp/app/id6805284204" target="_blank" rel="noopener"><span class="vh">App Store で<wbr>ダウンロード</span></a>
+          <a class="badge and" href="https://play.google.com/store/apps/details?id=app.tapuda.android" target="_blank" rel="noopener"><span class="vh">Google Play で<wbr>手に<wbr>入れよう</span></a>
+        </p>
+      </li>
+
+      <li>
+        <h3>ひとまわり</h3>
+        <p>毎日<wbr>ひとつ、<wbr>全国に<wbr>同じお題が<wbr>配られる<wbr>散歩アプリです。<wbr>歩いているあいだは、<wbr>何も<wbr>要求しません。</p>
+        <p class="links">
+          <a class="badge ios" href="https://apps.apple.com/jp/app/id6799991379" target="_blank" rel="noopener"><span class="vh">App Store で<wbr>ダウンロード</span></a>
+          <a class="badge and" href="https://play.google.com/store/apps/details?id=com.hitomawari.app" target="_blank" rel="noopener"><span class="vh">Google Play で<wbr>手に<wbr>入れよう</span></a>
+        </p>
+      </li>
+
+      <li>
+        <h3>Pokory</h3>
+        <p>家族で<wbr>共有する<wbr>育児の<wbr>記録です。</p>
+        <p class="links">
+          <a class="badge ios" href="https://apps.apple.com/jp/app/id6785926739" target="_blank" rel="noopener"><span class="vh">App Store で<wbr>ダウンロード</span></a>
+          <a class="badge and" href="https://play.google.com/store/apps/details?id=com.pokopoko.pokory" target="_blank" rel="noopener"><span class="vh">Google Play で<wbr>手に<wbr>入れよう</span></a>
+        </p>
+      </li>
+
+      <li>
+        <h3>Omry</h3>
+        <p>犬と<wbr>猫の<wbr>記録手帳です。</p>
+        <p class="links">
+          <a class="badge ios" href="https://apps.apple.com/jp/app/id6781990488" target="_blank" rel="noopener"><span class="vh">App Store で<wbr>ダウンロード</span></a>
+        </p>
+      </li>
+
+      <li>
+        <h3>カベメーター</h3>
+        <p>扶養の<wbr>壁を、<wbr>ひとつの<wbr>数字で<wbr>見られるようにしたものです。</p>
+        <p class="links">
+          <a class="badge ios" href="https://apps.apple.com/jp/app/id6786967194" target="_blank" rel="noopener"><span class="vh">App Store で<wbr>ダウンロード</span></a>
+        </p>
+      </li>
+
+      <li>
+        <h3>余白と、<wbr>あじ。</h3>
+        <p>手書きの<wbr>文字から、<wbr>フォントをつくる<wbr>アプリです。</p>
+        <p class="links">
+          <a class="badge ios" href="https://apps.apple.com/jp/app/id6789184486" target="_blank" rel="noopener"><span class="vh">App Store で<wbr>ダウンロード</span></a>
+        </p>
+      </li>
+    </ul>
+
+    <p class="note">
+      これらは<wbr>受託のお仕事ではなく、<wbr>自分で<wbr>企画して<wbr>出しているものです。<wbr>業務アプリとは<wbr>目的が<wbr>違いますが、<wbr>申請から<wbr>審査、<wbr>運用まで<wbr>一人で<wbr>回している<wbr>点は<wbr>同じです。
+    </p>
+  </div>
+</section>
+
+<!-- プラットフォーム側のページの末尾。
+     まだ開発前なので、売り込みではなく「一緒に試してくれる会社を探している」
+     という書き方にする。
+
+     【注意】ここに「開発中」の札は置かないこと。
+     このブロックは about（長谷川について）や works にも入るが、
+     それらのページには開発中の表示を付けない決まりになっている。
+     開発中であることは、下の本文で言葉にして伝える。 -->
+<section class="section brand" id="apply">
+  <div class="wrap narrow">
+    <h2>先行モニターを<wbr>募集しています</h2>
+    <p class="lead-p">
+      VideoTask<wbr>（ビデオタスク）<wbr> は<wbr>現在開発中です。<wbr>できあがった<wbr>機能から、<wbr>先行モニターの<wbr>皆さまに<wbr>順にお使いいただきます。<wbr>実際の<wbr>現場で<wbr>使っていただきながら、<wbr>形を<wbr>決めていきたいと<wbr>思っています。
+      <b>先行モニターの<wbr>期間中は<wbr>無料です。</b>
+      使ってみた<wbr>感想をお聞かせいただけると<wbr>助かります。
+    </p>
+    <div class="btn-row">
+      <a class="btn btn-apply" href="/monitor/">先行モニターに<wbr>申し込む</a>
+      <a class="btn ghost on-brand" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
+    </div>
+    <!-- TODO: 料金が決まったら更新 -->
+    <p class="note on-brand">正式な<wbr>料金は、<wbr>決まり<wbr>次第お知らせします。</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="name">長谷川　侑希</p>
+    <p class="tag">動画のしくみ VideoTask と、<wbr>現場で<wbr>使う<wbr>業務アプリをつくっています。</p>
+
+    <nav aria-label="フッターメニュー">
+      <a href="/">ホーム</a>
+      <a href="/shikumi/">しくみのくわしい<wbr>話</a>
+      <a href="/monitor/">先行モニター申し込み</a>
+      <a href="/partner/">顧問の<wbr>先生へ</a>
+      <a href="/jutaku/">受託開発</a>
+      <a href="/hojokin/">補助金のご案内</a>
+      <a href="/about/">長谷川について</a>
+      <a href="/faq/">よくあるご質問</a>
+      <a href="/works/">つくったもの</a>
+      <a href="/tapuda/">tapuda 法人導入</a>
+      <a href="/contact/">ご相談</a>
+      <a href="/privacy/">プライバシーポリシー</a>
+    </nav>
+
+    <dl>
+      <dt>お電話</dt>
+      <dd><a href="tel:08062061245">080-6206-1245</a></dd>
+      <!-- アドレスは build.py の MAIL ひとつで決まる。ここでは書かない -->
+      <dt>メール</dt>
+      <dd><a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a></dd>
+      <dt>活動拠点</dt>
+      <dd>兵庫県姫路市<wbr>（播磨エリアを<wbr>中心に、<wbr>現場へ<wbr>伺います）</dd>
+      <dt>所在地</dt>
+      <dd>
+        〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室<br>
+        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言 -->
+        <span class="why-addr">事務所の<wbr>所在地と、<wbr>普段うかがっている<wbr>地域が<wbr>異なります。</span>
+      </dd>
+    </dl>
+
+    <!-- TODO: 法人化後に運営会社名を追記
+         登記が済むまでは会社名を書かないこと。 -->
+    <p class="cr">© 長谷川 侑希</p>
+  </div>
+</footer>
+
+
+<!-- スマホの画面下に固定する。高さは抑え、
+     iPhone のホームバーにかからないよう safe-area を見ている -->
+<div class="mobilebar" aria-label="お問い合わせ">
+  <a href="tel:08062061245">電話する</a>
+  <a class="primary" href="/monitor/">モニターに<wbr>申し込む</a>
+</div>
+
+
+<script src="/assets/js/site.js" defer></script>
+
+<!-- Cloudflare Web Analytics。Cookie を使わないので同意バナーは不要 -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
+</body>
+</html>

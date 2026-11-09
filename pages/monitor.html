@@ -35,7 +35,16 @@ description: {{service_full}}の先行モニターを募集しています。期
 
       <!-- 送信はメールソフトを立ち上げる形。宛先はページ上の mailto を読む。
            TODO: 送信先を確認（いまは build.py の MAIL 宛） -->
-      <form class="form" data-mailto data-subject="【先行モニター申込】" data-thanks="thanks-monitor">
+      <form class="form" method="post" action="/api/form" data-thanks="thanks-monitor">
+        <input type="hidden" name="_form" value="先行モニター申込">
+
+        <!-- 人には見えない欄。機械だけが埋めるので、入っていたら弾く -->
+        <div class="hp" aria-hidden="true">
+          <label>この欄は入力しないでください
+            <input type="text" name="_hp" tabindex="-1" autocomplete="off">
+          </label>
+        </div>
+
 
         <label data-q="会社名">
           <span class="q">会社名<span class="req">必須</span></span>
@@ -102,12 +111,21 @@ description: {{service_full}}の先行モニターを募集しています。期
           <textarea name="ひとこと"></textarea>
         </label>
 
+        {{turnstile}}
+
         <button class="btn btn-apply" type="submit">この内容で申し込む</button>
         <p class="note">
-          ボタンを押すとメールソフトが開き、入力した内容が本文に入ります。
-          そのまま送信してください。うまく開かない場合は、お電話いただければ確実です。
+          ボタンを押すと、そのまま長谷川に届きます。メールソフトは開きません。
+          うまくいかないときは、お電話いただければ確実です。
           いただいた内容の扱いは<a href="/privacy/">プライバシーポリシー</a>のとおりです。
         </p>
+        <noscript>
+          <p class="note">
+            このブラウザでは確認のしくみが動きませんが、そのまま送信できます。
+            届かないときは、お電話（<a href="tel:08062061245">080-6206-1245</a>）か
+            <a href="mailto:{{mail}}">{{mail}}</a> までお願いします。
+          </p>
+        </noscript>
       </form>
 
       <div class="thanks" id="thanks-monitor" role="status">

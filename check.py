@@ -34,11 +34,12 @@ PORT   = 8799
 WIDTHS = (1280, 1024, 390)
 PROFILE = os.path.join(ROOT, '.chrome-check')
 
+# 配信するのは dist/ の中だけ。確認も dist/ を見る。
+DIST = os.path.join(ROOT, 'dist')
 PAGES = ['/index.html'] + sorted(
-    '/%s/index.html' % d for d in os.listdir(ROOT)
-    if os.path.isdir(os.path.join(ROOT, d))
-    and d not in ('.git', 'assets', 'parts', 'pages', 'vendor', '_preview', '.chrome-check')
-    and os.path.isfile(os.path.join(ROOT, d, 'index.html')))
+    '/%s/index.html' % d for d in os.listdir(DIST)
+    if os.path.isdir(os.path.join(DIST, d))
+    and os.path.isfile(os.path.join(DIST, d, 'index.html')))
 
 
 # ---------------------------------------------------------------- 読むだけで分かるもの
@@ -66,7 +67,7 @@ def sentences(html):
 
 
 def read_all():
-    return {p: io.open(os.path.join(ROOT, p.strip('/')), encoding='utf-8').read()
+    return {p: io.open(os.path.join(DIST, p.strip('/')), encoding='utf-8').read()
             for p in PAGES}
 
 
@@ -105,7 +106,7 @@ def check_links(pages):
             if tp in pages:
                 if frag and frag not in ids[tp]:
                     bad.append((p, href, '%s に #%s がない' % (tp, frag)))
-            elif not os.path.isfile(os.path.join(ROOT, tp.lstrip('/'))):
+            elif not os.path.isfile(os.path.join(DIST, tp.lstrip('/'))):
                 bad.append((p, href, 'ファイルがない'))
     return bad
 
@@ -169,6 +170,7 @@ function scan(d) {
                              + 'label,legend,.a,.t,.d,.hint,.sub,.what,.name');
   for (var i2 = 0; i2 < els.length; i2++) {
     var el = els[i2];
+    if (el.closest('.hp')) continue;   /* 画面の外に置いた隠し欄 */
     if (el.querySelector('p,li,h1,h2,h3,h4,ul,ol,div,section,figure,table')) continue;
     var txt = (el.textContent || '').replace(/\s+/g, '');
     if (txt.length < 10) continue;
@@ -223,7 +225,7 @@ go();
 
 
 def render(width):
-    probe = os.path.join(ROOT, '_probe.html')
+    probe = os.path.join(DIST, '_probe.html')
     io.open(probe, 'w', encoding='utf-8').write(
         PROBE.replace('__PAGES__', json.dumps(PAGES)).replace('__W__', str(width)))
     try:
@@ -274,7 +276,7 @@ def main():
     print('   → %d件' % len(bad))
 
     srv = subprocess.Popen([sys.executable, '-m', 'http.server', str(PORT)],
-                           cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                           cwd=DIST, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     try:
         time.sleep(1.2)
         for w in widths:

@@ -64,7 +64,16 @@ description: {{service}} のご相談も、受託開発のご相談も承りま�
       <!-- バックエンドを持たないため、送信はメールソフトを立ち上げる形にしている。
            外部のフォームに移すときは、この form の action と
            site.js の送信処理を差し替えること。 -->
-      <form class="form" data-mailto data-subject="【ご相談】" data-thanks="thanks-soudan">
+      <form class="form" method="post" action="/api/form" data-thanks="thanks-soudan">
+        <input type="hidden" name="_form" value="ご相談">
+
+        <!-- 人には見えない欄。機械だけが埋めるので、入っていたら弾く -->
+        <div class="hp" aria-hidden="true">
+          <label>この欄は入力しないでください
+            <input type="text" name="_hp" tabindex="-1" autocomplete="off">
+          </label>
+        </div>
+
         <label data-q="業種・会社名">
           業種・会社名
           <span class="hint">例：食品製造／○○食品株式会社</span>
@@ -80,12 +89,21 @@ description: {{service}} のご相談も、受託開発のご相談も承りま�
           <span class="hint">お電話番号かメールアドレスを、どちらかだけでも。</span>
           <input type="text" name="お名前・ご連絡先" autocomplete="name">
         </label>
+        {{turnstile}}
+
         <button class="btn" type="submit">この内容で相談する</button>
         <p class="note">
-          ボタンを押すとメールソフトが開き、入力した内容が本文に入ります。
-          そのまま送信してください。うまく開かない場合は、お電話いただければ確実です。
+          ボタンを押すと、そのまま長谷川に届きます。メールソフトは開きません。
+          うまくいかないときは、お電話いただければ確実です。
           いただいた内容の扱いは<a href="/privacy/">プライバシーポリシー</a>のとおりです。
         </p>
+        <noscript>
+          <p class="note">
+            このブラウザでは確認のしくみが動きませんが、そのまま送信できます。
+            届かないときは、お電話（<a href="tel:08062061245">080-6206-1245</a>）か
+            <a href="mailto:{{mail}}">{{mail}}</a> までお願いします。
+          </p>
+        </noscript>
       </form>
 
       <div class="thanks" id="thanks-soudan" role="status">

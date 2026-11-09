@@ -612,9 +612,36 @@ section .note{margin-top:16px}
 @media (max-width:620px){
   .btn-row{gap:10px}
   .btn-row .btn{width:100%}
-  .hero .duo > figure{order:-1;margin-bottom:4px}
+  /* ファーストビューの画像は、スマホでも文章の後ろ。
+     先に出すと、申し込みボタンが最初の画面から押し出される。
+     そのうえで、画像の上端が最初の画面に入るよう、
+     ここまでの余白を少しずつ詰める。 */
+  .hero{padding-block:28px 34px}
   .hero h1{margin-top:4px}
+  .hero .lead{margin-top:14px}
+  .hero .btn-row{margin-top:18px}
+  .hero .note{margin-top:16px;padding:14px 16px;font-size:15px}
+  .hero .wip-line{margin-bottom:6px}
+  .hero .duo > figure{order:0;margin-top:16px;margin-bottom:0}
 }
+
+/* ==================================================================
+   ファーストビューは縦並び
+   管理画面の画像を横に並べると、469pxまで縮んで文字が読めなくなる。
+   文章を上、画像を下に置いて全幅で見せる。1280px では画像の中の
+   文字がほぼ原寸（14px相当）になり、名前も催促ボタンも読める。
+================================================================== */
+.hero .duo{grid-template-columns:1fr}
+@media (min-width:860px){
+  .hero .duo{grid-template-columns:1fr}
+  .hero .duo > :first-child,
+  .hero .duo > .note{max-width:46rem}
+  .hero .duo > figure{order:0;margin-top:clamp(26px,3.4vw,38px);margin-bottom:0}
+}
+/* 画像は切らない。全部出す。
+   文章と申し込みボタンが先に来るので、画像の上だけが最初の画面に入り、
+   残りは下にはみ出す。それで「続きがある」と分かる。
+   （max-height で抑えると、画像の下のほうが永久に見えなくなる） */
 
 /* ==================================================================
    業種別ページ
@@ -1158,6 +1185,21 @@ body[data-current="shikumi"] [data-nav="shikumi"]{
 /* :has() が使えない環境でも、点が付くので選択は分かる */
 
 /* 送信したあとに出すお礼 */
+/* 人には見えない欄。display:none だと埋めない機械がいるので、
+   画面の外に置くだけにする。読み上げには aria-hidden で伏せてある。 */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* いたずらよけの確認。送信ボタンのすぐ上 */
+.cf-turnstile{margin:20px 0 4px}
+
+/* 送信に失敗したときの知らせ。入力は消していないことを必ず書く */
+.form-error{
+  margin-top:16px;padding:14px 18px;
+  background:var(--hl-pale);border:1px solid var(--hl);
+  border-radius:var(--round);
+  font-size:15.5px;line-height:1.85;color:var(--ink);
+}
+
 .thanks{
   display:none;
   margin-top:24px;padding:clamp(22px,3.5vw,32px);
