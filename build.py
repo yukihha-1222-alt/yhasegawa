@@ -24,7 +24,7 @@ npm も node_modules も使わない。使う外部ライブラリは BudouX ひ
 HTMLを直接さわらないこと。次のビルドで消える。pages/ と parts/ を直す。
 """
 
-import io, os, re, sys, shutil
+import io, os, re, sys, glob, shutil
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -475,6 +475,7 @@ def to_preview(html, slug):
     # 置き場所に依存しないよう、資材も相対にする
     html = html.replace('href="/assets/', 'href="assets/')
     html = html.replace('src="/assets/', 'src="assets/')
+    html = html.replace('srcset="/assets/', 'srcset="assets/')
     return html
 
 
@@ -559,7 +560,17 @@ def main():
         css = read(os.path.join(ROOT, 'assets', 'css', 'site.css'))
         write(os.path.join(PREVIEW, 'assets', 'css', 'site.css'),
               css.replace('url(/assets/', 'url(../'))
-        for rel in ('assets/js/site.js', 'assets/store-appstore-ja.svg',
+        # 画像一式もプレビューに持っていく
+        for src in glob.glob(os.path.join(ROOT, 'assets', 'img', '**', '*'), recursive=True):
+            if os.path.isfile(src):
+                dst = os.path.join(PREVIEW, os.path.relpath(src, ROOT))
+                d = os.path.dirname(dst)
+                if not os.path.isdir(d):
+                    os.makedirs(d)
+                shutil.copy(src, dst)
+
+        for rel in ('assets/js/site.js', 'assets/favicon.svg', 'assets/favicon-32.png',
+                    'assets/apple-touch-icon.png', 'assets/store-appstore-ja.svg',
                     'assets/store-googleplay-ja.png', 'assets/store-googleplay-ja.webp'):
             src = os.path.join(ROOT, rel)
             if os.path.isfile(src):
