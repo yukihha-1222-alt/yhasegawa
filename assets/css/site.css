@@ -112,7 +112,11 @@ a:hover{color:var(--accent)}
 :focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:3px}
 
 .wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--pad)}
-.narrow{max-width:46rem}
+/* 読みやすい行長に収めるための指定。
+   .wrap ごと狭めると中央に寄って、ほかの節と左端がずれる。
+   箱の幅は変えず、中の要素の幅だけを抑える。 */
+.narrow{max-width:var(--wrap)}
+.narrow > *{max-width:46rem}
 
 /* 読み上げには残して画面からは隠す */
 .vh{
@@ -547,10 +551,17 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
    面を薄い柿色にして、強調は先頭の太字の一文だけに任せる。 */
 .caution{
   margin-top:20px;padding:20px 24px;
-  background:var(--accent-pale);
-  border:1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  background:var(--hl-pale);
+  border:1px solid color-mix(in srgb, var(--hl) 60%, transparent);
   border-radius:var(--round-l);
   font-size:16px;line-height:1.85;
+  /* 黄の上は必ず濃い文字。暗い配色のときは地のほうを暗くしてある */
+  color:#17201D;
+}
+.caution b{color:#17201D}
+@media (prefers-color-scheme: dark){
+  .caution{color:var(--ink)}
+  .caution b{color:var(--ink)}
 }
 .caution b{color:var(--accent-ink)}
 .note{margin-top:16px;font-size:14.5px;color:var(--ink-faint);line-height:1.85;max-width:40em}
@@ -1080,3 +1091,32 @@ body[data-current="shikumi"] [data-nav="shikumi"]{
 /* ラベルの文字と「必須」を同じ行に置くための箱。
    .form label は縦並びの flex なので、包まないとバッジが独立した行になる。 */
 .form .q{display:block}
+
+/* ==================================================================
+   顧問の先生へ
+   見えるものと見えないものを並べて示す。
+   ここが曖昧だと、先生も顧問先も踏み出せない。
+================================================================== */
+.seen{display:grid;gap:16px;grid-template-columns:1fr;margin-top:clamp(16px,2.4vw,22px)}
+@media (min-width:720px){ .seen{grid-template-columns:1fr 1fr} }
+.seen > div{
+  padding:20px clamp(18px,2.6vw,24px);
+  border-radius:var(--round);border:1px solid var(--line);background:var(--bg-card);
+}
+.seen .yes{background:var(--green-pale);border-color:color-mix(in srgb, var(--green) 35%, transparent)}
+.seen h3{font-size:17px;margin-bottom:12px}
+.seen .yes h3{color:var(--green)}
+.seen .no h3{color:var(--ink-soft)}
+.seen li{
+  position:relative;padding-left:1.5em;margin-top:9px;
+  font-size:16px;line-height:1.7;
+}
+.seen .yes li::before{
+  content:"";position:absolute;left:1px;top:.5em;
+  width:5px;height:9px;border:solid var(--green);border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
+.seen .no li::before{
+  content:"";position:absolute;left:0;top:.8em;
+  width:.7em;height:2px;background:var(--ink-faint);border-radius:2px;
+}
