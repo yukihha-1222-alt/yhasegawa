@@ -47,13 +47,13 @@
      転送できない。ここで見て送るしかない。 */
   var OLD = {
     '#contact': '/contact/',
-    '#process': '/ryokin/',
+    '#process': '/jutaku/',
     '#faq':     '/faq/',
     '#works':   '/about/',
-    '#solo':    '/about/',
+    '#solo':    '/jutaku/',
     '#apps':    '/works/',
     '#tapuda':  '/tapuda/',
-    '#genba':   '/#gyoshu'
+    '#genba':   '/jutaku/'
   };
   if (location.pathname === '/' || location.pathname === '/index.html') {
     var to = OLD[location.hash];

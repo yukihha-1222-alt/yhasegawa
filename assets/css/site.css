@@ -1120,3 +1120,37 @@ body[data-current="shikumi"] [data-nav="shikumi"]{
   content:"";position:absolute;left:0;top:.8em;
   width:.7em;height:2px;background:var(--ink-faint);border-radius:2px;
 }
+
+/* ==================================================================
+   受託開発のページ
+   業種ごとの詳しい話は、開かないかぎり場所を取らないようにする。
+   4業種ぶんをそのまま並べると、進め方や費用が読まれないまま埋もれる。
+================================================================== */
+.trade-fold{margin-top:clamp(16px,2.4vw,22px);border-top:1px solid var(--line)}
+.trade-fold details{border-bottom:1px solid var(--line)}
+.trade-fold summary{
+  display:flex;gap:14px;align-items:baseline;
+  padding:18px 0;cursor:pointer;list-style:none;
+  font-size:17px;font-weight:700;line-height:1.6;
+}
+.trade-fold summary::-webkit-details-marker{display:none}
+.trade-fold summary::before{
+  content:"＋";flex:none;color:var(--accent);font-weight:700;
+}
+.trade-fold details[open] summary::before{content:"−"}
+.trade-fold summary:hover{color:var(--accent)}
+.trade-fold summary .sub{font-weight:400;font-size:14.5px;color:var(--ink-soft)}
+.trade-fold .body{padding:0 0 26px 30px}
+.trade-fold .body h4{
+  font-size:15px;font-weight:700;margin:20px 0 10px;color:var(--ink-soft);
+}
+.trade-fold .body h4:first-child{margin-top:0}
+.trade-fold .recmap{margin-top:0}
+.trade-fold .recmap > div{padding:16px 18px}
+.trade-fold .recmap h3{font-size:15px;padding-bottom:8px;margin-bottom:10px}
+.trade-fold .rec-line{margin-top:16px}
+.trade-fold .rec-line .nm{
+  display:inline-block;font-size:16px;font-weight:700;
+  padding-bottom:4px;border-bottom:2.5px solid var(--accent);margin-bottom:10px;
+}
+@media (max-width:560px){ .trade-fold .body{padding-left:0} }
