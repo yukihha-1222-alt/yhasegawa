@@ -1,0 +1,161 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""Compiled model evaluation benchmark utility."""
+
+import argparse
+import json
+import os
+import typing
+
+from . import parser as parser_module
+from . import utils
+
+
+class EvaluationMetrics(typing.TypedDict):
+  accuracy: float
+  precision: float
+  recall: float
+  fscore: float
+  errors: list[tuple[str, str]]
+
+
+def evaluate(
+  model_path: str | os.PathLike, test_data_path: str | os.PathLike
+) -> EvaluationMetrics:
+  """Loads the JSON model and evaluates it against the test dataset.
+
+  Args:
+    model_path (str | os.PathLike): Path to the compiled model JSON file.
+    test_data_path (str | os.PathLike): Path to the test dataset file. Each
+      line must contain one sentence split by '▁' (U+2581). For '.tsv' files,
+      comment lines starting with '#' are ignored, and only the last column
+      after tab splitting is evaluated.
+
+  Returns:
+    EvaluationMetrics: A dictionary containing precision, recall, accuracy,
+      fscore, and errors.
+  """
+  model_path_str = str(model_path)
+  test_data_path_str = str(test_data_path)
+
+  with open(model_path_str, encoding='utf-8') as f:
+    model = json.load(f)
+  parser = parser_module.Parser(model)
+
+  tp = 0
+  tn = 0
+  fp = 0
+  fn = 0
+  errors: list[tuple[str, str]] = []
+
+  is_tsv = test_data_path_str.endswith('.tsv')
+  with open(test_data_path_str, encoding='utf-8') as f:
+    for line in f:
+      line = line.strip()
+      if not line or line.startswith('#'):
+        continue
+      if is_tsv or '\t' in line:
+        parts = line.split('\t')
+        if len(parts) >= 2:
+          line = parts[-1].strip()
+        if not line:
+          continue
+
+      # Parse raw characters and ground truth break positions
+
+      raw_chars: list[str] = []
+      ground_truth_breaks: list[bool] = []
+      next_is_break = False
+      for char in line:
+        if char == utils.SEP:
+          next_is_break = True
+        else:
+          if raw_chars:
+            ground_truth_breaks.append(next_is_break)
+          next_is_break = False
+          raw_chars.append(char)
+
+      if not raw_chars:
+        continue
+
+      raw_sentence = ''.join(raw_chars)
+      predicted_chunks = parser.parse(raw_sentence)
+      predicted_sentence = utils.SEP.join(predicted_chunks)
+      if predicted_sentence != line:
+        errors.append((line, predicted_sentence))
+
+      # Build set of chunk start character indices in raw_sentence
+      chunk_start_indices = set()
+      curr_idx = 0
+      for chunk in predicted_chunks:
+        chunk_start_indices.add(curr_idx)
+        curr_idx += len(chunk)
+
+      # Extract predicted breaks (excluding starting character at index 0)
+      predicted_breaks = []
+      for i in range(1, len(raw_chars)):
+        predicted_breaks.append(i in chunk_start_indices)
+
+      # Accumulate evaluation counts across transitions
+      for p, g in zip(predicted_breaks, ground_truth_breaks):
+        if p and g:
+          tp += 1
+        elif not p and not g:
+          tn += 1
+        elif p and not g:
+          fp += 1
+        elif not p and g:
+          fn += 1
+
+  total = tp + tn + fp + fn
+  accuracy = (tp + tn) / total if total > 0 else 0.0
+  precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+  recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+  fscore = (
+    2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
+  )
+
+  return {
+    'accuracy': accuracy,
+    'precision': precision,
+    'recall': recall,
+    'fscore': fscore,
+    'errors': errors,
+  }
+
+
+def main() -> None:
+  parser = argparse.ArgumentParser(description=__doc__)
+  parser.add_argument(
+    '-m', '--model', required=True, help='Path to the compiled model JSON file.'
+  )
+  parser.add_argument(
+    '-t',
+    '--test-data',
+    required=True,
+    help=(
+      'Path to the test dataset file. Each line must contain one '
+      'sentence split by "▁". For .tsv files, lines starting with "#" '
+      'are ignored and only the last column after tab splitting is '
+      'evaluated.'
+    ),
+  )
+  args = parser.parse_args()
+
+  metrics = evaluate(args.model, args.test_data)
+  print(json.dumps(metrics, indent=2))
+
+
+if __name__ == '__main__':
+  main()

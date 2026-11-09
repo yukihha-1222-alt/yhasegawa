@@ -1,0 +1,209 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""HTML processor."""
+
+import html
+import itertools
+import json
+import os
+from html.parser import HTMLParser
+
+HTMLAttr = list[tuple[str, str | None]]
+PARENT_CSS_STYLE = 'word-break: keep-all; overflow-wrap: anywhere;'
+with open(
+  os.path.join(os.path.dirname(__file__), 'skip_nodes.json'), encoding='utf-8'
+) as f:
+  SKIP_NODES: set[str] = set(json.load(f))
+
+# Elements without an end tag, see https://html.spec.whatwg.org/#void-elements
+VOID_ELEMENTS = {
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'link',
+  'meta',
+  'source',
+  'track',
+  'wbr',
+}
+
+
+class ElementState:
+  """Represents the state for an element.
+
+  Attributes:
+    tag (str): The tag name.
+    to_skip (bool): Whether the content should be skipped or not.
+  """
+
+  def __init__(self, tag: str, to_skip: bool) -> None:
+    self.tag = tag
+    self.to_skip = to_skip
+
+
+class TextContentExtractor(HTMLParser):
+  """An HTML parser to extract text content.
+
+  Attributes:
+    output (str): Accumulated text content.
+  """
+
+  def __init__(self) -> None:
+    super().__init__()
+    self._output: list[str] = []
+
+  @property
+  def output(self) -> str:
+    return ''.join(self._output)
+
+  def handle_data(self, data: str) -> None:
+    self._output.append(data)
+
+
+class HTMLChunkResolver(HTMLParser):
+  """An HTML parser to resolve the given HTML string and semantic chunks.
+
+  Attributes:
+    output (str): The HTML string to output.
+  """
+
+  def __init__(self, chunks: list[str], separator: str):
+    """Initializes the parser.
+
+    Args:
+      chunks (List[str]): The chunks to resolve.
+      separator (str): The separator string.
+    """
+    super().__init__()
+    self.text = ''.join(chunks)
+    self.boundaries = set(itertools.accumulate(len(c) for c in chunks[:-1]))
+    # Don't add a separator where the source already has a ZWSP or `<wbr>`.
+    self.boundaries -= {i for i, c in enumerate(self.text) if c == '\u200b'} | {
+      i + 1 for i, c in enumerate(self.text) if c == '\u200b'
+    }
+    self.separator = separator
+    self.to_skip = False
+    self.scan_index = 0
+    self.element_stack: list[ElementState] = []
+    self._output: list[str] = []
+
+  @property
+  def output(self) -> str:
+    return ''.join(self._output)
+
+  def handle_starttag(self, tag: str, attrs: HTMLAttr) -> None:
+    attr_pairs = []
+    for attr in attrs:
+      if attr[1] is None:
+        attr_pairs.append(' ' + attr[0])
+      else:
+        attr_pairs.append(f' {attr[0]}="{html.escape(attr[1])}"')
+    encoded_attrs = ''.join(attr_pairs)
+    self.element_stack.append(ElementState(tag, self.to_skip))
+    if tag == 'wbr':
+      self.boundaries.discard(self.scan_index)
+    if tag.upper() in SKIP_NODES:
+      if not self.to_skip and self.scan_index in self.boundaries:
+        self.boundaries.remove(self.scan_index)
+        self._output.append(self.separator)
+      self.to_skip = True
+    self._output.append(f'<{tag}{encoded_attrs}>')
+    if tag in VOID_ELEMENTS:
+      # Void elements like `<input>` have no end tag, so restore the state now.
+      self.to_skip = self.element_stack.pop().to_skip
+
+  def handle_startendtag(self, tag: str, attrs: HTMLAttr) -> None:
+    # Self-closing tags like `<br/>` have no end tag, so don't output one.
+    self.handle_starttag(tag, attrs)
+    self._output[-1] = self._output[-1][:-1] + '/>'
+    if tag not in VOID_ELEMENTS:
+      self.to_skip = self.element_stack.pop().to_skip
+
+  def handle_endtag(self, tag: str) -> None:
+    self._output.append(f'</{tag}>')
+    if tag in VOID_ELEMENTS:
+      return
+    if not any(state.tag == tag for state in self.element_stack):
+      return
+    while self.element_stack:
+      state = self.element_stack.pop()
+      if state.tag == tag:
+        self.to_skip = state.to_skip
+        break
+      # If the close tag doesn't match the open tag, remove it and keep looking.
+      # This means that close tags close their corresponding open tags.
+      # e.g., `<span>abc<img>def</span>` or `<p>abc<span>def</p>` are both valid
+      # HTML as per the HTML spec.
+      # Note the HTML "adoption agency algorithm" isn't fully supported.
+      # See https://html.spec.whatwg.org/multipage/parsing.html#an-introduction-to-error-handling-and-strange-cases-in-the-parser
+
+  def handle_data(self, data: str) -> None:
+    for char in data:
+      if self.scan_index in self.boundaries:
+        prev_was_whitespace = (
+          self.scan_index > 0 and self.text[self.scan_index - 1].isspace()
+        )
+        if not self.to_skip and not char.isspace() and not prev_was_whitespace:
+          self._output.append(self.separator)
+      # Re-escape text that `HTMLParser` unescaped, except in raw text elements.
+      self._output.append(
+        html.escape(char, quote=False)
+        if self.cdata_elem not in self.CDATA_CONTENT_ELEMENTS
+        else char
+      )
+      self.scan_index += 1
+
+
+def get_text(html: str) -> str:
+  """Gets the text content from the input HTML string.
+
+  Args:
+    html (str): Input HTML string.
+
+  Returns:
+    The text content.
+  """
+  text_content_extractor = TextContentExtractor()
+  text_content_extractor.feed(html)
+  text_content_extractor.close()
+  return text_content_extractor.output
+
+
+def resolve(
+  phrases: list[str], html: str, separator: str = '\u200b', wrap: bool = True
+) -> str:
+  """Wraps phrases in the HTML string with non-breaking markup.
+
+  Args:
+    phrases (List[str]): The phrases included in the HTML string.
+    html (str): The HTML string to resolve.
+    separator (str, optional): The separator string.
+    wrap (bool, optional): Whether to wrap the output in a span element with
+      inline styles. Defaults to True.
+
+  Returns:
+    The HTML string with phrases wrapped in non-breaking markup.
+  """
+  resolver = HTMLChunkResolver(phrases, separator)
+  resolver.feed(html)
+  resolver.close()
+  if not wrap:
+    return resolver.output
+  result = f'<span style="{PARENT_CSS_STYLE}">{resolver.output}</span>'
+  return result

@@ -4,3 +4,8 @@ Thumbs.db
 
 # プレビュー用の書き出し。本番には要らない
 _preview/
+
+.chrome-check/
+
+# Pythonの中間ファイル
+__pycache__/

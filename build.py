@@ -6,7 +6,8 @@ yhasegawa.com の組み立て
     python3 build.py
 
 parts/ の共通部品と pages/ の各ページ本文を合わせて、配信用のHTMLを書き出す。
-npm も node_modules も使わない。Python の標準ライブラリだけで動く。
+npm も node_modules も使わない。使う外部ライブラリは BudouX ひとつだけで、
+それも vendor/ に同梱してある（pip も venv も要らない）。
 
     parts/layout.html   全ページの骨組み。{{...}} が差し込み口
     parts/header.html   ヘッダー（ナビ）
@@ -25,6 +26,14 @@ HTMLを直接さわらないこと。次のビルドで消える。pages/ と pa
 
 import io, os, re, sys, shutil
 
+ROOT = os.path.dirname(os.path.abspath(__file__))
+
+# 文節の切れ目を判定する BudouX（Google）。
+# システムのPythonには入れず、vendor/ に同梱したものを読む。
+#   pip3 install --target vendor budoux    ← 入れ直すときはこれ
+sys.path.insert(0, os.path.join(ROOT, 'vendor'))
+import budoux
+
 # ------------------------------------------------------------------
 # サイト全体で使う値。ページや部品の中で {{mail}} と書けば差し込まれる。
 #
@@ -37,13 +46,13 @@ import io, os, re, sys, shutil
 #   Gmailのエイリアス送信が使えるか、別のSMTPを用意するかは未定。
 MAIL = 'hasegawa@yhasegawa.com'
 
-# サービス名はまだ決まっていない。本文では {{service}} と書く。
-# 決まったらここ1行を変えれば全ページ切り替わる。
-# TODO: サービス名が決まったら更新
-SERVICE = '[サービス名]'
+# サービス名。ページでは常に {{service}} と書けばよい。
+# 「各ページで最初の1回だけ読みを添える」のは build.py がやる（first_full）。
+# 手で書き分けると、共通の末尾ブロックが先に来るページで取りこぼす。
+SERVICE      = 'VideoTask'
+SERVICE_FULL = 'VideoTask（ビデオタスク）'
 # ------------------------------------------------------------------
 
-ROOT  = os.path.dirname(os.path.abspath(__file__))
 PARTS = os.path.join(ROOT, 'parts')
 PAGES = os.path.join(ROOT, 'pages')
 
@@ -116,6 +125,160 @@ def tidy_ja(html):
     return ''.join(out)
 
 
+# ------------------------------------------------------------------
+# 文節の切れ目に <wbr> を入れる
+#
+# 日本語には語の区切りがないので、ブラウザは放っておくと
+# 「先行モニ／ター」「お知らせし／ます」のようにどこでも切る。
+# BudouX に文節の切れ目を聞いて、そこに <wbr>（切ってよい印）を入れておく。
+# CSS 側で word-break:keep-all にしてあるので、印のある所でしか切れなくなる。
+#
+# <wbr> は画面には出ず、文字数にも数えられず、コピーにも入らない。
+# なので「入れてよい所を並べる」のではなく「入れない所だけ」を決めている。
+#   ・script style textarea title option pre code svg の中には入れない
+#   ・属性値には入れない（タグは丸ごと素通しするので自然にそうなる）
+#   ・メールアドレス・電話番号・URL はまたがせない
+#   ・英数字どうしのあいだには入れない（VideoTask を割らない）
+#   ・括弧や句読点の肩には入れない（<wbr> は禁則処理より強いため）
+#
+# 【なぜ一覧にしないか】
+# はじめは h1 h2 h3 p li dd dt th td figcaption だけにしていたが、
+# よくあるご質問の答えは <div class="a">、質問は <summary>、
+# フォームの補足は <span class="hint"> で、どれも漏れた。
+# 入れ物の名前を数え上げると必ず取りこぼす。
+# ------------------------------------------------------------------
+
+NO_WBR_TAGS = {'script', 'style', 'textarea', 'title', 'option', 'pre',
+               'code', 'svg', 'select'}
+# そのまま置いておきたいかたまり。ここをまたいで切らない
+KEEP_WHOLE = re.compile(
+    r'[\w.+-]+@[\w.-]+\.\w+'          # メールアドレス
+    r'|https?://[^\s<>"\u3000]+'        # URL
+    r'|\d[\d\-()\u2212 ]{7,}\d')     # 電話番号
+
+TOKEN = re.compile(r'<!--.*?-->|<[^>]*>|[^<]+', re.S)
+ALNUM = re.compile(r'[0-9A-Za-z]')
+
+# <wbr> はブラウザの禁則処理より強い。ここで切ると「（」が行末に残ったり
+# 「」」が行頭に来たりするので、自分で避ける。
+NO_BREAK_AFTER  = '\u3014\u3008\u300a\u300c\u300e\u3010\uff08\uff3b\uff5b\u2018\u201c('
+NO_BREAK_BEFORE = ('\u3015\u3009\u300b\u300d\u300f\u3011\uff09\uff3d\uff5d\u2019\u201d)'
+                   '\u3001\u3002\uff0c\uff0e\uff01\uff1f\u30fb'
+                   '\u3041\u3043\u3045\u3047\u3049\u3063\u3083\u3085\u3087\u308e'
+                   '\u30a1\u30a3\u30a5\u30a7\u30a9\u30c3\u30e3\u30e5\u30e7\u30ee'
+                   '\u30fc\u301c\u2026\u2015')
+
+_parser = None
+
+
+def phrase_wbr(text):
+    """ひとつながりの文字に <wbr> を入れて返す。"""
+    global _parser
+    if not text.strip() or not re.search(r'[^\x00-\x7F]', text):
+        return text                      # 日本語がなければ何もしない
+    if _parser is None:
+        _parser = budoux.load_default_japanese_parser()
+
+    out, pos = [], 0
+    for m in KEEP_WHOLE.finditer(text):
+        out.append(_split(text[pos:m.start()]))
+        out.append(m.group(0))           # メール・URL・電話はそのまま
+        pos = m.end()
+    out.append(_split(text[pos:]))
+    return ''.join(out)
+
+
+def _kanji(ch):
+    return '\u4e00' <= ch <= '\u9fff' or ch == '\u3005'
+
+
+def _split(s):
+    if not s.strip() or not re.search(r'[^\x00-\x7F]', s):
+        return s
+    head = s[:len(s) - len(s.lstrip())]
+    tail = s[len(s.rstrip()):]
+    body = s.strip()
+
+    parts = _parser.parse(body)
+    # 漢字1文字だけの切片が、次も漢字で始まるときは熟語を割っている。
+    # 「つくった研修動画を」が つくった／研／修動画を になるなど。足し戻す。
+    i = 0
+    while i < len(parts) - 1:
+        if len(parts[i]) == 1 and _kanji(parts[i]) and _kanji(parts[i + 1][0]):
+            parts[i + 1] = parts[i] + parts[i + 1]
+            parts.pop(i)
+        else:
+            i += 1
+
+    joined = parts[0]
+    for p in parts[1:]:
+        a, b = joined[-1], p[0]
+        # 英数字の途中では切らない。VideoTask が Video／Task にならないように
+        if (ALNUM.match(a) and ALNUM.match(b)) \
+           or a in NO_BREAK_AFTER or b in NO_BREAK_BEFORE:
+            joined += p
+        else:
+            joined += '<wbr>' + p
+    # 「大手家電量販店｜公式スマートフォンアプリ」のような並記は、
+    # BudouX がひとかたまりと見るので、区切り記号の後ろは手で足す。
+    joined = re.sub(r'(?<=[\uff5c\uff0f])(?!<wbr>)(?=[^\x00-\x7F])', '<wbr>', joined)
+    return head + joined + tail
+
+
+def wbr_ja(html):
+    """本文の文節の切れ目に <wbr> を入れる。tidy_ja のあとに通すこと。
+
+    tidy_ja は日本語どうしのあいだの改行を詰める。先に <wbr> を入れると
+    そこでタグに分断されて詰められなくなるので、順番を変えないこと。
+    """
+    out, quiet = [], 0
+    for tok in TOKEN.findall(html):
+        if tok.startswith('<!--'):
+            out.append(tok)
+            continue
+        if tok.startswith('<'):
+            close = re.match(r'</\s*([A-Za-z][\w-]*)', tok)
+            if close:
+                if close.group(1).lower() in NO_WBR_TAGS:
+                    quiet = max(0, quiet - 1)
+            else:
+                open_ = re.match(r'<\s*([A-Za-z][\w-]*)', tok)
+                if open_ and open_.group(1).lower() in NO_WBR_TAGS \
+                   and not tok.rstrip().endswith('/>'):
+                    quiet += 1
+            out.append(tok)
+            continue
+        out.append(tok if quiet else phrase_wbr(tok))
+    return ''.join(out)
+
+
+def first_full(html):
+    """<main> の中で最初に出てくるサービス名にだけ、読みを添える。
+
+    ヘッダーのロゴ下にも名前が入っているが、あれは全ページ共通の説明文
+    なので数えない。属性値やコメントの中も数えない。
+    """
+    m = re.search(r'<main\b.*?</main>', html, re.S)
+    if not m:
+        return html
+
+    done = [False]
+
+    def one(tok):
+        if done[0] or tok.startswith('<'):
+            return tok
+        if SERVICE_FULL in tok:
+            done[0] = True
+            return tok
+        if SERVICE in tok:
+            done[0] = True
+            return tok.replace(SERVICE, SERVICE_FULL, 1)
+        return tok
+
+    body = ''.join(one(t) for t in TOKEN.findall(m.group(0)))
+    return html[:m.start()] + body + html[m.end():]
+
+
 def fill(template, values, strict=True):
     """{{name}} を values[name] に置き換える。
 
@@ -165,7 +328,7 @@ def main():
     # サイト共通の値を先に部品へ埋める。
     # 部品は本文に差し込まれたあと走査されないので、ここで埋めておかないと
     # footer の {{mail}} がそのまま残ってしまう。
-    scalars = {'mail': MAIL, 'service': SERVICE}
+    scalars = {'mail': MAIL, 'service': SERVICE, 'service_full': SERVICE_FULL}
     common = {name: fill(read(os.path.join(PARTS, name + '.html')), scalars, strict=False)
               for name in ('header', 'footer', 'mobilebar',
                            'tail_monitor', 'tail_soudan')}
@@ -207,13 +370,15 @@ def main():
         if values['tail'] is None:
             sys.exit('%s: tail は monitor / soudan / no のどれか' % fn)
         values.update({
-            'title':       meta['title'],
-            'description': meta['description'],
+            # title と description にも {{service}} と書ける。
+            # layout に差し込んだあとは走査されないので、ここで埋める。
+            'title':       fill(meta['title'], scalars),
+            'description': fill(meta['description'], scalars),
             'url':         url,
             'current':     slug,
             'body':        body.strip(),
         })
-        page = tidy_ja(fill(layout, values))
+        page = wbr_ja(first_full(tidy_ja(fill(layout, values))))
         write(out, WARNING.format(src='pages/' + fn) + page)
         built.append((url, os.path.relpath(out, ROOT), len(body)))
 

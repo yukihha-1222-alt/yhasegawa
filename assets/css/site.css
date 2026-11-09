@@ -102,8 +102,6 @@ body{
   background:var(--bg);
   /* 行頭に句読点が来ないようにする */
   line-break:strict;
-  word-break:normal;
-  overflow-wrap:anywhere;
 }
 @media (max-width:600px){ body{font-size:16px;line-height:1.8} }
 
@@ -589,17 +587,16 @@ section .note{margin-top:16px}
     border-top:1px solid var(--line);
   }
   @supports not (backdrop-filter:blur(2px)){ .mobilebar{background:var(--bg)} }
+  /* 「電話する」は白地に緑の枠 */
   .mobilebar a{
     flex:1;display:flex;align-items:center;justify-content:center;
     min-height:48px;padding:10px;border-radius:var(--round);
     font-size:16px;font-weight:700;text-decoration:none;
     border:1.5px solid var(--accent);color:var(--accent-ink);background:var(--bg-card);
   }
-  .mobilebar a.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  /* 申し込みはトップのボタンと同じ黄。色でも同じものだと分かるように */
+  .mobilebar a.primary{background:var(--hl);color:#17201D;border-color:var(--hl)}
   body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
-}
-@media (max-width:900px) and (prefers-color-scheme: dark){
-  .mobilebar a.primary{color:#241B16}
 }
 
 /* ---------- 長谷川について（トップの短い版） ---------- */
@@ -647,9 +644,15 @@ section .note{margin-top:16px}
   border-radius:var(--round);
   font-size:clamp(16px,2.2vw,17.5px);line-height:1.8;
 }
+/* 頭の印。横線だと漢字の「一」に見えるので、チェックの線にする。
+   色は var(--accent) のまま追わせたいので、形は mask で抜いている
+   （画像に色を焼き付けると、暗い配色のときに沈む）。 */
 .troubles li::before{
-  content:"";position:absolute;left:20px;top:1.3em;
-  width:18px;height:2px;border-radius:2px;background:var(--accent);
+  content:"";position:absolute;left:19px;top:1.05em;
+  width:21px;height:21px;background:var(--accent);
+  --check:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12.8l5.4 5.4L20 6'/%3E%3C/svg%3E");
+  -webkit-mask:var(--check) center/contain no-repeat;
+          mask:var(--check) center/contain no-repeat;
 }
 
 /* ---------- 記録の地図 ------------------------------------------------
@@ -847,9 +850,22 @@ section .note{margin-top:16px}
    見え方を減らす。
      balance … 見出しの各行の長さを揃える
      pretty  … 本文の最終行が1〜2文字だけにならないようにする
-     auto-phrase … 文節で折り返す。対応していない環境では無視される
    いずれも対応していなければ何も起きないので、置いて害はない。
+
+   折り返す位置そのものは build.py が決めている。BudouX で文節の
+   切れ目を調べ、そこに <wbr>（切ってよい印）を入れてある。
+   なので keep-all で「印のある所でしか切らない」と言い切れる。
+     keep-all        … 日本語を勝手な位置で切らない
+     overflow-wrap   … それでも入りきらない長い語だけは、はみ出すより切る
+   ※ word-break:auto-phrase（Chromeのみ）はやめた。<wbr> と役目が重なり、
+     どちらが効いたのか分からなくなるため。
 ================================================================== */
+body{
+  word-break:keep-all;
+  overflow-wrap:anywhere;
+}
+/* 入力欄の中身は <wbr> が入らないので、従来どおりどこでも折る */
+input,textarea,select,option,pre,code{ word-break:normal }
 h1,h2,h3,
 .sec-head h2,
 .trades .name,
@@ -858,7 +874,6 @@ h1,h2,h3,
 .step h3,
 .faq summary{
   text-wrap:balance;
-  word-break:auto-phrase;
 }
 p,li,dd,
 .lead,.lead-p,.note,.ctx,.d,
@@ -941,6 +956,9 @@ p,li,dd,
   /* 黄の上は必ず濃い文字。暗い配色でも読めるよう色を固定する */
   color:#17201D;
   padding:0 .1em;
+  /* 2行にまたがったとき、下線を各行に引き直す（途切れさせない） */
+  -webkit-box-decoration-break:clone;
+  box-decoration-break:clone;
 }
 
 /* 大きな数字だけ Barlow。本文の数字には使わない */
@@ -1006,6 +1024,8 @@ p,li,dd,
   padding:13px 16px;background:var(--bg-card);
   border:1px solid var(--line);border-radius:var(--round);
 }
+/* 1行ずつ縦に積む並べ方。2列にすると3つめだけ余って見える */
+.feats.lines{grid-template-columns:1fr}
 .feats .t{font-size:16px;font-weight:700;line-height:1.5}
 .feats .d{grid-column:2;color:var(--ink-soft);font-size:15px;line-height:1.7}
 
