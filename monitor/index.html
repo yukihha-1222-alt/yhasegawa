@@ -39,17 +39,17 @@
   <div class="wrap">
     <a class="who" href="/">
       <b>長谷川　侑希</b>
-      <span>動画の<wbr>しく<wbr>み VideoTask と、<wbr>業務アプリの<wbr>受託開発</span>
+      <span>動画のしくみ VideoTask と、<wbr>業務アプリの<wbr>受託開発</span>
     </a>
 
     <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
          ここが折り返して出るだけなので、リンクは必ず辿れる -->
     <nav class="nav" aria-label="メインメニュー">
       <ul>
-        <li><a href="/shikumi/" data-nav="shikumi">しく<wbr>み</a></li>
+        <li><a href="/shikumi/" data-nav="shikumi">しくみ</a></li>
         <li><a href="/partner/" data-nav="partner">顧問の<wbr>先生へ</a></li>
         <li><a href="/jutaku/" data-nav="jutaku">受託開発</a></li>
-        <li><a href="/about/" data-nav="about">長谷川に<wbr>ついて</a></li>
+        <li><a href="/about/" data-nav="about">長谷川について</a></li>
       </ul>
     </nav>
 
@@ -61,15 +61,16 @@
 <main id="main">
 <section class="section hero">
   <div class="wrap narrow">
-    <p class="eyebrow">先行モニターの<wbr>お申し込み</p>
+    <p class="eyebrow">先行モニターのお申し込み</p>
+    <p class="wip-line"><span class="wip">開発中</span></p>
     <h1><span class="nb">一緒に<wbr>試してくださる</span><span class="nb">会社を<wbr>探しています</span></h1>
     <p class="lead">
-      VideoTask<wbr>（ビデオタスク）<wbr> は、<wbr>これから<wbr>開発する<wbr>しくみです。<wbr>実際の<wbr>現場で<wbr>使っていただきながら、<wbr>形を<wbr>決めていきたいと<wbr>思っています。
+      VideoTask<wbr>（ビデオタスク）<wbr> は<wbr>現在開発中です。<wbr>できあがった<wbr>機能から、<wbr>先行モニターの<wbr>皆さまに<wbr>順にお使いいただきます。<wbr>実際の<wbr>現場で<wbr>使っていただきながら、<wbr>形を<wbr>決めていきたいと<wbr>思っています。
     </p>
     <!-- TODO: 料金が決まったら更新 -->
     <p class="caution">
       <b>先行モニターの<wbr>期間中は<wbr>無料です。</b>
-      正式な<wbr>料金は、<wbr>決まり<wbr>次第お知らせします。<wbr>お申し込みいただいたからと<wbr>いって、<wbr>そのまま<wbr>有料に<wbr>なる<wbr>ことは<wbr>ありません。
+      正式な<wbr>料金は、<wbr>決まり<wbr>次第お知らせします。<wbr>お申し込みいただいたからといって、<wbr>そのまま<wbr>有料になることはありません。
     </p>
   </div>
 </section>
@@ -80,7 +81,7 @@
     <div class="contact-card">
       <h2>お申し込み</h2>
       <p class="lead-p">
-        必須は、<wbr>会社名と<wbr>お名前と<wbr>メールアドレスの<wbr>3つだけです。<wbr>残りは<wbr>分かる<wbr>範囲で<wbr>構いません。
+        必須は、<wbr>会社名とお名前と<wbr>メールアドレスの<wbr>3つだけです。<wbr>残りは<wbr>分かる<wbr>範囲で<wbr>構いません。
       </p>
 
       <!-- 送信はメールソフトを立ち上げる形。宛先はページ上の mailto を読む。
@@ -104,7 +105,7 @@
 
         <label data-q="電話番号">
           電話番号
-          <span class="hint">お急ぎの<wbr>場合は、<wbr>こちらから<wbr>ご連絡します。</span>
+          <span class="hint">お急ぎの<wbr>場合は、<wbr>こちらからご連絡します。</span>
           <input type="tel" name="tel" autocomplete="tel">
         </label>
 
@@ -120,7 +121,7 @@
 
         <fieldset data-q="使いたい場面">
           <legend>使いたい<wbr>場面</legend>
-          <span class="hint">いく<wbr>つ<wbr>選んでいただいても<wbr>構いません。</span>
+          <span class="hint">いくつ<wbr>選んでいただいても<wbr>構いません。</span>
           <div class="choices">
             <label><input type="checkbox" name="use" value="新人教育">新人教育</label>
             <label><input type="checkbox" name="use" value="社内研修">社内研修</label>
@@ -141,26 +142,26 @@
         </fieldset>
 
         <label data-q="ご紹介くださった先生のお名前">
-          ご紹介くださった<wbr>先生の<wbr>お名前
-          <span class="hint">顧問の<wbr>社労士や<wbr>税理士の<wbr>先生から<wbr>お聞きに<wbr>なった<wbr>場合に、<wbr>お書きください。</span>
+          ご紹介くださった<wbr>先生のお名前
+          <span class="hint">顧問の<wbr>社労士や<wbr>税理士の<wbr>先生からお聞きになった<wbr>場合に、<wbr>お書きください。</span>
           <input type="text" name="partner">
         </label>
 
         <label data-q="ひとこと">
           ひとこと
-          <span class="hint">お困りの<wbr>ことや、<wbr>気に<wbr>なる<wbr>点が<wbr>あれば<wbr>お書きください。</span>
+          <span class="hint">お困りのことや、<wbr>気になる<wbr>点があればお書きください。</span>
           <textarea name="note"></textarea>
         </label>
 
         <button class="btn btn-apply" type="submit">この<wbr>内容で<wbr>申し込む</button>
         <p class="note">
-          ボタンを<wbr>押すと<wbr>メールソフトが<wbr>開き、<wbr>入力した<wbr>内容が<wbr>本文に<wbr>入ります。<wbr>そのまま<wbr>送信してください。<wbr>うまく<wbr>開かない<wbr>場合は、<wbr>お電話いただければ<wbr>確実です。
+          ボタンを<wbr>押すと<wbr>メールソフトが<wbr>開き、<wbr>入力した<wbr>内容が<wbr>本文に<wbr>入ります。<wbr>そのまま<wbr>送信してください。<wbr>うまく<wbr>開かない<wbr>場合は、<wbr>お電話いただければ<wbr>確実です。<wbr>いただいた<wbr>内容の<wbr>扱いは<a href="/privacy/">プライバシーポリシー</a>のとおりです。
         </p>
       </form>
 
       <div class="thanks" id="thanks-monitor" role="status">
-        <h3>ありがとう<wbr>ございます</h3>
-        <p>数日以内に<wbr>長谷川から<wbr>ご連絡します。<wbr>メールソフトが<wbr>開きましたら、<wbr>そのまま<wbr>送信してください。</p>
+        <h3>ありがとうございます</h3>
+        <p>数日以内に<wbr>長谷川からご連絡します。<wbr>メールソフトが<wbr>開きましたら、<wbr>そのまま<wbr>送信してください。</p>
       </div>
     </div>
   </div>
@@ -170,29 +171,29 @@
 <section class="section">
   <div class="wrap narrow">
     <div class="sec-head">
-      <h2>お申し込みの<wbr>あとは</h2>
+      <h2>お申し込みのあとは</h2>
     </div>
     <ol class="flow">
       <li>
         <p class="when">まず</p>
         <h3>お返事します</h3>
-        <p class="d">いただいた<wbr>内容を<wbr>読んで、<wbr>数日以内に<wbr>ご連絡します。</p>
+        <p class="d">いただいた<wbr>内容を<wbr>読んで、<wbr>数日以内にご連絡します。</p>
       </li>
       <li>
         <p class="when">次に</p>
-        <h3>お話を<wbr>うかが<wbr>います</h3>
-        <p class="d">どんな<wbr>動画を<wbr>配りたいかを、<wbr>お電話か<wbr>オンラインで<wbr>お聞きします。</p>
+        <h3>お話をうかがいます</h3>
+        <p class="d">どんな<wbr>動画を<wbr>配りたいかを、<wbr>お電話か<wbr>オンラインでお聞きします。</p>
       </li>
       <li>
-        <p class="when">その<wbr>あと</p>
+        <p class="when">そのあと</p>
         <h3>使っていただきます</h3>
         <p class="d">
-          できあがった<wbr>順に<wbr>お渡しして、<wbr>実際の<wbr>現場で<wbr>試していただきます。<wbr>使いにくいところを<wbr>教えてください。
+          できあがった<wbr>順にお渡しして、<wbr>実際の<wbr>現場で<wbr>試していただきます。<wbr>使いにくいところを<wbr>教えてください。
         </p>
       </li>
     </ol>
     <p class="note">
-      お電話での<wbr>お申し込みも<wbr>承ります。
+      お電話でのお申し込みも<wbr>承ります。
       <a href="tel:08062061245">080-6206-1245</a>
     </p>
   </div>
@@ -204,20 +205,21 @@
 <footer class="site-foot">
   <div class="wrap">
     <p class="name">長谷川　侑希</p>
-    <p class="tag">動画の<wbr>しく<wbr>み VideoTask と、<wbr>現場で<wbr>使う<wbr>業務アプリを<wbr>つくっています。</p>
+    <p class="tag">動画のしくみ VideoTask と、<wbr>現場で<wbr>使う<wbr>業務アプリをつくっています。</p>
 
     <nav aria-label="フッターメニュー">
       <a href="/">ホーム</a>
-      <a href="/shikumi/">しくみの<wbr>くわしい<wbr>話</a>
+      <a href="/shikumi/">しくみのくわしい<wbr>話</a>
       <a href="/monitor/">先行モニター申し込み</a>
       <a href="/partner/">顧問の<wbr>先生へ</a>
       <a href="/jutaku/">受託開発</a>
-      <a href="/hojokin/">補助金の<wbr>ご案内</a>
-      <a href="/about/">長谷川に<wbr>ついて</a>
-      <a href="/faq/">よく<wbr>ある<wbr>ご質問</a>
-      <a href="/works/">つくった<wbr>もの</a>
+      <a href="/hojokin/">補助金のご案内</a>
+      <a href="/about/">長谷川について</a>
+      <a href="/faq/">よくあるご質問</a>
+      <a href="/works/">つくったもの</a>
       <a href="/tapuda/">tapuda 法人導入</a>
       <a href="/contact/">ご相談</a>
+      <a href="/privacy/">プライバシーポリシー</a>
     </nav>
 
     <dl>

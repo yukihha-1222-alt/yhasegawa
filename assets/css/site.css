@@ -964,6 +964,48 @@ p,li,dd,
 /* 大きな数字だけ Barlow。本文の数字には使わない */
 .num{font-family:var(--font-num);font-weight:700;font-feature-settings:"tnum"}
 
+/* ==================================================================
+   読むだけのページ（プライバシーポリシーなど）
+   ul は全体で list-style:none にしてあるので、点は自分で描く。
+================================================================== */
+.bullets{margin-top:14px;display:flex;flex-direction:column;gap:8px;max-width:44em}
+.bullets li{position:relative;padding-left:1.2em;line-height:1.85}
+.bullets li::before{
+  content:"";position:absolute;left:.15em;top:.85em;
+  width:6px;height:6px;border-radius:50%;background:var(--ink-faint);
+}
+.plain-dl{margin-top:14px;display:grid;grid-template-columns:auto 1fr;gap:8px 20px;max-width:44em}
+.plain-dl dt{color:var(--ink-faint);font-size:15px;white-space:nowrap}
+.plain-dl dd{margin:0}
+
+/* ==================================================================
+   開発中であることの明示
+   VideoTask はまだ出来上がっていない。画面の画像も実物ではない。
+   見た人が「もう使えるもの」と受け取らないよう、札と注記を置く。
+================================================================== */
+
+/* 「開発中」の札。黄は申し込みボタンの色なので使わない。
+   補足の文字色（--ink-faint）の枠だけで、目立たせすぎない。 */
+.wip{
+  display:inline-block;vertical-align:middle;
+  padding:.15em .7em;
+  border:1px solid var(--ink-faint);border-radius:999px;
+  color:var(--ink-faint);background:transparent;
+  font-size:12.5px;font-weight:700;line-height:1.7;letter-spacing:.04em;
+  white-space:nowrap;
+}
+/* 濃い緑の帯の上では、枠も文字も明るくしないと沈む */
+.section.brand .wip{border-color:rgba(255,255,255,.5);color:#C9D8D2}
+/* 見出しの上に単独で置くときの行 */
+.wip-line{margin-bottom:10px}
+.sec-head .wip-line{margin-bottom:8px}
+
+/* 画面の画像に添える注記。figcaption と同じ見た目 */
+.wip-cap{
+  margin-top:10px;font-size:13px;color:var(--ink-faint);line-height:1.7;
+}
+.sp-shots + .wip-cap{margin-top:14px;text-align:center}
+
 /* 申し込みのボタン。黄は原則これだけに使う */
 .btn-apply{
   background:var(--hl);

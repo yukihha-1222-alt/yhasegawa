@@ -188,6 +188,10 @@ def phrase_wbr(text):
     return ''.join(out)
 
 
+def _hira(ch):
+    return '\u3041' <= ch <= '\u309f'
+
+
 def _kanji(ch):
     return '\u4e00' <= ch <= '\u9fff' or ch == '\u3005'
 
@@ -210,11 +214,26 @@ def _split(s):
         else:
             i += 1
 
+    # 「1か月」の数え方を割らない。1か／月後に にならないように。
+    i = 0
+    while i < len(parts) - 1:
+        if re.search(r'[0-9０-９]+[かケヵヶカ]$', parts[i]):
+            parts[i + 1] = parts[i] + parts[i + 1]
+            parts.pop(i)
+        else:
+            i += 1
+
     joined = parts[0]
     for p in parts[1:]:
         a, b = joined[-1], p[0]
-        # 英数字の途中では切らない。VideoTask が Video／Task にならないように
-        if (ALNUM.match(a) and ALNUM.match(b)) \
+        # 英数字の途中では切らない。VideoTask が Video／Task にならないように。
+        #
+        # ひらがなが続く所でも切らない。BudouX はここを外しやすく
+        # （「しくみ」が しく／み、「使うしくみを」が 使うしく／みを）、
+        # しかもひらがなの列は語の切れ目が目に見えないので、
+        # 間違えたときの読みにくさがいちばん大きい。
+        # 入りきらないときは overflow-wrap が切るので、通らなくなるわけではない。
+        if (ALNUM.match(a) and ALNUM.match(b)) or (_hira(a) and _hira(b)) \
            or a in NO_BREAK_AFTER or b in NO_BREAK_BEFORE:
             joined += p
         else:
