@@ -55,11 +55,23 @@ description: {{service}} でできることの一覧です。チャンネルで�
         <span class="d">研修をしたという記録を、あとから出力できます。</span>
       </li>
     </ul>
+
+    <figure class="feats-shot">
+      <div class="shot-slot" role="img"
+           data-img="platform/admin-sessions.png"
+           data-alt="勉強会の画面。録画と参加記録を取り込み、当日来られなかった人に届いたかが並んでいる"
+           aria-label="画面（準備中）勉強会の画面。録画と参加記録を取り込み、当日来られなかった人に届いたかが並んでいる">
+        <b>admin-sessions.png</b>
+        勉強会の画面
+      </div>
+      <figcaption class="wip-cap">開発中の画面イメージです。実際の画面とは異なる場合があります。</figcaption>
+    </figure>
   </div>
 </section>
 
 <!-- ============ 社員の画面 ============ -->
-<section class="section alt">
+<!-- 画像が1枚も無いあいだは、節ごと出さない（build.py が見ている） -->
+<section class="section alt" data-needs-img>
   <div class="wrap">
     <div class="sec-head">
       <h2>社員が見るのは、スマホだけです</h2>
@@ -68,33 +80,21 @@ description: {{service}} でできることの一覧です。チャンネルで�
 
     <div class="sp-shots">
       <figure>
-        <!-- TODO: assets/img/platform/sp-home.png を書き出して置く。
-             <img src="/assets/img/platform/sp-home.png" width="390" height="844"
-                  loading="lazy" decoding="async" class="shot"
-                  alt="社員のスマホ画面のホーム。見る必要のある動画が並んでいる"> -->
-        <div class="shot-slot" role="img"
+        <div class="shot-slot" data-img="platform/sp-home.png" data-scale="3" data-alt="社員のスマホ画面のホーム。見る必要のある動画が並んでいる" role="img"
              aria-label="画面（準備中）社員のスマホ画面のホーム。見る必要のある動画が並んでいる">
           <b>sp-home.png</b>ホーム
         </div>
         <figcaption>ホーム</figcaption>
       </figure>
       <figure>
-        <!-- TODO: assets/img/platform/sp-quiz.png を書き出して置く。
-             <img src="/assets/img/platform/sp-quiz.png" width="390" height="844"
-                  loading="lazy" decoding="async" class="shot"
-                  alt="確認問題の画面。動画の最後に出る問いと選択肢が並んでいる"> -->
-        <div class="shot-slot" role="img"
+        <div class="shot-slot" data-img="platform/sp-quiz.png" data-scale="3" data-alt="確認問題の画面。動画の最後に出る問いと選択肢が並んでいる" role="img"
              aria-label="画面（準備中）確認問題の画面。動画の最後に出る問いと選択肢が並んでいる">
           <b>sp-quiz.png</b>確認問題
         </div>
         <figcaption>確認問題</figcaption>
       </figure>
       <figure>
-        <!-- TODO: assets/img/platform/sp-shorts.png を書き出して置く。
-             <img src="/assets/img/platform/sp-shorts.png" width="390" height="844"
-                  loading="lazy" decoding="async" class="shot"
-                  alt="短い縦の動画を見ている画面"> -->
-        <div class="shot-slot" role="img"
+        <div class="shot-slot" data-img="platform/sp-shorts.png" data-scale="3" data-alt="短い縦の動画を見ている画面" role="img"
              aria-label="画面（準備中）短い縦の動画を見ている画面">
           <b>sp-shorts.png</b>短い動画
         </div>

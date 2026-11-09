@@ -298,6 +298,146 @@ def first_full(html):
     return html[:m.start()] + body + html[m.end():]
 
 
+# ------------------------------------------------------------------
+# 画像の枠
+#
+# 画面の画像や顔写真は、まだ用意できていない。
+# 空の枠や「準備中」の文字が並ぶと、サイト全体が作りかけに見えるので、
+# 画像が無いあいだは <figure> ごと出力しない。
+#
+# ページ側には、こう書いておく。
+#
+#     <figure>
+#       <div class="shot-slot" role="img"
+#            data-img="platform/admin-home.png"
+#            data-alt="管理画面のホーム。…"
+#            aria-label="画面（準備中）管理画面のホーム。…">
+#         <b>admin-home.png</b>
+#         管理画面のホーム
+#       </div>
+#       <figcaption class="wip-cap">開発中の画面イメージです。…</figcaption>
+#     </figure>
+#
+# assets/img/platform/admin-home.png を置けば、その枠だけが <img> に変わる。
+# 1枚ずつ足していける。手で消して回らなくてよい。
+#
+# 幅と高さは画像そのものから読む。手で書くとずれるため。
+# 画像はRetina用に大きく作ってあるので、data-scale で割る（既定は2。
+# スマホの画面は3）。width と height を必ず入れるので、読み込み中に
+# ページが跳ねない。
+# 同じ名前の .webp があれば <picture> で先に出す。PNG は残す。
+# data-eager を付けた1枚だけ loading="eager"。ほかは lazy。
+#
+# 枠が消えた結果、節に画像が1枚も残らないことがある。
+# 見出しと数行だけになって間が抜けるので、<section data-needs-img> と
+# 書いてある節は、中身の <figure> が全部消えたら節ごと落とす。
+#
+# --with-placeholders を付けると、枠を消さずにそのまま出す。
+# どこに何の画像が要るかを確かめるときに使う。
+# ------------------------------------------------------------------
+
+IMG_DIR = os.path.join(ROOT, 'assets', 'img')
+
+FIGURE = re.compile(r'[ \t]*<figure\b[^>]*>.*?</figure>\s*', re.S)
+SLOT   = re.compile(r'<div class="(?:shot-slot|photo-slot)"[^>]*>.*?</div>', re.S)
+SECTION_NEEDS = re.compile(r'[ \t]*<section\b[^>]*\bdata-needs-img\b[^>]*>.*?</section>\s*', re.S)
+
+
+def _attr(tag, name):
+    m = re.search(r'\b%s="([^"]*)"' % name, tag)
+    return m.group(1) if m else ''
+
+
+def image_size(path):
+    """画像の幅と高さを返す。PNG と JPEG だけ見る。
+
+    外部ライブラリを増やしたくないので、ファイルの先頭を自分で読む。
+    """
+    import struct
+    with open(path, 'rb') as f:
+        head = f.read(26)
+        if head[:8] == b'\x89PNG\r\n\x1a\n':
+            return struct.unpack('>II', head[16:24])
+        if head[:2] != b'\xff\xd8':
+            return None
+        # JPEG。SOF（寸法が書いてある区画）まで読み飛ばす
+        f.seek(2)
+        while True:
+            b = f.read(1)
+            if not b:
+                return None
+            if b != b'\xff':
+                continue
+            marker = f.read(1)
+            while marker == b'\xff':
+                marker = f.read(1)
+            if marker in (b'\xd8', b'\xd9') or b'\xd0' <= marker <= b'\xd7':
+                continue
+            ln = struct.unpack('>H', f.read(2))[0]
+            if marker in (b'\xc0', b'\xc1', b'\xc2', b'\xc3',
+                          b'\xc5', b'\xc6', b'\xc7', b'\xc9', b'\xca', b'\xcb',
+                          b'\xcd', b'\xce', b'\xcf'):
+                data = f.read(5)
+                h, w = struct.unpack('>HH', data[1:5])
+                return w, h
+            f.seek(ln - 2, 1)
+
+
+def place_images(body, keep):
+    """用意できた画像を <img> に変え、まだ無いものは枠ごと落とす。"""
+    missing = []
+
+    def one_figure(m):
+        block = m.group(0)
+        slot = SLOT.search(block)
+        if not slot:
+            return block                      # 画像の枠ではない figure
+        tag = slot.group(0)[:slot.group(0).find('>') + 1]
+        rel = _attr(tag, 'data-img')
+        if not rel:
+            return block
+        src = os.path.join(IMG_DIR, rel)
+        if not os.path.isfile(src):
+            missing.append(rel)
+            return block if keep else ''      # まだ無い。枠ごと落とす
+
+        size = image_size(src)
+        if size is None:
+            sys.exit('%s の寸法が読めません（PNG か JPEG を置いてください）' % rel)
+        scale = int(_attr(tag, 'data-scale') or 2)
+        w, h = size[0] // scale, size[1] // scale
+
+        attrs = ['src="/assets/img/%s"' % rel, 'width="%d"' % w, 'height="%d"' % h,
+                 'loading="%s"' % ('eager' if 'data-eager' in tag else 'lazy'),
+                 'decoding="async"', 'class="shot"', 'alt="%s"' % _attr(tag, 'data-alt')]
+        img = '<img ' + ' '.join(attrs) + '>'
+
+        webp = os.path.splitext(rel)[0] + '.webp'
+        if os.path.isfile(os.path.join(IMG_DIR, webp)):
+            img = ('<picture>\n'
+                   '            <source srcset="/assets/img/%s" type="image/webp">\n'
+                   '            %s\n'
+                   '          </picture>' % (webp, img))
+        return block.replace(slot.group(0), img)
+
+    body = FIGURE.sub(one_figure, body)
+
+    def one_section(m):
+        block = m.group(0)
+        if '<figure' in block:
+            return block.replace(' data-needs-img', '', 1)
+        return block                          # 画像が1枚も残らなかった。節ごと落とす
+
+    def drop_section(m):
+        block = m.group(0)
+        if '<figure' in block:
+            return block.replace(' data-needs-img', '', 1)
+        return ''
+
+    body = SECTION_NEEDS.sub(drop_section, body)
+    return body, missing
+
+
 def fill(template, values, strict=True):
     """{{name}} を values[name] に置き換える。
 
@@ -342,6 +482,9 @@ def main():
     if not os.path.isdir(PARTS) or not os.path.isdir(PAGES):
         sys.exit('parts/ か pages/ が見つかりません')
     preview = '--preview' in sys.argv
+    # 枠を消さずに出す。どこに何の画像が要るかを見るとき用
+    keep_slots = '--with-placeholders' in sys.argv
+    missing = set()
 
     layout = read(os.path.join(PARTS, 'layout.html'))
     # サイト共通の値を先に部品へ埋める。
@@ -366,9 +509,13 @@ def main():
 
         slug = meta['slug']
         # トップだけは直下。ほかは /<slug>/index.html に置き、URLの末尾を / にする
-        out = os.path.join(ROOT, 'index.html') if slug == 'index' \
-            else os.path.join(ROOT, slug, 'index.html')
-        url = '/' if slug == 'index' else '/%s/' % slug
+        # 404 だけは Cloudflare が /404.html を見るので、直下に置く
+        if slug == 'index':
+            out, url = os.path.join(ROOT, 'index.html'), '/'
+        elif slug == '404':
+            out, url = os.path.join(ROOT, '404.html'), '/404.html'
+        else:
+            out, url = os.path.join(ROOT, slug, 'index.html'), '/%s/' % slug
 
         # 本文の中の {{pricebrief}} などを先に埋める。
         # layout を埋めたあとでは、差し込んだ本文は走査されない。
@@ -376,6 +523,9 @@ def main():
             body = fill(body, common)
         except ValueError as e:
             sys.exit('%s: %s' % (fn, e))
+
+        body, lack = place_images(body, keep_slots)
+        missing.update(lack)
 
         values = dict(common)
         # ページの末尾に置くブロックを選ぶ。
@@ -422,6 +572,15 @@ def main():
     print('%d ページを組み立てました' % len(built))
     for url, path, n in built:
         print('  %-14s → %-26s 本文 %5d 字' % (url, path, n))
+
+    if missing:
+        print()
+        print('  まだ無い画像（置けばその枠が出ます）')
+        for rel in sorted(missing):
+            print('    assets/img/%s' % rel)
+        if not keep_slots:
+            print('    ※ いまは枠ごと出力していません。'
+                  '--with-placeholders で枠を見られます')
 
     # 置き去りになった古い出力に気づけるように
     known = {p for _, p, _ in built}

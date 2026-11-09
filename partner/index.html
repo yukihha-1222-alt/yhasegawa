@@ -17,7 +17,17 @@
 <meta property="og:description" content="社労士や税理士の先生がつくった研修動画を、顧問先の会社にまとめて配れます。VideoTask では、顧問先が共有を許可した場合だけ受講率と合格率をご覧いただけます。社員の名前や個別の記録は見えません。">
 <meta property="og:site_name" content="長谷川侑希｜動画のしくみ VideoTask と、業務アプリの受託開発">
 <meta property="og:locale" content="ja_JP">
-<!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
+<meta property="og:image" content="https://yhasegawa.com/assets/img/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VideoTask｜動画を配ったら、まだ見ていない人がすぐ分かる。">
+<meta name="twitter:card" content="summary_large_image">
+<!-- TODO: 本人の写真が用意できたら、文字だけの ogp.png を差し替える -->
+
+<!-- タブとホーム画面の印。SVG が読めない古いブラウザのために 32px の PNG も置く -->
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta name="theme-color" content="#173F35">
 <meta name="theme-color" content="#0F1A17" media="(prefers-color-scheme: dark)">
 
@@ -72,15 +82,10 @@
       </div>
 
       <figure>
-        <!-- TODO: assets/img/platform/expert-library.png を書き出して置く。
-             <img src="/assets/img/platform/expert-library.png" width="1280" height="800"
-                  loading="eager" decoding="async" class="shot"
-                  alt="社労士のライブラリ。つくった研修動画と、配布先の顧問先が並んでいる"> -->
-        <div class="shot-slot" role="img"
-             aria-label="画面（準備中）社労士のライブラリ。つくった研修動画と、配布先の顧問先が並んでいる">
-          <b>expert-library.png</b>
-          社労士の<wbr>ライブラリ
-        </div>
+        <picture>
+            <source srcset="/assets/img/platform/expert-library.webp" type="image/webp">
+            <img src="/assets/img/platform/expert-library.png" width="1280" height="781" loading="lazy" decoding="async" class="shot" alt="社労士のライブラリ。つくった研修動画と、配布先の顧問先が並んでいる">
+          </picture>
         <figcaption class="wip-cap">開発中の<wbr>画面イメージです。<wbr>実際の<wbr>画面とは<wbr>異なる<wbr>場合があります。</figcaption>
       </figure>
     </div>

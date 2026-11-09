@@ -17,7 +17,17 @@
 <meta property="og:description" content="VideoTask のご相談も、受託開発のご相談も承ります。ご相談と、半日ほどの現場の見学は無料です。見せていただいたうえで、アプリで解決したほうがいいのかを正直にお伝えします。兵庫・大阪・岡山あたりが対象です。お電話は080-6206-1245。">
 <meta property="og:site_name" content="長谷川侑希｜動画のしくみ VideoTask と、業務アプリの受託開発">
 <meta property="og:locale" content="ja_JP">
-<!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
+<meta property="og:image" content="https://yhasegawa.com/assets/img/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VideoTask｜動画を配ったら、まだ見ていない人がすぐ分かる。">
+<meta name="twitter:card" content="summary_large_image">
+<!-- TODO: 本人の写真が用意できたら、文字だけの ogp.png を差し替える -->
+
+<!-- タブとホーム画面の印。SVG が読めない古いブラウザのために 32px の PNG も置く -->
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta name="theme-color" content="#173F35">
 <meta name="theme-color" content="#0F1A17" media="(prefers-color-scheme: dark)">
 
@@ -119,17 +129,17 @@
         <label data-q="業種・会社名">
           業種・会社名
           <span class="hint">例：食品製造／<wbr>○○食品株式会社</span>
-          <input type="text" name="company" autocomplete="organization">
+          <input type="text" name="業種・会社名" autocomplete="organization">
         </label>
         <label data-q="ご相談の内容">
           ご相談の<wbr>内容
           <span class="hint">例：今ある<wbr>システムと<wbr>VideoTask<wbr>（ビデオタスク）をつなぎたい<wbr>／<wbr>自社専用の<wbr>記録の<wbr>画面がほしい</span>
-          <textarea name="issue"></textarea>
+          <textarea name="ご相談の内容"></textarea>
         </label>
         <label data-q="お名前・ご連絡先">
           お名前・ご連絡先
           <span class="hint">お電話番号か<wbr>メールアドレスを、<wbr>どちらかだけでも。</span>
-          <input type="text" name="contact" autocomplete="name">
+          <input type="text" name="お名前・ご連絡先" autocomplete="name">
         </label>
         <button class="btn" type="submit">この<wbr>内容で<wbr>相談する</button>
         <p class="note">
