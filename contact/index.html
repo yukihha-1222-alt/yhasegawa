@@ -115,18 +115,18 @@
       <!-- バックエンドを持たないため、送信はメールソフトを立ち上げる形にしている。
            外部のフォームに移すときは、この form の action と
            site.js の送信処理を差し替えること。 -->
-      <form class="form" id="cform">
-        <label>
+      <form class="form" data-mailto data-subject="【ご相談】" data-thanks="thanks-soudan">
+        <label data-q="業種・会社名">
           業種・会社名
           <span class="hint">例：食品製造／○○食品株式会社</span>
           <input type="text" name="company" autocomplete="organization">
         </label>
-        <label>
+        <label data-q="いま紙やExcelでやっていること">
           いま、紙やExcelでやっていること
           <span class="hint">短くて構いません。「製造記録を紙に書いて、事務所で打ち直しています」くらいで十分です。</span>
           <textarea name="issue"></textarea>
         </label>
-        <label>
+        <label data-q="お名前・ご連絡先">
           お名前・ご連絡先
           <span class="hint">お電話番号かメールアドレスを、どちらかだけでも。</span>
           <input type="text" name="contact" autocomplete="name">
@@ -136,6 +136,11 @@
           ボタンを押すとメールソフトが開き、入力した内容が本文に入ります。そのまま送信してください。うまく開かない場合は、お電話いただければ確実です。
         </p>
       </form>
+
+      <div class="thanks" id="thanks-soudan" role="status">
+        <h3>ありがとうございます</h3>
+        <p>メールソフトが開きましたら、そのまま送信してください。数日以内に長谷川からご連絡します。</p>
+      </div>
     </div>
   </div>
 </section>

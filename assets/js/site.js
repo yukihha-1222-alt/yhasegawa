@@ -60,33 +60,63 @@
     if (to) location.replace(to);
   }
 
-  /* ---- 3. ご相談フォーム --------------------------------------------
+  /* ---- 3. フォーム --------------------------------------------------
      Workers Static Assets はサーバー処理を持たないため、入力内容を
      本文に入れたメールを立ち上げる形にしている。
-     外部のフォームに移すときは、この節ごと差し替えること。 */
-  var form = document.getElementById('cform');
-  if (form) {
-    var link = document.querySelector('a[href^="mailto:"]');
-    if (link) {
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var v = function (n) {
-          var el = form.elements[n];
-          return el && el.value.trim() ? el.value.trim() : '（未記入）';
-        };
-        var body = [
-          '■ 業種・会社名', v('company'), '',
-          '■ いま紙やExcelでやっていること', v('issue'), '',
-          '■ お名前・ご連絡先', v('contact'), '',
-          '----', 'yhasegawa.com のご相談フォームから'
-        ].join('\n');
-        var to = link.getAttribute('href').replace(/^mailto:/, '');
-        window.location.href = 'mailto:' + to
-          + '?subject=' + encodeURIComponent('【ご相談】' + v('company'))
-          + '&body=' + encodeURIComponent(body);
-      });
+     外部のフォームに移すときは、この節ごと差し替えること。
+
+     質問のかたまりに data-q="見出し" を付けておけば、
+     ご相談でも申し込みでも同じ処理で組み立てられる。
+     TODO: 送信先を確認 */
+  function collect(form) {
+    var lines = [];
+    var groups = form.querySelectorAll('[data-q]');
+    for (var i = 0; i < groups.length; i++) {
+      var g = groups[i];
+      var q = g.getAttribute('data-q');
+      var boxes = g.querySelectorAll('input[type=radio],input[type=checkbox]');
+      var val;
+      if (boxes.length) {
+        var picked = [];
+        for (var k = 0; k < boxes.length; k++) {
+          if (boxes[k].checked) {
+            /* ラベルの文字から、入力そのものの文字を除いたものを拾う */
+            var lab = boxes[k].closest('label');
+            picked.push(lab ? lab.textContent.trim() : boxes[k].value);
+          }
+        }
+        val = picked.join('、');
+      } else {
+        var one = g.querySelector('input,textarea,select');
+        val = one ? one.value.trim() : '';
+      }
+      lines.push('■ ' + q, val || '（未記入）', '');
     }
+    return lines.join('\n');
   }
+
+  var forms = document.querySelectorAll('form[data-mailto]');
+  var mailLink = document.querySelector('a[href^="mailto:"]');
+  Array.prototype.forEach.call(forms, function (form) {
+    if (!mailLink) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var to = mailLink.getAttribute('href').replace(/^mailto:/, '');
+      var subject = form.getAttribute('data-subject') || 'お問い合わせ';
+      var first = form.querySelector('[data-q] input,[data-q] textarea');
+      var body = collect(form) + '\n----\nyhasegawa.com のフォームから';
+      window.location.href = 'mailto:' + to
+        + '?subject=' + encodeURIComponent(subject + (first && first.value ? '｜' + first.value.trim() : ''))
+        + '&body=' + encodeURIComponent(body);
+      /* メールソフトが開いたあと、このページに何が起きたか分かるようにする */
+      var thanks = document.getElementById(form.getAttribute('data-thanks') || '');
+      if (thanks) {
+        thanks.classList.add('shown');
+        thanks.setAttribute('tabindex', '-1');
+        thanks.focus();
+      }
+    });
+  });
 
   /* ---- 4. 本文の出現 ------------------------------------------------ */
   var slow = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

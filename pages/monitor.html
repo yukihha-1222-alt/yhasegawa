@@ -1,0 +1,150 @@
+<!--page
+slug: monitor
+tail: no
+title: 先行モニターに申し込む｜期間中は無料です
+description: 研修動画を配って、見たか・分かったかまで確かめられるしくみの先行モニターを募集しています。期間中は無料です。社内研修や新人教育の動画を配りたい会社の方に、お使いいただければと思います。
+-->
+
+<section class="section hero">
+  <div class="wrap narrow">
+    <p class="eyebrow">先行モニターのお申し込み</p>
+    <h1><span class="nb">一緒に試してくださる</span><span class="nb">会社を探しています</span></h1>
+    <p class="lead">
+      {{service}} は、これから開発するしくみです。
+      実際の現場で使っていただきながら、形を決めていきたいと思っています。
+    </p>
+    <!-- TODO: 料金が決まったら更新 -->
+    <p class="caution">
+      <b>先行モニターの期間中は無料です。</b>
+      正式な料金は、決まり次第お知らせします。
+      お申し込みいただいたからといって、そのまま有料になることはありません。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 申し込みフォーム ============ -->
+<section class="section alt">
+  <div class="wrap narrow">
+    <div class="contact-card">
+      <h2>お申し込み</h2>
+      <p class="lead-p">
+        必須は、会社名とお名前とメールアドレスの3つだけです。
+        残りは分かる範囲で構いません。
+      </p>
+
+      <!-- 送信はメールソフトを立ち上げる形。宛先はページ上の mailto を読む。
+           TODO: 送信先を確認（いまは build.py の MAIL 宛） -->
+      <form class="form" data-mailto data-subject="【先行モニター申込】" data-thanks="thanks-monitor">
+
+        <label data-q="会社名">
+          <span class="q">会社名<span class="req">必須</span></span>
+          <input type="text" name="company" autocomplete="organization" required>
+        </label>
+
+        <label data-q="お名前">
+          <span class="q">お名前<span class="req">必須</span></span>
+          <input type="text" name="name" autocomplete="name" required>
+        </label>
+
+        <label data-q="メールアドレス">
+          <span class="q">メールアドレス<span class="req">必須</span></span>
+          <input type="email" name="email" autocomplete="email" required>
+        </label>
+
+        <label data-q="電話番号">
+          電話番号
+          <span class="hint">お急ぎの場合は、こちらからご連絡します。</span>
+          <input type="tel" name="tel" autocomplete="tel">
+        </label>
+
+        <fieldset data-q="従業員数">
+          <legend>従業員数</legend>
+          <div class="choices">
+            <label><input type="radio" name="size" value="〜10人">〜10人</label>
+            <label><input type="radio" name="size" value="11〜30人">11〜30人</label>
+            <label><input type="radio" name="size" value="31〜100人">31〜100人</label>
+            <label><input type="radio" name="size" value="101人以上">101人以上</label>
+          </div>
+        </fieldset>
+
+        <fieldset data-q="使いたい場面">
+          <legend>使いたい場面</legend>
+          <span class="hint">いくつ選んでいただいても構いません。</span>
+          <div class="choices">
+            <label><input type="checkbox" name="use" value="新人教育">新人教育</label>
+            <label><input type="checkbox" name="use" value="社内研修">社内研修</label>
+            <label><input type="checkbox" name="use" value="商品の勉強">商品の勉強</label>
+            <label><input type="checkbox" name="use" value="お客様向け">お客様向け</label>
+            <label><input type="checkbox" name="use" value="勉強会の録画">勉強会の録画</label>
+            <label><input type="checkbox" name="use" value="その他">その他</label>
+          </div>
+        </fieldset>
+
+        <fieldset data-q="いま研修や説明に動画を使っているか">
+          <legend>いま、研修や説明に動画を使っていますか</legend>
+          <div class="choices">
+            <label><input type="radio" name="now" value="使っている">使っている</label>
+            <label><input type="radio" name="now" value="少し使っている">少し使っている</label>
+            <label><input type="radio" name="now" value="まだ使っていない">まだ使っていない</label>
+          </div>
+        </fieldset>
+
+        <label data-q="ご紹介くださった先生のお名前">
+          ご紹介くださった先生のお名前
+          <span class="hint">顧問の社労士や税理士の先生からお聞きになった場合に、お書きください。</span>
+          <input type="text" name="partner">
+        </label>
+
+        <label data-q="ひとこと">
+          ひとこと
+          <span class="hint">お困りのことや、気になる点があればお書きください。</span>
+          <textarea name="note"></textarea>
+        </label>
+
+        <button class="btn btn-apply" type="submit">この内容で申し込む</button>
+        <p class="note">
+          ボタンを押すとメールソフトが開き、入力した内容が本文に入ります。
+          そのまま送信してください。うまく開かない場合は、お電話いただければ確実です。
+        </p>
+      </form>
+
+      <div class="thanks" id="thanks-monitor" role="status">
+        <h3>ありがとうございます</h3>
+        <p>数日以内に長谷川からご連絡します。メールソフトが開きましたら、そのまま送信してください。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 申し込むとどうなるか ============ -->
+<section class="section">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <h2>お申し込みのあとは</h2>
+    </div>
+    <ol class="flow">
+      <li>
+        <p class="when">まず</p>
+        <h3>お返事します</h3>
+        <p class="d">いただいた内容を読んで、数日以内にご連絡します。</p>
+      </li>
+      <li>
+        <p class="when">次に</p>
+        <h3>お話をうかがいます</h3>
+        <p class="d">どんな動画を配りたいかを、お電話かオンラインでお聞きします。</p>
+      </li>
+      <li>
+        <p class="when">そのあと</p>
+        <h3>使っていただきます</h3>
+        <p class="d">
+          できあがった順にお渡しして、実際の現場で試していただきます。
+          使いにくいところを教えてください。
+        </p>
+      </li>
+    </ol>
+    <p class="note">
+      お電話でのお申し込みも承ります。
+      <a href="tel:08062061245">080-6206-1245</a>
+    </p>
+  </div>
+</section>

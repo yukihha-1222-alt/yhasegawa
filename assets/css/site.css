@@ -444,7 +444,7 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
 .contact-ways dd a:hover{color:var(--accent-ink)}
 
 .form{display:flex;flex-direction:column;gap:18px;margin-top:28px;max-width:34rem}
-.form label{display:flex;flex-direction:column;gap:7px;font-size:15px;font-weight:700}
+.form label{display:flex;flex-direction:column;gap:7px;font-size:15px;font-weight:700;color:var(--ink)}
 .form .hint{font-weight:400;font-size:13.5px;color:var(--ink-faint);line-height:1.7}
 .form input,.form textarea{
   font:inherit;
@@ -1034,3 +1034,49 @@ body[data-current="shikumi"] [data-nav="shikumi"]{
   text-decoration:underline;text-underline-offset:.4em;text-decoration-thickness:2px;
   text-decoration-color:var(--hl);
 }
+
+/* ==================================================================
+   申し込みフォーム
+   質問のかたまりに data-q を付けておくと、site.js がそのまま
+   メールの本文に組み立てる。2つのフォームで同じ仕組みを使う。
+================================================================== */
+.form fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+.form legend{padding:0;font-size:15px;font-weight:700;color:var(--ink)}
+.form .req{
+  margin-left:8px;font-size:12px;font-weight:700;letter-spacing:.06em;
+  color:var(--accent);background:var(--accent-pale);
+  padding:2px 8px;border-radius:999px;vertical-align:2px;
+}
+
+/* 選択肢。押せる面を広く取る */
+.choices{display:flex;flex-wrap:wrap;gap:9px}
+.choices label{
+  display:inline-flex;align-items:center;gap:9px;flex-direction:row;
+  font-size:15.5px;font-weight:400;
+  padding:11px 16px;min-height:48px;
+  background:var(--bg-card);border:1.5px solid var(--line);border-radius:999px;
+  cursor:pointer;
+}
+.choices input{
+  width:20px;height:20px;margin:0;accent-color:var(--accent);flex:none;
+}
+.choices label:hover{border-color:var(--accent)}
+.choices label:has(input:checked){
+  border-color:var(--accent);background:var(--accent-pale);font-weight:700;
+}
+/* :has() が使えない環境でも、点が付くので選択は分かる */
+
+/* 送信したあとに出すお礼 */
+.thanks{
+  display:none;
+  margin-top:24px;padding:clamp(22px,3.5vw,32px);
+  background:var(--green-pale);
+  border:1px solid color-mix(in srgb, var(--green) 40%, transparent);
+  border-radius:var(--round-l);
+}
+.thanks.shown{display:block}
+.thanks h3{color:var(--green);margin-bottom:8px}
+.thanks p{color:var(--ink-soft);font-size:16px}
+/* ラベルの文字と「必須」を同じ行に置くための箱。
+   .form label は縦並びの flex なので、包まないとバッジが独立した行になる。 */
+.form .q{display:block}
