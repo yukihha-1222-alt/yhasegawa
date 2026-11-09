@@ -1,0 +1,237 @@
+<!-- ============================================================
+     このファイルは build.py が組み立てたものです。直接編集しても、
+     次のビルドで消えます。本文は pages/pages/shikumi.html、
+     共通部分は parts/ を編集して python3 build.py を実行してください。
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>しくみのくわしい話｜研修動画を配って、見たか・分かったかを確かめる</title>
+<meta name="description" content="チャンネルで分ける、短い縦の動画を配る、勉強会の録画を取り込む、顧問の先生の動画を受け取る、実施記録を出す。社員が見るスマホの画面もご覧いただけます。">
+<link rel="canonical" href="https://yhasegawa.com/shikumi/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yhasegawa.com/shikumi/">
+<meta property="og:title" content="しくみのくわしい話｜研修動画を配って、見たか・分かったかを確かめる">
+<meta property="og:description" content="チャンネルで分ける、短い縦の動画を配る、勉強会の録画を取り込む、顧問の先生の動画を受け取る、実施記録を出す。社員が見るスマホの画面もご覧いただけます。">
+<meta property="og:site_name" content="長谷川侑希｜現場の業務アプリ開発">
+<meta property="og:locale" content="ja_JP">
+<!-- TODO: OGP画像（1200x630）を用意して og:image を足す。長谷川本人が現場にいる写真 -->
+<meta name="theme-color" content="#173F35">
+<meta name="theme-color" content="#0F1A17" media="(prefers-color-scheme: dark)">
+
+<!-- 日本語は BIZ UDPGothic。読みやすさのためにつくられた書体で、
+     年配の方にも読みやすい。数字だけ Barlow を使う。
+     swap を指定しているので、落ちてくるまではシステムの書体で読める。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&amp;family=Barlow:wght@600;700&amp;display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<!-- メニューの折りたたみは、描画が始まる前に決めないと一瞬ひらいて見える -->
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body data-current="shikumi">
+
+<a class="skip" href="#main">本文へ移動する</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="who" href="/">
+      <b>長谷川　侑希</b>
+      <span>研修動画のしくみと、現場の業務アプリ</span>
+    </a>
+
+    <!-- 画面が狭いときは site.js が折りたたむ。JSが動かない環境では
+         ここが折り返して出るだけなので、リンクは必ず辿れる -->
+    <nav class="nav" aria-label="メインメニュー">
+      <ul>
+        <li><a href="/shikumi/" data-nav="shikumi">しくみ</a></li>
+        <li><a href="/partner/" data-nav="partner">顧問の先生へ</a></li>
+        <li><a href="/jutaku/" data-nav="jutaku">受託開発</a></li>
+        <li><a href="/about/" data-nav="about">長谷川について</a></li>
+      </ul>
+    </nav>
+
+    <a class="btn btn-apply head-cta" href="/monitor/">先行モニターに申し込む</a>
+  </div>
+</header>
+
+
+<main id="main">
+<section class="section hero">
+  <div class="wrap narrow">
+    <p class="eyebrow">しくみのくわしい話</p>
+    <h1><span class="nb">配ったあとに、</span><span class="nb">何が分かるのか</span></h1>
+    <p class="lead">
+      中心にあるのは3つです。誰がまだ見ていないか、分かったかどうか、そして1か月後にも身についているか。このページでは、それ以外にできることをまとめています。
+    </p>
+    <div class="btn-row">
+      <a class="btn ghost" href="/#dekiru">中心の3つを見る</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ほかにもできること ============ -->
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>ほかにもできること</h2>
+    </div>
+
+    <ul class="feats">
+      <li>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
+        <span class="t">チャンネルで分ける</span>
+        <span class="d">研修用、営業の勉強用、お客様向けを分けて配れます。</span>
+      </li>
+      <li>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 9l5 3-5 3z"/></svg>
+        <span class="t">短い縦の動画も使える</span>
+        <span class="d">スマホで撮った縦の短い動画も、そのまま配れます。</span>
+      </li>
+      <li>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="13" height="12" rx="2"/><path d="M15 10l7-4v12l-7-4z"/></svg>
+        <span class="t">勉強会の録画を取り込む</span>
+        <span class="d">ZoomやTeamsで行った勉強会の録画と、参加記録を取り込めます。</span>
+      </li>
+      <li>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M5 21c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>
+        <span class="t">顧問の先生の動画を受け取る</span>
+        <span class="d">顧問の社労士や税理士がつくった研修動画を、受け取って配れます。</span>
+      </li>
+      <li>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l4 4v16H6z"/><path d="M14 2v4h4"/><path d="M9 13h6M9 17h4"/></svg>
+        <span class="t">実施記録を出せる</span>
+        <span class="d">研修をしたという記録を、あとから出力できます。</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 社員の画面 ============ -->
+<section class="section alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>社員が見るのは、スマホだけです</h2>
+      <p>難しい操作はありません。届いた動画を開いて、最後の確認問題に答えるだけです。</p>
+    </div>
+
+    <div class="sp-shots">
+      <figure>
+        <!-- TODO: assets/img/platform/sp-home.png を書き出して置く。
+             <img src="/assets/img/platform/sp-home.png" width="390" height="844"
+                  loading="lazy" decoding="async" class="shot"
+                  alt="社員のスマホ画面のホーム。見る必要のある動画が並んでいる"> -->
+        <div class="shot-slot" role="img"
+             aria-label="画面（準備中）社員のスマホ画面のホーム。見る必要のある動画が並んでいる">
+          <b>sp-home.png</b>ホーム
+        </div>
+        <figcaption>ホーム</figcaption>
+      </figure>
+      <figure>
+        <!-- TODO: assets/img/platform/sp-quiz.png を書き出して置く。
+             <img src="/assets/img/platform/sp-quiz.png" width="390" height="844"
+                  loading="lazy" decoding="async" class="shot"
+                  alt="確認問題の画面。動画の最後に出る問いと選択肢が並んでいる"> -->
+        <div class="shot-slot" role="img"
+             aria-label="画面（準備中）確認問題の画面。動画の最後に出る問いと選択肢が並んでいる">
+          <b>sp-quiz.png</b>確認問題
+        </div>
+        <figcaption>確認問題</figcaption>
+      </figure>
+      <figure>
+        <!-- TODO: assets/img/platform/sp-shorts.png を書き出して置く。
+             <img src="/assets/img/platform/sp-shorts.png" width="390" height="844"
+                  loading="lazy" decoding="async" class="shot"
+                  alt="短い縦の動画を見ている画面"> -->
+        <div class="shot-slot" role="img"
+             aria-label="画面（準備中）短い縦の動画を見ている画面">
+          <b>sp-shorts.png</b>短い動画
+        </div>
+        <figcaption>短い動画</figcaption>
+      </figure>
+    </div>
+
+    <p class="note center">
+      記録している内容は、本人にも見せています。見られていることを隠しません。
+    </p>
+  </div>
+</section>
+
+<!-- プラットフォーム側のページの末尾。
+     まだ開発前なので、売り込みではなく「一緒に試してくれる会社を探している」
+     という書き方にする。 -->
+<section class="section brand" id="apply">
+  <div class="wrap narrow">
+    <h2>先行モニターを募集しています</h2>
+    <p class="lead-p">
+      [サービス名] は、これから開発するしくみです。実際の現場で使っていただきながら、形を決めていきたいと思っています。
+      <b>先行モニターの期間中は無料です。</b>
+      使ってみた感想をお聞かせいただけると助かります。
+    </p>
+    <div class="btn-row">
+      <a class="btn btn-apply" href="/monitor/">先行モニターに申し込む</a>
+      <a class="btn ghost on-brand" href="tel:08062061245">お電話はこちら 080-6206-1245</a>
+    </div>
+    <!-- TODO: 料金が決まったら更新 -->
+    <p class="note on-brand">正式な料金は、決まり次第お知らせします。</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p class="name">長谷川　侑希</p>
+    <p class="tag">研修動画のしくみと、現場で使う業務アプリをつくっています。</p>
+
+    <nav aria-label="フッターメニュー">
+      <a href="/">ホーム</a>
+      <a href="/shikumi/">しくみのくわしい話</a>
+      <a href="/monitor/">先行モニター申し込み</a>
+      <a href="/partner/">顧問の先生へ</a>
+      <a href="/jutaku/">受託開発</a>
+      <a href="/hojokin/">補助金のご案内</a>
+      <a href="/about/">長谷川について</a>
+      <a href="/faq/">よくあるご質問</a>
+      <a href="/works/">つくったもの</a>
+      <a href="/tapuda/">tapuda 法人導入</a>
+      <a href="/contact/">ご相談</a>
+    </nav>
+
+    <dl>
+      <dt>お電話</dt>
+      <dd><a href="tel:08062061245">080-6206-1245</a></dd>
+      <!-- アドレスは build.py の MAIL ひとつで決まる。ここでは書かない -->
+      <dt>メール</dt>
+      <dd><a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a></dd>
+      <dt>活動拠点</dt>
+      <dd>兵庫県姫路市（播磨エリアを中心に、現場へ伺います）</dd>
+      <dt>所在地</dt>
+      <dd>
+        〒651-0084　兵庫県神戸市中央区磯辺通1丁目1番18号　カサベラ国際プラザビル707号室<br>
+        <!-- TODO: 説明文。なぜ所在地（神戸）と活動拠点（姫路）が違うのかを一言 -->
+        <span class="why-addr">事務所の所在地と、普段うかがっている地域が異なります。</span>
+      </dd>
+    </dl>
+
+    <p class="cr">© 長谷川 侑希</p>
+  </div>
+</footer>
+
+
+<!-- スマホの画面下に固定する。高さは抑え、
+     iPhone のホームバーにかからないよう safe-area を見ている -->
+<div class="mobilebar" aria-label="お問い合わせ">
+  <a href="tel:08062061245">電話する</a>
+  <a class="primary" href="/monitor/">先行モニターに申し込む</a>
+</div>
+
+
+<script src="/assets/js/site.js" defer></script>
+<!-- Cloudflare Web Analytics。Cookie を使わないので同意バナーは不要 -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "6b4eab9c76094eebb6e545de0c437730"}'></script>
+</body>
+</html>

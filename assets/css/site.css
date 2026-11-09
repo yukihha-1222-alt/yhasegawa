@@ -980,8 +980,10 @@ p,li,dd,
 .shot-slot b{display:block;font-weight:700;color:var(--ink-soft);font-size:14px}
 
 /* できること。画像と文章を左右交互に置く */
-.can{margin-top:clamp(20px,3vw,28px)}
-.can + .can{padding-top:clamp(20px,3vw,28px);border-top:1px solid var(--line)}
+.can{margin-top:clamp(18px,2.4vw,24px)}
+.can + .can{padding-top:clamp(18px,2.4vw,24px);border-top:1px solid var(--line)}
+/* 画面の画像が縦に伸びすぎないよう、高さに上限を置く */
+.can .shot,.can .shot-slot{max-height:240px;object-fit:cover}
 .can h3{margin-bottom:10px}
 .can p{color:var(--ink-soft)}
 
@@ -1022,3 +1024,13 @@ p,li,dd,
 .bridges{display:grid;gap:16px;grid-template-columns:1fr}
 @media (min-width:860px){ .bridges{grid-template-columns:1fr 1fr} }
 .note.center{margin-inline:auto;text-align:center}
+/* 節の終わりに置く、次のページへのリンク */
+.center-go{margin-top:clamp(18px,2.6vw,24px)}
+.center-go a{font-weight:700}
+.center-go a::after{content:" →"}
+/* 現在地の印。しくみも対象に加える */
+body[data-current="shikumi"] [data-nav="shikumi"]{
+  color:#fff;font-weight:700;
+  text-decoration:underline;text-underline-offset:.4em;text-decoration-thickness:2px;
+  text-decoration-color:var(--hl);
+}
