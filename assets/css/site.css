@@ -254,8 +254,19 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
 @media (min-width:860px){
   .duo{grid-template-columns:1fr 1fr}
   .duo.flip > :first-child{order:2}
-  /* 画像がまだ無いとき、中身が1つだけになる。半分の幅に縮めない */
-  .duo > :only-child{grid-column:1/-1;max-width:46rem}
+}
+
+/* ------------------------------------------------------------------
+   画像がまだ無いときの箱の幅
+   build.py は、用意できていない画像の <figure> を丸ごと落とす。
+   2列の格子は中身が1つになり、そのままでは狭いほうの列に入って
+   文章が細長く潰れる。1つだけになったら全幅を使わせる。
+   新しく2列の箱をつくったら、ここに足すこと。
+------------------------------------------------------------------ */
+.duo > :only-child,
+.meband > :only-child{
+  grid-column:1/-1;
+  max-width:46rem;
 }
 
 /* ---------- ファーストビュー ---------- */
