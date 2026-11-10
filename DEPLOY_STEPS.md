@@ -104,9 +104,21 @@ Turnstile の自動判定だけを飛ばして送信を通し、届いたメー�
 Cloudflare の **Compute (Workers)** → 対象の Worker → **Deployments**
 （または **Builds**）に、`renewal` のビルドが出ます。1〜2分で終わります。
 
-### 2-2. Secret Key を入れる（ここで初めてできます）
+### 2-2. Secret Key は、まだ入れられません
 
-ビルドが終わると、Worker にコードが入った状態になります。
+**版を上げただけでは、まだ Add が出ません。**
+「Variables cannot be added to a Worker that only has static assets」は、
+**本番として配られている版**を見て出ています。本番はまだコードのない版
+（`e3c69755`）なので、メッセージは消えません。
+
+**入れられるのは、本番を新しい版に切り替えたあと**です。手順は「5.」に
+まとめました。
+
+それまでのあいだ、プレビューでのフォームの確認は**Secret 無しのまま
+できます**。届くメールの先頭に「Turnstile の Secret が未設定です」
+（または「自動判定なし」）と入るだけです。
+
+<details><summary>もし Add が出ていたら（参考）</summary>
 
 **Compute (Workers)** → 対象の Worker → **Settings**
 → **Variables and Secrets** → **＋ Add**
@@ -119,11 +131,9 @@ Cloudflare の **Compute (Workers)** → 対象の Worker → **Deployments**
 
 **Save** を押してください。
 ※ Secret はこのチャットにも、リポジトリにも書きません。
+</details>
 
-> まだ **Add** が出ない場合は、ビルドがまだ終わっていないか、
-> 失敗しています。**Builds** の画面でログを見てください。
-
-### 2-3. もう一度ビルドし直す
+### 2-3. 版を作り直すとき
 
 Secret は、あとから足しても**すでに作られた版には反映されません。**
 **Builds** → いちばん上のビルドの右の **…** → **Retry build** を押して
@@ -226,11 +236,23 @@ F12 →（Macは `⌘ + ⌥ + I`）→ 右上の歯車 → **Debugger** の
 
 1. ご指示をいただいたら、こちらで `renewal` を `main` に取り込みます
 2. **長谷川が** `git push origin main` を実行します（公開のタイミングはご本人が握る）
-3. 切り替わったら、**Compute (Workers)** → 対象の Worker → **Settings**
-   → **Assets** → **Not found handling** を **404-page** に
-   （`wrangler.toml` にも書いてありますが、ダッシュボード側が優先されることが
-   あるため、念のため見てください）
-4. 本番で 4-2 と 4-3 をもう一度、今度は `https://yhasegawa.com/` で確かめる
+3. ビルドが走り、`npx wrangler deploy` で本番が新しい版になります
+4. **ここで初めて Secret が入れられます。**
+   **Compute (Workers)** → `yhasegawa` → **Settings**
+   → **Variables and Secrets** → **＋ Add**
+
+   | 欄 | 入れるもの |
+   |---|---|
+   | Type | **Secret**（Text ではありません） |
+   | Variable name | `TURNSTILE_SECRET` |
+   | Value | Turnstile の Secret Key |
+
+   Save を押すと、新しいデプロイが自動で走ります。
+5. **Settings** → **Assets** → **Not found handling** が **404-page** か確認
+   （`wrangler.toml` にも書いていますが、ダッシュボード側が優先される
+   ことがあるため）
+6. `https://yhasegawa.com/` で 4-2 と 4-3 をもう一度確かめる。
+   **このときのメールに「Secret が未設定です」が出ていなければ完了です。**
 
 ## 6. 戻し方
 
