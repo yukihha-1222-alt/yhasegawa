@@ -197,6 +197,9 @@ https://<8桁の英数字>-<Worker名>.<アカウントのサブドメイン>.wo
 - [ ] `<プレビューURL>/LAUNCH_CHECKLIST.md` → **404**
 - [ ] `<プレビューURL>/.vscode/settings.json` → **404**
 - [ ] `<プレビューURL>/あいうえお` → **404のページ**（真っ白ではなく、案内が出る）
+- [ ] `<プレビューURL>/shikumi/` → **`/how-it-works/` に飛ぶ**（301）
+- [ ] `<プレビューURL>/jutaku/` → **`/development/` に飛ぶ**
+- [ ] `<プレビューURL>/hojokin/` → **`/subsidy/` に飛ぶ**
 - [ ] `<プレビューURL>/robots.txt` → 中身が出る
 - [ ] `<プレビューURL>/sitemap.xml` → 中身が出る
 

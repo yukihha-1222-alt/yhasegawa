@@ -17,6 +17,15 @@
 
 import { EmailMessage } from 'cloudflare:email';
 
+/* 2026-11-10 にURLを英語に直した。古いURLを控えている方のために転送する。
+   このリストは wrangler.toml の run_worker_first と対になっている。
+   片方だけ消すと転送が効かなくなるので、消すときは両方。 */
+const MOVED = {
+  '/shikumi': '/how-it-works/',
+  '/jutaku':  '/development/',
+  '/hojokin': '/subsidy/',
+};
+
 const FROM = 'form@yhasegawa.com';
 const TO_FALLBACK = 'hasegawa@yhasegawa.com';
 const PHONE = '080-6206-1245';
@@ -37,6 +46,14 @@ export default {
         });
       }
       return handleForm(request, env);
+    }
+
+    /* 古いURLなら、新しいURLへ恒久的に送る（301）。
+       /shikumi も /shikumi/ も、その下の何かも受ける。 */
+    for (const from in MOVED) {
+      if (url.pathname === from || url.pathname.startsWith(from + '/')) {
+        return Response.redirect(new URL(MOVED[from] + url.search, url.origin).toString(), 301);
+      }
     }
 
     return env.ASSETS.fetch(request);

@@ -198,10 +198,10 @@ h3{font-size:clamp(18px,2.2vw,20px)}
   text-decoration:none;color:#E4EDEA;font-size:15px;white-space:nowrap;
 }
 .nav a:hover{background:rgba(255,255,255,.12);color:#fff}
-/* 現在地のページだけ下線で示す。色だけに頼らない */
-body[data-current="partner"] [data-nav="partner"],
-body[data-current="jutaku"]  [data-nav="jutaku"],
-body[data-current="about"]   [data-nav="about"]{
+/* 現在地のページだけ下線で示す。色だけに頼らない。
+   印を付けるのは build.py（href を見て aria-current="page" を足す）。
+   ページを足してもURLを変えても、ここを直す必要はない。 */
+.nav a[aria-current="page"]{
   color:#fff;font-weight:700;
   text-decoration:underline;text-underline-offset:.4em;text-decoration-thickness:2px;
   text-decoration-color:var(--hl);
@@ -1168,12 +1168,7 @@ p,li,dd,
 .center-go{margin-top:clamp(18px,2.6vw,24px)}
 .center-go a{font-weight:700}
 .center-go a::after{content:" →"}
-/* 現在地の印。しくみも対象に加える */
-body[data-current="shikumi"] [data-nav="shikumi"]{
-  color:#fff;font-weight:700;
-  text-decoration:underline;text-underline-offset:.4em;text-decoration-thickness:2px;
-  text-decoration-color:var(--hl);
-}
+
 
 /* ==================================================================
    申し込みフォーム

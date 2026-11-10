@@ -26,7 +26,12 @@ not_found_handling = "404-page"
 
 # /api/ だけ先に worker/index.js へ。それ以外は静的ファイルが直接返る
 # （静的ファイルの配信は Workers のリクエスト数に数えられない）
-run_worker_first = ["/api/*"]
+# /api/ のほか、2026-11-10 に変えた古いURLもコードへ回す（転送のため）。
+# worker/index.js の MOVED と対になっている。
+run_worker_first = ["/api/*",
+                    "/shikumi", "/shikumi/*",
+                    "/jutaku", "/jutaku/*",
+                    "/hojokin", "/hojokin/*"]
 
 # ------------------------------------------------------------------
 # フォームの送信先。

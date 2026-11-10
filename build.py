@@ -467,6 +467,25 @@ def place_images(body, keep):
     return body, missing
 
 
+def mark_current(header, url):
+    """メニューの中で、いま見ているページへのリンクに印を付ける。
+
+    以前は data-nav="shikumi" のような印を手で書き、CSS 側にも
+    ページ名を1つずつ並べていた。ページを足すたびに両方を直す必要があり、
+    URL を変えたときに片方だけ古いまま残った。
+    href を見て付けるようにすれば、書き忘れようがない。
+
+    aria-current="page" は読み上げにも「現在のページ」と伝わる。
+    """
+    def one(m):
+        return m.group(0) + ' aria-current="page"' if m.group(1) == url else m.group(0)
+    nav = re.search(r'<nav\b.*?</nav>', header, re.S)
+    if not nav:
+        return header
+    marked = re.sub(r'<a href="([^"]+)"', one, nav.group(0))
+    return header[:nav.start()] + marked + header[nav.end():]
+
+
 def fill(template, values, strict=True):
     """{{name}} を values[name] に置き換える。
 
@@ -573,7 +592,7 @@ def to_preview(html, slug):
     html = re.sub(r'<!-- Cloudflare Web Analytics.*?</script>', '', html, flags=re.S)
 
     # ページへのリンク。/kensetsu/ → kensetsu.html、/ → index.html
-    html = re.sub(r'href="/([a-z]+)/(#[^"]*)?"',
+    html = re.sub(r'href="/([a-z0-9-]+)/(#[^"]*)?"',
                   lambda m: 'href="%s.html%s"' % (m.group(1), m.group(2) or ''), html)
     html = re.sub(r'href="/(#[^"]*)?"',
                   lambda m: 'href="index.html%s"' % (m.group(1) or ''), html)
@@ -659,6 +678,7 @@ def main():
         if values['tail'] is None:
             sys.exit('%s: tail は monitor / soudan / no のどれか' % fn)
         values['turnstile_script'] = turnstile_script if 'cf-turnstile' in body else ''
+        values['header'] = mark_current(common['header'], url)
         values.update({
             # title と description にも {{service}} と書ける。
             # layout に差し込んだあとは走査されないので、ここで埋める。
