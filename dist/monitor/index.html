@@ -129,6 +129,12 @@
         </label>
 
         <fieldset data-q="従業員数">
+          <!-- 選択肢は、何も選ばれないとブラウザが送らない。
+               項目ごと消えて「聞いたのに答えが無い」のか
+               「そもそも聞いていない」のか分からなくなるので、
+               空の値を必ず1つ送っておく。選ばれていれば、
+               そちらが本文に出る。 -->
+          <input type="hidden" name="従業員数" value="">
           <legend>従業員数</legend>
           <div class="choices">
             <label><input type="radio" name="従業員数" value="〜10人">〜10人</label>
@@ -139,6 +145,12 @@
         </fieldset>
 
         <fieldset data-q="使いたい場面">
+          <!-- 選択肢は、何も選ばれないとブラウザが送らない。
+               項目ごと消えて「聞いたのに答えが無い」のか
+               「そもそも聞いていない」のか分からなくなるので、
+               空の値を必ず1つ送っておく。選ばれていれば、
+               そちらが本文に出る。 -->
+          <input type="hidden" name="使いたい場面" value="">
           <legend>使いたい<wbr>場面</legend>
           <span class="hint">いくつ<wbr>選んでいただいても<wbr>構いません。</span>
           <div class="choices">
@@ -152,6 +164,12 @@
         </fieldset>
 
         <fieldset data-q="いま研修や説明に動画を使っているか">
+          <!-- 選択肢は、何も選ばれないとブラウザが送らない。
+               項目ごと消えて「聞いたのに答えが無い」のか
+               「そもそも聞いていない」のか分からなくなるので、
+               空の値を必ず1つ送っておく。選ばれていれば、
+               そちらが本文に出る。 -->
+          <input type="hidden" name="いま研修や説明に動画を使っているか" value="">
           <legend>いま、<wbr>研修や<wbr>説明に<wbr>動画を<wbr>使っていますか</legend>
           <div class="choices">
             <label><input type="radio" name="いま研修や説明に動画を使っているか" value="使っている">使っている</label>
