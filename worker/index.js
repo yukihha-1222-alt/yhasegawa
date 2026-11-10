@@ -80,11 +80,18 @@ async function handleForm(request, env) {
        それでも万一のために、入力を返す画面は出す。 */
     return fail(request, fields, '送信を確認できませんでした。');
   }
-  if (token) {
+  if (token && env.TURNSTILE_SECRET) {
     const ok = await verifyTurnstile(token, ip, env.TURNSTILE_SECRET);
     if (!ok) {
       return fail(request, fields, '「人が操作しているか」の確認が通りませんでした。');
     }
+  } else if (token) {
+    /* ウィジェットは出ているが、Secret がまだ入っていない。
+       Cloudflare は「コードのない Worker」に変数を足させないので、
+       いちばん最初のデプロイの前は必ずこの状態になる。
+       ここで止めると、せっかくの送信が消える。通したうえで、
+       メールの先頭に書いて気づけるようにする。 */
+    note = '（Turnstile の Secret が未設定です。自動判定をしていません）';
   } else {
     /* JavaScript が動いていないとき。Turnstile はJSが要るのでトークンが無い。
        ここで止めると、書いてくれた内容がそのまま消える。
@@ -114,7 +121,6 @@ async function handleForm(request, env) {
 /* ------------------------------------------------------------------ */
 
 async function verifyTurnstile(token, ip, secret) {
-  if (!secret) return false;
   const body = new FormData();
   body.append('secret', secret);
   body.append('response', token);

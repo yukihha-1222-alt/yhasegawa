@@ -42,19 +42,23 @@ name = "yhasegawa"
 
 **足さないと、プレビューではフォームの確認が通らず、送信できません。**
 
-### 1-2. Secret Key を入れる
+### 1-2. Secret Key は、いまは入れられません（あとで）
 
-**Compute (Workers)** → 対象の Worker → **Settings**
-→ **Variables and Secrets** → **＋ Add**
+**Variables and Secrets の画面に Add がなく、こう出ます。**
 
-| 欄 | 入れるもの |
-|---|---|
-| Type | **Secret**（Text ではありません） |
-| Variable name | `TURNSTILE_SECRET` |
-| Value | Turnstile の Secret Key |
+> Variables cannot be added to a Worker that only has static assets.
 
-入れたら **Deploy** / **Save** を押してください。
-※ Secret はこのチャットにも、リポジトリにも書きません。
+**これは正常です。** いまの Worker は静的ファイルを配っているだけで、
+コードが1行も入っていません。Cloudflare は、コードのない Worker に
+変数を足させない仕様です。
+
+**最初の push で `worker/index.js` が入ってから登録します。**
+手順は下の「2-2」にあります。
+
+**その間フォームが使えなくなることはありません。** Secret が無いあいだは、
+Turnstile の自動判定だけを飛ばして送信を通し、届いたメールの先頭に
+「Turnstile の Secret が未設定です」と入れるようにしてあります。
+気づかないまま判定なしで運用し続けることがないようにするためです。
 
 ### 1-3. non-production branch のデプロイのしかたを確かめる
 
@@ -77,17 +81,55 @@ name = "yhasegawa"
 > `versions upload` は「版を上げるだけで、本番には出さない」命令なので、
 > プレビューURLだけができます。
 
+### 1-4. まとめ（push の前にするのはこの3つ）
+
+1. Turnstile に `workers.dev` と `localhost` を足す（1-1）
+2. Worker の名前を確認して教える（いちばん上）
+3. Non-production branch deploy command が
+   `npx wrangler versions upload` であることを確認する（1-3）
+
+**Secret は push のあとです（2-2）。**
+
 **この3つが終わったら教えてください。`renewal` に push します。**
 
 ---
 
 ## 2. push したあとにすること
 
+### 2-1. ビルドが走るのを待つ
+
 こちらで `git push origin renewal` を実行します（指示をいただいてから）。
 `main` には触れません。
 
 Cloudflare の **Compute (Workers)** → 対象の Worker → **Deployments**
-（または **Builds**）に、`renewal` のビルドが出ます。
+（または **Builds**）に、`renewal` のビルドが出ます。1〜2分で終わります。
+
+### 2-2. Secret Key を入れる（ここで初めてできます）
+
+ビルドが終わると、Worker にコードが入った状態になります。
+
+**Compute (Workers)** → 対象の Worker → **Settings**
+→ **Variables and Secrets** → **＋ Add**
+
+| 欄 | 入れるもの |
+|---|---|
+| Type | **Secret**（Text ではありません） |
+| Variable name | `TURNSTILE_SECRET` |
+| Value | Turnstile の Secret Key |
+
+**Save** を押してください。
+※ Secret はこのチャットにも、リポジトリにも書きません。
+
+> まだ **Add** が出ない場合は、ビルドがまだ終わっていないか、
+> 失敗しています。**Builds** の画面でログを見てください。
+
+### 2-3. もう一度ビルドし直す
+
+Secret は、あとから足しても**すでに作られた版には反映されません。**
+**Builds** → いちばん上のビルドの右の **…** → **Retry build** を押して
+ください。これで Secret の入った版ができます。
+
+（押せない場合は、こちらで何か1つコミットして push し直します。）
 
 ---
 
@@ -159,6 +201,8 @@ https://<8桁の英数字>-<Worker名>.<アカウントのサブドメイン>.wo
       **件名「【先行モニター申込】テスト…」**のメールが届く
 - [ ] 本文が「■ 会社名／■ お名前…」の形で読める
 - [ ] メールに**返信**すると、入力したメールアドレス宛になる（Reply-To）
+- [ ] 本文の先頭に「Turnstile の Secret が未設定です」と**出ていない**こと
+      （出ていたら 2-2 と 2-3 がまだです）
 
 **JavaScript を切って送る**（ここが今回の肝です）
 
