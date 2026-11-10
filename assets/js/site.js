@@ -1,10 +1,12 @@
 /* ==================================================================
    yhasegawa.com
 
-   やることは3つだけ。重い処理は入れない。
+   やることは5つだけ。重い処理は入れない。
      1. 狭い画面でメニューを折りたたむ
      2. 旧い1ページ構成のリンクで来た方を、新しいページへ送る
-     3. 本文をそっと出す（動きを減らす設定の方には何もしない）
+     3. フォームを、ページを離れずに送る
+     4. ページを開いたら、いちばん上から見せる
+     5. 本文をそっと出す（動きを減らす設定の方には何もしない）
 ================================================================== */
 (function () {
   'use strict';
@@ -113,18 +115,107 @@
   });
 
 
-  /* ---- 4. 本文の出現 ------------------------------------------------ */
-  var slow = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var targets = document.querySelectorAll('.rise');
-  if (!targets.length) return;
-  if (slow || !('IntersectionObserver' in window)) {
-    Array.prototype.forEach.call(targets, function (el) { el.classList.add('shown'); });
-    return;
+  /* ---- 4. ページを開いたら、いちばん上から ---------------------------
+     リンクをたどった先が、前のページで読んでいた位置あたりから
+     開いてしまうことがある。ブラウザがスクロール位置を復元する
+     ためで、長いページほど目立つ。
+
+     戻るボタンのときは、元の位置に戻るのが正しい。なので
+     「前に進んだとき」だけ上に戻す。進んだか戻ったかは
+     Navigation Timing で見分ける（取れない古い環境では何もしない）。
+
+     #見出し 付きのリンクで来たときも、そこへ飛ぶのが正しいので触らない。 */
+  function wentForward() {
+    try {
+      var nav = performance.getEntriesByType('navigation')[0];
+      if (nav) return nav.type === 'navigate' || nav.type === 'reload';
+      return performance.navigation.type === 0;   /* 古い書き方 */
+    } catch (e) { return false; }
   }
+  if (!location.hash && wentForward() && window.scrollY > 0) {
+    /* html に scroll-behavior:smooth が効いているので、
+       ここだけ切る。切らないと、上まで動く様子が見えてしまう。 */
+    var root = document.documentElement;
+    var keep = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    window.scrollTo(0, 0);
+    root.style.scrollBehavior = keep;
+  }
+
+
+  /* ---- 5. 本文の出現 ------------------------------------------------
+     節ごとに、少し下から浮かび上がらせる。
+
+     【隠すのは、まだ見えていないものだけ】
+     すでに画面に入っているものまで opacity:0 にすると、
+     一度見えたものが消えてから出てくる。ちらつく。
+     この処理が走った時点で画面の下にあるものだけを隠す。
+
+     【JSが動かないときに消えないこと】
+     .rise を付けるのも JS。付かなければ CSS も効かないので、
+     何も起きずに全部見えたままになる。 */
+  var slow = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (slow || !('IntersectionObserver' in window)) return;
+
+  var fold = window.innerHeight * 0.92;
+  var targets = [];
+  var boxes = document.querySelectorAll(
+    '.section:not(.hero) > .wrap > *, .section:not(.hero) > .wrap.narrow > *');
+  Array.prototype.forEach.call(boxes, function (el) {
+    if (el.getBoundingClientRect().top > fold) {
+      el.classList.add('rise');
+      targets.push(el);
+    }
+  });
+  if (!targets.length) return;
+
+  function show(el) { el.classList.add('shown'); }
+
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add('shown'); io.unobserve(e.target); }
+      if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
     });
   }, { rootMargin: '0px 0px -8% 0px' });
-  Array.prototype.forEach.call(targets, function (el) { io.observe(el); });
+  targets.forEach(function (el) { io.observe(el); });
+
+  /* 【保険】
+     隠したまま出てこない、という事故だけは起こしたくない。
+     IntersectionObserver が働かない場面（描画が止められている、
+     古い実装、拡張機能との衝突）でも出るように、
+     自分でも見にいく道を2本持たせる。
+
+       ・スクロールと画面の回転のたびに見る
+       ・0.4秒ごとにも見る（スクロールの通知が来ない環境のため）
+
+     どちらも requestAnimationFrame を使わない。
+     全部出たら両方とも止める。最後の砦として、60秒たっても
+     残っていたら無条件で出す。 */
+  function sweep() {
+    var left = 0;
+    targets.forEach(function (el) {
+      if (el.classList.contains('shown')) return;
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.92) show(el);
+      else left++;
+    });
+    if (!left) stop();
+    return left;
+  }
+  var last = 0;
+  function onScroll() {
+    var now = Date.now();
+    if (now - last < 80) return;   /* 間引きは時刻で。rAF に頼らない */
+    last = now;
+    sweep();
+  }
+  var tick = window.setInterval(sweep, 400);
+  function stop() {
+    window.clearInterval(tick);
+    window.removeEventListener('scroll', onScroll);
+    window.removeEventListener('resize', onScroll);
+    window.removeEventListener('orientationchange', onScroll);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  window.addEventListener('orientationchange', onScroll, { passive: true });
+  window.setTimeout(function () { targets.forEach(show); stop(); }, 60000);
 })();

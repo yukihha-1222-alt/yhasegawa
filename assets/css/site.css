@@ -506,9 +506,20 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
   .site-foot dt{margin-top:12px;font-size:13px}
 }
 
-/* ---------- 控えめな出現。動きを減らす設定は尊重する ---------- */
-.rise{opacity:0;transform:translateY(12px);transition:opacity .6s ease,transform .6s ease}
-.rise.shown{opacity:1;transform:none}
+/* ---------- 控えめな出現 ----------------------------------------
+   .rise を付けるのは site.js。付けるのは、その時点で画面より下に
+   あるものだけ。すでに見えているものは触らないので、ちらつかない。
+   JSが動かなければ .rise が付かず、全部そのまま見えている。
+   動きを減らす設定の方には、そもそも付けない。
+---------------------------------------------------------------- */
+.rise{
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .55s ease, transform .55s cubic-bezier(.22,.61,.36,1);
+  /* 出現の最中に、横棒が出ないように */
+  will-change:opacity, transform;
+}
+.rise.shown{opacity:1;transform:none;will-change:auto}
 @media (prefers-reduced-motion:reduce){
   .rise{opacity:1;transform:none;transition:none}
 }
