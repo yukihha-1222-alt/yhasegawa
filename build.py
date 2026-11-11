@@ -679,6 +679,16 @@ def main():
             sys.exit('%s: tail は monitor / soudan / no のどれか' % fn)
         values['turnstile_script'] = turnstile_script if 'cf-turnstile' in body else ''
         values['header'] = mark_current(common['header'], url)
+        # スマホの固定ボタンの行き先。いま見ているページへは送らない。
+        if slug == 'monitor':
+            values['bar_href'], values['bar_text'] = '/contact/', '相談する'
+        elif slug == 'contact':
+            values['bar_href'], values['bar_text'] = '/monitor/', 'モニターに申し込む'
+        else:
+            values['bar_href'], values['bar_text'] = '/monitor/', 'モニターに申し込む'
+        values['mobilebar'] = fill(common['mobilebar'],
+                                   {'bar_href': values['bar_href'],
+                                    'bar_text': values['bar_text']}, strict=False)
         values.update({
             # title と description にも {{service}} と書ける。
             # layout に差し込んだあとは走査されないので、ここで埋める。

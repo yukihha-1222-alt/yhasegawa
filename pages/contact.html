@@ -2,7 +2,7 @@
 slug: contact
 tail: no
 title: ご相談｜{{service}} のことも、受託開発のことも｜長谷川侑希
-description: {{service}} のご相談も、受託開発のご相談も承ります。ご相談と、3時間ほどの現場の見学は無料です（1回まで）。見せていただいたうえで、アプリで解決したほうがいいのかを正直にお伝えします。兵庫・大阪・岡山あたりが対象です。お電話は080-6206-1245。
+description: {{service}} のご相談も、受託開発のご相談も承ります。ご相談と、3時間ほどの現場の見学は無料です（1回まで）。見せていただいたうえで、アプリで解決したほうがいいのかを正直にお伝えします。兵庫・大阪・岡山あたりが対象です。2営業日以内にメールでお返事します。
 -->
 
 <section class="section page-hero">
@@ -26,7 +26,7 @@ description: {{service}} のご相談も、受託開発のご相談も承りま�
     </div>
 
     <ul class="changes">
-      <li>お電話、オンライン、おうかがいしてのご相談。やりやすい形で構いません。</li>
+      <li>オンライン、おうかがいしてのご相談。やりやすい形で構いません。</li>
       <li>3時間ほど、現場を見せていただくこと。どの作業に何分かかっているかを見ます。</li>
       <li>アプリで解決すべきかどうかの、正直なお返事。</li>
       <li>作る価値がありそうな場合は、ご一緒に「何ができれば合格か」を決めるところまで。</li>
@@ -47,14 +47,11 @@ description: {{service}} のご相談も、受託開発のご相談も承りま�
     <div class="contact-card">
       <h2>ご連絡先</h2>
       <p class="lead-p">
-        お急ぎでしたら、お電話が一番早くつながります。
+        下のフォームか、メールでお送りください。
+        <b>いただいたご相談には、2営業日以内にメールでお返事します。</b>
       </p>
 
       <dl class="contact-ways">
-        <div>
-          <dt>お電話</dt>
-          <dd><a href="tel:08062061245">080-6206-1245</a></dd>
-        </div>
         <div>
           <!-- アドレスは build.py の MAIL ひとつで決まる。ここでは書かない -->
           <dt>メール</dt>
@@ -87,22 +84,47 @@ description: {{service}} のご相談も、受託開発のご相談も承りま�
         </label>
         <label data-q="お名前・ご連絡先">
           お名前・ご連絡先
-          <span class="hint">お電話番号かメールアドレスを、どちらかだけでも。</span>
+          <span class="hint">メールアドレスをお書きください。こちらからご返信します。</span>
           <input type="text" name="お名前・ご連絡先" autocomplete="name">
         </label>
+        <fieldset data-q="お電話でのご連絡を希望される場合" class="callback">
+          <!-- 空の値を1つ送っておく理由は、ほかの選択肢と同じ -->
+          <input type="hidden" name="お電話でのご連絡を希望される場合" value="">
+          <legend>お電話でのご連絡を希望される場合</legend>
+          <span class="hint">お電話をご希望の方には、こちらから折り返しご連絡します。</span>
+          <div class="choices">
+            <label><input type="radio" name="お電話でのご連絡を希望される場合" value="メールでの返信を希望" data-callback="no">メールでの返信を希望</label>
+            <label><input type="radio" name="お電話でのご連絡を希望される場合" value="電話での折り返しを希望" data-callback="yes">電話での折り返しを希望</label>
+          </div>
+
+          <!-- 「電話での折り返しを希望」を選んだときだけ出す。
+               隠すのは site.js。JavaScript が動かなければ出たままなので、
+               書けなくなることはない。 -->
+          <div class="callback-only">
+            <label>
+              電話番号
+              <input type="tel" name="電話番号" autocomplete="tel">
+            </label>
+            <label>
+              つながりやすい時間帯
+              <span class="hint">例：平日の午前中／13時〜15時</span>
+              <input type="text" name="つながりやすい時間帯">
+            </label>
+          </div>
+        </fieldset>
+
         {{turnstile}}
 
         <button class="btn" type="submit">この内容で相談する</button>
         <p class="note">
           ボタンを押すと、そのまま長谷川に届きます。メールソフトは開きません。
-          うまくいかないときは、お電話いただければ確実です。
+うまくいかないときは、<a href="mailto:{{mail}}">{{mail}}</a> まで直接お送りください。
           いただいた内容の扱いは<a href="/privacy/">プライバシーポリシー</a>のとおりです。
         </p>
         <noscript>
           <p class="note">
             このブラウザでは確認のしくみが動きませんが、そのまま送信できます。
-            届かないときは、お電話（<a href="tel:08062061245">080-6206-1245</a>）か
-            <a href="mailto:{{mail}}">{{mail}}</a> までお願いします。
+            届かないときは、<a href="mailto:{{mail}}">{{mail}}</a> までお願いします。
           </p>
         </noscript>
       </form>

@@ -122,12 +122,6 @@
           <input type="email" name="メールアドレス" autocomplete="email" required>
         </label>
 
-        <label data-q="電話番号">
-          電話番号
-          <span class="hint">お急ぎの<wbr>場合は、<wbr>こちらからご連絡します。</span>
-          <input type="tel" name="電話番号" autocomplete="tel">
-        </label>
-
         <fieldset data-q="従業員数">
           <!-- 選択肢は、何も選ばれないとブラウザが送らない。
                項目ごと消えて「聞いたのに答えが無い」のか
@@ -197,6 +191,32 @@
           <input type="text" name="ご紹介くださった先生のお名前">
         </label>
 
+        <fieldset data-q="お電話でのご連絡を希望される場合" class="callback">
+          <!-- 空の値を1つ送っておく理由は、ほかの選択肢と同じ -->
+          <input type="hidden" name="お電話でのご連絡を希望される場合" value="">
+          <legend>お電話でのご連絡を<wbr>希望される<wbr>場合</legend>
+          <span class="hint">お電話をご希望の<wbr>方には、<wbr>こちらから<wbr>折り返しご連絡します。</span>
+          <div class="choices">
+            <label><input type="radio" name="お電話でのご連絡を希望される場合" value="メールでの返信を希望" data-callback="no">メールでの<wbr>返信を<wbr>希望</label>
+            <label><input type="radio" name="お電話でのご連絡を希望される場合" value="電話での折り返しを希望" data-callback="yes">電話での<wbr>折り返しを<wbr>希望</label>
+          </div>
+
+          <!-- 「電話での折り返しを希望」を選んだときだけ出す。
+               隠すのは site.js。JavaScript が動かなければ出たままなので、
+               書けなくなることはない。 -->
+          <div class="callback-only">
+            <label>
+              電話番号
+              <input type="tel" name="電話番号" autocomplete="tel">
+            </label>
+            <label>
+              つながりやすい<wbr>時間帯
+              <span class="hint">例：平日の<wbr>午前中／13時〜15時</span>
+              <input type="text" name="つながりやすい時間帯">
+            </label>
+          </div>
+        </fieldset>
+
         <label data-q="ひとこと">
           ひとこと
           <span class="hint">お困りのことや、<wbr>気になる<wbr>点があればお書きください。</span>
@@ -211,12 +231,11 @@
 
         <button class="btn btn-apply" type="submit">この<wbr>内容で<wbr>申し込む</button>
         <p class="note">
-          ボタンを<wbr>押すと、<wbr>そのまま<wbr>長谷川に<wbr>届きます。<wbr>メールソフトは<wbr>開きません。<wbr>うまくいかないときは、<wbr>お電話いただければ<wbr>確実です。<wbr>いただいた<wbr>内容の<wbr>扱いは<a href="/privacy/">プライバシーポリシー</a>のとおりです。
+          ボタンを<wbr>押すと、<wbr>そのまま<wbr>長谷川に<wbr>届きます。<wbr>メールソフトは<wbr>開きません。<wbr>うまくいかないときは、<a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a> まで<wbr>直接お送りください。<wbr>いただいた<wbr>内容の<wbr>扱いは<a href="/privacy/">プライバシーポリシー</a>のとおりです。
         </p>
         <noscript>
           <p class="note">
-            この<wbr>ブラウザでは<wbr>確認のしくみが<wbr>動きませんが、<wbr>そのまま<wbr>送信できます。<wbr>届かないときは、<wbr>お電話<wbr>（<a href="tel:08062061245">080-6206-1245</a>）か
-            <a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a> までお願いします。
+            この<wbr>ブラウザでは<wbr>確認のしくみが<wbr>動きませんが、<wbr>そのまま<wbr>送信できます。<wbr>届かないときは、<a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a> までお願いします。
           </p>
         </noscript>
       </form>
@@ -244,7 +263,7 @@
       <li>
         <p class="when">次に</p>
         <h3>お話をうかがいます</h3>
-        <p class="d">どんな<wbr>動画を<wbr>配りたいかを、<wbr>お電話か<wbr>オンラインでお聞きします。</p>
+        <p class="d">どんな<wbr>動画を<wbr>配りたいかを、<wbr>オンラインかお電話でお聞きします。</p>
       </li>
       <li>
         <p class="when">そのあと</p>
@@ -255,8 +274,7 @@
       </li>
     </ol>
     <p class="note">
-      お電話でのお申し込みも<wbr>承ります。
-      <a href="tel:08062061245">080-6206-1245</a>
+      フォームからでも、<a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a> へ<wbr>直接<wbr>お送りいただいても<wbr>構いません。<wbr>いただいたお申し込みには、<wbr>2営業日以内に<wbr>メールでお返事します。
     </p>
   </div>
 </section>
@@ -285,8 +303,6 @@
     </nav>
 
     <dl>
-      <dt>お電話</dt>
-      <dd><a href="tel:08062061245">080-6206-1245</a></dd>
       <!-- アドレスは build.py の MAIL ひとつで決まる。ここでは書かない -->
       <dt>メール</dt>
       <dd><a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a></dd>
@@ -308,10 +324,10 @@
 
 
 <!-- スマホの画面下に固定する。高さは抑え、
-     iPhone のホームバーにかからないよう safe-area を見ている -->
+     iPhone のホームバーにかからないよう safe-area を見ている。
+     ボタンは1つだけ。行き先はページによって変える（build.py が差し込む）。 -->
 <div class="mobilebar" aria-label="お問い合わせ">
-  <a href="tel:08062061245">電話する</a>
-  <a class="primary" href="/monitor/">モニターに<wbr>申し込む</a>
+  <a class="primary" href="/contact/">相談する</a>
 </div>
 
 

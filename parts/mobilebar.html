@@ -1,6 +1,6 @@
 <!-- スマホの画面下に固定する。高さは抑え、
-     iPhone のホームバーにかからないよう safe-area を見ている -->
+     iPhone のホームバーにかからないよう safe-area を見ている。
+     ボタンは1つだけ。行き先はページによって変える（build.py が差し込む）。 -->
 <div class="mobilebar" aria-label="お問い合わせ">
-  <a href="tel:08062061245">電話する</a>
-  <a class="primary" href="/monitor/">モニターに申し込む</a>
+  <a class="primary" href="{{bar_href}}">{{bar_text}}</a>
 </div>

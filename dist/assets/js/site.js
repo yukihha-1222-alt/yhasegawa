@@ -106,13 +106,39 @@
         p.setAttribute('role', 'alert');
         p.textContent = String(err.message || err) +
           ' 入力はそのまま残っています。もう一度お試しいただくか、' +
-          'お電話（080-6206-1245）でもお受けします。';
+          'hasegawa@yhasegawa.com まで直接お送りください。';
         form.appendChild(p);
         /* Turnstile は1回しか使えないので、作り直す */
         if (window.turnstile) { try { window.turnstile.reset(); } catch (e) {} }
       });
     });
   });
+
+
+  /* ---- 3b. 折り返しの電話番号の欄 -----------------------------------
+     「電話での折り返しを希望」を選んだときだけ出す。
+
+     隠すのはここ。CSS で最初から隠すと、JavaScript が動かない環境で
+     二度と出せなくなる。この処理が動かなければ出たままなので、
+     書けなくなることはない。 */
+  Array.prototype.forEach.call(
+    document.querySelectorAll('fieldset.callback'), function (fs) {
+      var box = fs.querySelector('.callback-only');
+      var radios = fs.querySelectorAll('input[data-callback]');
+      if (!box || !radios.length) return;
+
+      function sync() {
+        var want = false;
+        Array.prototype.forEach.call(radios, function (r) {
+          if (r.checked && r.getAttribute('data-callback') === 'yes') want = true;
+        });
+        box.hidden = !want;
+      }
+      Array.prototype.forEach.call(radios, function (r) {
+        r.addEventListener('change', sync);
+      });
+      sync();
+    });
 
 
   /* ---- 4. ページを開いたら、いちばん上から ---------------------------

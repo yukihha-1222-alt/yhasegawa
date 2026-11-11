@@ -1202,6 +1202,17 @@ p,li,dd,
 /* :has() が使えない環境でも、点が付くので選択は分かる */
 
 /* 送信したあとに出すお礼 */
+/* 折り返しの電話番号の欄。
+   出し入れするのは site.js（hidden 属性を付け外しする）。
+   CSS で最初から隠さないこと。JavaScript が動かない環境で
+   二度と出せなくなる。 */
+.callback-only{
+  margin-top:14px;padding-top:14px;
+  border-top:1px dashed var(--line);
+  display:flex;flex-direction:column;gap:14px;
+}
+.callback-only[hidden]{display:none}
+
 /* 人には見えない欄。display:none だと埋めない機械がいるので、
    画面の外に置くだけにする。読み上げには aria-hidden で伏せてある。 */
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}

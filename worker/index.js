@@ -28,7 +28,6 @@ const MOVED = {
 
 const FROM = 'form@yhasegawa.com';
 const TO_FALLBACK = 'hasegawa@yhasegawa.com';
-const PHONE = '080-6206-1245';
 
 /* 1通あたりの上限。長すぎる本文はメールを壊すので切る */
 const MAX_FIELD = 4000;
@@ -235,9 +234,9 @@ function fail(request, fields, why) {
     <h1>うまく送信できませんでした</h1>
     <p>${esc(why)}</p>
     <p><b>入力していただいた内容は、下に残してあります。</b>
-       お手数ですが、コピーしてメールでお送りいただくか、お電話ください。</p>
+       お手数ですが、コピーしてメールでお送りください。</p>
     <p><a class="btn" href="${mailto}">この内容をメールで送る</a>
-       <a class="btn" href="tel:${PHONE.replace(/-/g, '')}">電話する（${PHONE}）</a></p>
+       <a class="btn" href="mailto:${TO_FALLBACK}">${TO_FALLBACK}</a></p>
     ${text ? '<textarea readonly rows="14">' + esc(text) + '</textarea>' : ''}
     <p><a href="/">ホームへもどる</a></p>
   `);
