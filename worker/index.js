@@ -26,6 +26,10 @@ const MOVED = {
   '/hojokin': '/subsidy/',
 };
 
+/* 本番のドメイン。これ以外（プレビューの *.workers.dev など）で配るときは、
+   検索エンジンに載せない。プレビューが検索結果に出ると、本物と二重になる。 */
+const SITE_HOST = 'yhasegawa.com';
+
 const FROM = 'form@yhasegawa.com';
 const TO_FALLBACK = 'hasegawa@yhasegawa.com';
 
@@ -55,7 +59,17 @@ export default {
       }
     }
 
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+
+    /* 本番のドメイン以外は、検索エンジンに載せない。
+       プレビューURLが検索結果に出ると、本物と同じ内容が二重に並ぶ。
+       ヘッダーで返すので、HTMLだけでなく PDF や画像にも効く。 */
+    if (url.hostname !== SITE_HOST) {
+      const out = new Response(res.body, res);
+      out.headers.set('X-Robots-Tag', 'noindex, nofollow');
+      return out;
+    }
+    return res;
   },
 };
 

@@ -26,12 +26,14 @@ not_found_handling = "404-page"
 
 # /api/ だけ先に worker/index.js へ。それ以外は静的ファイルが直接返る
 # （静的ファイルの配信は Workers のリクエスト数に数えられない）
-# /api/ のほか、2026-11-10 に変えた古いURLもコードへ回す（転送のため）。
-# worker/index.js の MOVED と対になっている。
-run_worker_first = ["/api/*",
-                    "/shikumi", "/shikumi/*",
-                    "/jutaku", "/jutaku/*",
-                    "/hojokin", "/hojokin/*"]
+# すべてコードを先に通す。理由は2つ。
+#   ・/api/form を受ける
+#   ・古いURL（/shikumi/ など）を新しいURLへ転送する
+#   ・本番以外のドメイン（プレビューの *.workers.dev）で
+#     X-Robots-Tag: noindex を付ける
+# 静的ファイルはコードから env.ASSETS.fetch() で返すので中身は同じ。
+# Workers の無料枠は1日10万リクエストで、いまの閲覧数とは桁が違う。
+run_worker_first = true
 
 # ------------------------------------------------------------------
 # フォームの送信先。
