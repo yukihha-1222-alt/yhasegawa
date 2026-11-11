@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="VideoTask">
   <!-- タブに出る印。16pxでも何か分かるよう、形は再生の三角ひとつに絞る。
-       緑はサイトの --accent と同じ #173F35。 -->
-  <rect width="64" height="64" rx="14" fill="#173F35"/>
-  <path d="M26 20.5 L45 32 L26 43.5 Z" fill="#FFFFFF"/>
-  <path d="M19 24.5v15" stroke="#FFE45C" stroke-width="4.5" stroke-linecap="round"/>
+       地はサイトの --green-bright #34BE84。三角は --on-green #0E3B2C。
+       明るい緑に白を載せると 2.37:1 で消えるので、白は使わない。 -->
+  <rect width="64" height="64" rx="14" fill="#34BE84"/>
+  <path d="M26 20.5 L45 32 L26 43.5 Z" fill="#0E3B2C"/>
+  <path d="M19 24.5v15" stroke="#0E3B2C" stroke-width="4.5" stroke-linecap="round"/>
 </svg>

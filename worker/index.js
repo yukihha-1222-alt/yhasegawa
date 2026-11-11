@@ -263,25 +263,34 @@ function html(status, title, inner) {
 <meta name="robots" content="noindex">
 <title>${esc(title)}｜長谷川侑希</title>
 <style>
-  :root{color-scheme:light dark}
-  body{margin:0;padding:40px 20px;background:#F1F3F2;color:#17201D;
+  /* 色はサイトの CSS と同じ決まり。ここだけ読み込みに失敗しても
+     読めるよう、変数ごと埋め込んでいる。
+     明るい緑に白文字は載せない（2.37:1 で読めない）。 */
+  :root{
+    color-scheme:light dark;
+    --bg:#F1F3F2; --card:#FFFFFF; --ink:#17201D; --line:#D7E3DC;
+    --green-bright:#34BE84; --on-green:#0E3B2C; --green-text:#157B54;
+    --hl:#FFE45C; --on-hl:#17201D;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0E1512; --card:#17211D; --ink:#E8F0EB; --line:#27332D;
+      --green-text:#5FD6A2;
+    }
+  }
+  body{margin:0;padding:40px 20px;background:var(--bg);color:var(--ink);
        font-family:"BIZ UDPGothic","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
        line-height:1.9;font-size:17px}
   main{max-width:40rem;margin-inline:auto}
   h1{font-size:1.5rem;line-height:1.5;margin:0 0 18px}
-  a{color:#173F35}
+  a{color:var(--green-text)}
   .btn{display:inline-block;margin:6px 10px 6px 0;padding:12px 20px;border-radius:10px;
-       background:#FFE45C;color:#17201D;font-weight:700;text-decoration:none;
-       border:1.5px solid #FFE45C}
-  .btn+.btn{background:#fff;border-color:#173F35;color:#173F35}
+       background:var(--hl);color:var(--on-hl);font-weight:700;text-decoration:none;
+       border:1.5px solid var(--hl)}
+  .btn+.btn{background:var(--card);border-color:var(--green-text);color:var(--green-text)}
   textarea{width:100%;box-sizing:border-box;margin-top:14px;padding:14px;
-           border:1px solid #DCE2DF;border-radius:10px;background:#fff;
-           font:inherit;font-size:15px;line-height:1.8}
-  @media (prefers-color-scheme: dark){
-    body{background:#0F1A17;color:#E8EEEB} a{color:#6FB89F}
-    textarea{background:#17241F;border-color:#2A3833;color:#E8EEEB}
-    .btn+.btn{background:#17241F;border-color:#4E9B84;color:#6FB89F}
-  }
+           border:1px solid var(--line);border-radius:10px;background:var(--card);
+           color:var(--ink);font:inherit;font-size:15px;line-height:1.8}
 </style></head><body><main>${inner}</main></body></html>`, {
     status,
     headers: { 'content-type': 'text/html; charset=utf-8' },

@@ -28,20 +28,40 @@
   --bg-alt:     #FFFFFF;   /* 節の切り替え。地と白を交互にする */
   --bg-card:    #FFFFFF;   /* カード、フォーム */
   --ink:        #17201D;   /* 本文、見出し */
-  --ink-soft:   #56615C;   /* 説明、注記 */
-  --ink-faint:  #7C8782;   /* さらに弱い注記 */
-  --line:       #DCE2DF;
+  --ink-soft:   #4E5A55;   /* 説明、注記（地の上で 6.46:1） */
+  --ink-faint:  #636E6A;   /* さらに弱い注記（白 5.29 / 地 4.75 / 薄緑 4.66） */
+  --line:       #D7E3DC;
 
-  --accent:     #173F35;   /* 黒板の緑。ヘッダー、主なボタン、リンク */
-  --accent-ink: #173F35;   /* 文字として使うときも同じ色でよい（地に対して12:1） */
-  --brand-deep: #0F2E26;   /* ボタンのホバー */
-  --accent-pale:#E6EBE8;   /* 緑に寄せた薄い面。ラベルや節のtint */
+  /* ------------------------------------------------------------------
+     緑は4つだけ。使い分けを間違えると読めなくなるので、用途を書いておく。
+       --green-bright  面に塗る緑。ボタン、ヘッダーの線、アイコン、CTAの帯
+       --green-press   その面を押したとき
+       --on-green      明るい緑の面の上に載せる文字。白は載せない
+       --on-green-pale ごく薄い緑の面の上に載せる文字。暗い配色では
+                       この面が暗くなるので、文字は逆に明るくする
+       --green-text    白や地の上に書く緑の文字（リンクなど）
+       --green-pale    目立たせたい面の背景。上の文字は --on-green
+     明るい緑に白文字は 2.37:1 で読めない。必ず --on-green を使う。
+  ------------------------------------------------------------------ */
+  --green-bright: #34BE84;
+  --green-press:  #2BA872;
+  --on-green:     #0E3B2C;
+  --on-green-pale:#0E3B2C;
+  --on-green-press:#0B2F23;  /* 押したときの文字。#2BA872 の上で 4.81:1 */
+  --green-text:   #157B54;   /* 白地 5.26:1 ／ ページの地 4.72:1 */
+  --green-pale:   #E2F5EC;
 
-  --hl:         #FFE45C;   /* 蛍光ペンの黄 */
+  /* 旧い名前。少しずつ置き換えるあいだ、両方を同じ色に向けておく */
+  --accent:     var(--green-bright);
+  --accent-ink: var(--green-text);
+  --brand-deep: var(--green-press);
+  --accent-pale:var(--green-pale);
+  --green:      var(--green-text);
+
+  --hl:         #FFE45C;   /* 蛍光ペンの黄。申し込みボタンと強調の下線だけ */
+  --hl-press:   #FFD92E;   /* 黄のボタンを押したとき */
   --hl-pale:    #FFF3A6;   /* 注意や強調の背景 */
-
-  --green:      #1F7A4D;   /* 完了、チェック */
-  --green-pale: #E3F2EA;
+  --on-hl:      #17201D;   /* 黄の上の文字 */
 
   --shadow:     0 1px 2px rgba(23,32,29,.04);
 
@@ -61,24 +81,34 @@
 /* 暗い環境。黄だけは同じ色のまま使う（暗地でも読める） */
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:         #0F1A17;
-    --bg-alt:     #17241F;
-    --bg-card:    #17241F;
-    --ink:        #E8EEEB;
-    --ink-soft:   #A9B5B0;
-    --ink-faint:  #7E8C86;
-    --line:       #2A3833;
+    --bg:         #0E1512;
+    --bg-alt:     #17211D;
+    --bg-card:    #17211D;
+    --ink:        #E8F0EB;
+    --ink-soft:   #A6B4AD;
+    --ink-faint:  #86958F;
+    --line:       #27332D;
 
-    --accent:     #4E9B84;   /* 暗地では濃い緑が沈むので明るくする */
-    --accent-ink: #6FB89F;
-    --brand-deep: #3C8672;
-    --accent-pale:#1D2E28;
+    /* 明るい緑はそのまま使える。押したときは、暗地では沈むので明るくする。
+       緑の文字は、暗地で読める明るさに上げる。 */
+    --green-bright: #34BE84;
+    --green-press:  #45CC93;
+    --on-green:     #07231A;
+    --on-green-pale:#E8F0EB;
+    --on-green-press:#07231A;
+    --green-text:   #5FD6A2;
+    --green-pale:   #173026;
+
+    --accent:     var(--green-bright);
+    --accent-ink: var(--green-text);
+    --brand-deep: var(--green-press);
+    --accent-pale:var(--green-pale);
+    --green:      var(--green-text);
 
     --hl:         #FFE45C;
+    --hl-press:   #FFD92E;
     --hl-pale:    #3A3516;
-
-    --green:      #54B384;
-    --green-pale: #163024;
+    --on-hl:      #17201D;
 
     --shadow:     0 1px 2px rgba(0,0,0,.25);
   }
@@ -125,7 +155,7 @@ a:hover{color:var(--accent)}
 /* キーボードで来た人が本文へ飛べるように */
 .skip{
   position:absolute;left:12px;top:-60px;z-index:100;
-  background:var(--accent);color:#fff;padding:10px 18px;border-radius:var(--round-s);
+  background:var(--green-bright);color:var(--on-green);padding:10px 18px;border-radius:var(--round-s);
   transition:top .2s;
 }
 .skip:focus{top:12px}
@@ -153,21 +183,20 @@ h3{font-size:clamp(18px,2.2vw,20px)}
   display:inline-flex;align-items:center;justify-content:center;gap:.5em;
   min-height:52px;padding:14px 28px;
   font:inherit;font-weight:700;font-size:16px;letter-spacing:.03em;
-  border-radius:var(--round);border:1.5px solid var(--accent);
-  background:var(--accent);color:#fff;text-decoration:none;cursor:pointer;
+  border-radius:var(--round);border:1.5px solid var(--green-bright);
+  background:var(--green-bright);color:var(--on-green);text-decoration:none;cursor:pointer;
   box-shadow:var(--shadow);
   transition:background .18s, transform .18s, box-shadow .18s;
 }
-.btn:hover{background:var(--accent-ink);color:#fff;transform:translateY(-1px)}
+.btn:hover{background:var(--green-press);border-color:var(--green-press);
+           color:var(--on-green-press);transform:translateY(-1px)}
 .btn:active{transform:none}
 .btn.ghost{
   background:transparent;color:var(--accent-ink);box-shadow:none;
 }
 .btn.ghost:hover{background:var(--accent-pale);color:var(--accent-ink)}
 @media (prefers-color-scheme: dark){
-  .btn{color:#241B16}
-  .btn:hover{color:#241B16}
-  .btn.ghost{color:var(--accent-ink)}
+  .btn.ghost{color:var(--green-text)}
 }
 .btn-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:clamp(22px,3vw,30px)}
 
@@ -180,40 +209,43 @@ h3{font-size:clamp(18px,2.2vw,20px)}
 /* ヘッダーは黒板の緑。白い文字と黄のボタンを載せる */
 .site-head{
   position:sticky;top:0;z-index:50;
-  background:var(--accent);
-  border-bottom:1px solid rgba(255,255,255,.1);
+  /* 白地にして、上辺だけ明るい緑の線で締める。
+     帯をベタで塗ると画面の上が重くなるため。 */
+  background:var(--bg-card);
+  border-top:4px solid var(--green-bright);
+  border-bottom:1px solid var(--line);
 }
 .site-head .wrap{
   display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;
   padding-block:10px;
 }
-.site-head .who{text-decoration:none;color:#fff;line-height:1.35;margin-right:auto}
-.site-head .who b{display:block;font-size:18px;font-weight:700;letter-spacing:.05em;color:#fff}
-.site-head .who span{display:block;font-size:12px;color:#B6C8C2;margin-top:1px}
+.site-head .who{text-decoration:none;color:var(--ink);line-height:1.35;margin-right:auto}
+.site-head .who b{display:block;font-size:18px;font-weight:700;letter-spacing:.05em;color:var(--ink)}
+.site-head .who span{display:block;font-size:12px;color:var(--ink-soft);margin-top:1px}
 .site-head .head-cta{min-height:42px;padding:9px 20px;font-size:15px;flex:none}
 
 .nav ul{display:flex;flex-wrap:wrap;gap:2px}
 .nav a{
   display:inline-block;padding:8px 13px;border-radius:999px;
-  text-decoration:none;color:#E4EDEA;font-size:15px;white-space:nowrap;
+  text-decoration:none;color:var(--ink);font-size:15px;white-space:nowrap;
 }
-.nav a:hover{background:rgba(255,255,255,.12);color:#fff}
+.nav a:hover{background:var(--green-pale);color:var(--on-green-pale)}
 /* 現在地のページだけ下線で示す。色だけに頼らない。
    印を付けるのは build.py（href を見て aria-current="page" を足す）。
    ページを足してもURLを変えても、ここを直す必要はない。 */
 .nav a[aria-current="page"]{
-  color:#fff;font-weight:700;
+  color:var(--green-text);font-weight:700;
   text-decoration:underline;text-underline-offset:.4em;text-decoration-thickness:2px;
   text-decoration-color:var(--hl);
 }
 
 /* 折りたたみボタン。site.js が作る */
 .nav-toggle{
-  display:none;font:inherit;font-size:15px;font-weight:700;color:#fff;
-  background:transparent;border:1.5px solid rgba(255,255,255,.5);border-radius:999px;
+  display:none;font:inherit;font-size:15px;font-weight:700;color:var(--ink);
+  background:transparent;border:1.5px solid var(--line);border-radius:999px;
   padding:8px 16px;cursor:pointer;
 }
-.nav-toggle:hover{border-color:#fff}
+.nav-toggle:hover{border-color:var(--green-bright)}
 @media (max-width:900px){
   .site-head .who span{display:none}
   .site-head .head-cta{display:none}      /* 画面下の固定ボタンがあるので重ねない */
@@ -486,20 +518,20 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
 /* ---------- フッター ---------- */
 /* フッターもヘッダーと同じ黒板の緑 */
 .site-foot{
-  background:var(--accent);color:#D8E2DE;
+  background:var(--green-pale);color:var(--on-green-pale);
   padding-block:clamp(30px,4vw,40px);font-size:15px;
 }
-.site-foot a{color:#E4EDEA}
-.site-foot a:hover{color:#fff}
-.site-foot .tag{color:#B6C8C2}
-.site-foot .name{font-size:19px;font-weight:700;letter-spacing:.04em;color:#fff}
+.site-foot a{color:var(--green-text)}
+.site-foot a:hover{color:var(--on-green-pale)}
+.site-foot .tag{color:var(--ink-soft)}
+.site-foot .name{font-size:19px;font-weight:700;letter-spacing:.04em;color:var(--on-green-pale)}
 .site-foot dl{
   display:grid;grid-template-columns:auto 1fr;gap:2px 20px;
   margin-top:14px;font-size:14px;line-height:1.7;
 }
-.site-foot dt{color:#9FB5AE;white-space:nowrap}
-.site-foot dd{margin:0;color:#D8E2DE}
-.site-foot .cr{margin-top:18px;font-size:13px;color:#9FB5AE}
+.site-foot dt{color:var(--ink-soft);white-space:nowrap}
+.site-foot dd{margin:0;color:var(--on-green-pale)}
+.site-foot .cr{margin-top:18px;font-size:13px;color:var(--ink-soft)}
 .site-foot nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px;font-size:14px}
 @media (max-width:560px){
   .site-foot dl{grid-template-columns:1fr;gap:0}
@@ -578,9 +610,9 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
   border-radius:var(--round-l);
   font-size:16px;line-height:1.85;
   /* 黄の上は必ず濃い文字。暗い配色のときは地のほうを暗くしてある */
-  color:#17201D;
+  color:var(--on-hl);
 }
-.caution b{color:#17201D}
+.caution b{color:var(--on-hl)}
 @media (prefers-color-scheme: dark){
   .caution{color:var(--ink)}
   .caution b{color:var(--ink)}
@@ -619,7 +651,7 @@ section .note{margin-top:16px}
     border:1.5px solid var(--accent);color:var(--accent-ink);background:var(--bg-card);
   }
   /* 申し込みはトップのボタンと同じ黄。色でも同じものだと分かるように */
-  .mobilebar a.primary{background:var(--hl);color:#17201D;border-color:var(--hl)}
+  .mobilebar a.primary{background:var(--hl);color:var(--on-hl);border-color:var(--hl)}
   body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
 }
 
@@ -860,9 +892,9 @@ section .note{margin-top:16px}
 .apps .tag{
   display:inline-block;margin-left:10px;vertical-align:2px;
   font-size:12px;font-weight:700;letter-spacing:.1em;
-  color:#fff;background:var(--accent);padding:3px 10px;border-radius:999px;
+  color:var(--on-green);background:var(--green-bright);padding:3px 10px;border-radius:999px;
 }
-@media (prefers-color-scheme: dark){ .apps .tag{color:#241B16} }
+
 .apps p{color:var(--ink-soft);font-size:15.5px;margin-top:8px;max-width:42em}
 .apps .links{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:16px}
 .apps .links > a:not(.badge){font-size:15px;font-weight:700;text-decoration:none;border-bottom:1.5px solid var(--line);padding-bottom:2px}
@@ -1004,12 +1036,17 @@ p,li,dd,
 /* 蛍光ペンを引いたような下線。強調したい語だけに使う */
 .hl{
   background:linear-gradient(transparent 62%, var(--hl) 62%);
-  /* 黄の上は必ず濃い文字。暗い配色でも読めるよう色を固定する */
-  color:#17201D;
+  /* 黄の上は必ず濃い文字 */
+  color:var(--on-hl);
   padding:0 .1em;
   /* 2行にまたがったとき、下線を各行に引き直す（途切れさせない） */
   -webkit-box-decoration-break:clone;
   box-decoration-break:clone;
+}
+/* 暗い配色では、下線だけだと文字の上半分が暗い地に重なって読めない
+   （濃い文字 × 暗い地で 1.11:1）。面をべた塗りにして、文字を黄の上に置く。 */
+@media (prefers-color-scheme: dark){
+  .hl{background:var(--hl);padding:.04em .18em;border-radius:3px}
 }
 
 /* 大きな数字だけ Barlow。本文の数字には使わない */
@@ -1046,7 +1083,7 @@ p,li,dd,
   white-space:nowrap;
 }
 /* 濃い緑の帯の上では、枠も文字も明るくしないと沈む */
-.section.brand .wip{border-color:rgba(255,255,255,.5);color:#C9D8D2}
+.section.brand .wip{border-color:var(--on-green);color:var(--on-green)}
 /* 見出しの上に単独で置くときの行 */
 .wip-line{margin-bottom:10px}
 .sec-head .wip-line{margin-bottom:8px}
@@ -1061,20 +1098,21 @@ p,li,dd,
 .btn-apply{
   background:var(--hl);
   border-color:var(--hl);
-  color:#17201D;
+  color:var(--on-hl);
 }
-.btn-apply:hover{background:#FFD92E;border-color:#FFD92E;color:#17201D}
+.btn-apply:hover{background:var(--hl-press);border-color:var(--hl-press);color:var(--on-hl)}
 
 /* 緑地の節。ここだけ文字を明るくする */
-.section.brand{background:var(--accent);color:#F1F3F2}
-.section.brand h2,.section.brand h3{color:#FFFFFF}
-.section.brand .lead-p,.section.brand p{color:#D8E2DE}
-.section.brand .lead-p b{color:#FFFFFF}
-.section.brand .note.on-brand{color:#AEC2BB}
-.btn.ghost.on-brand{color:#FFFFFF;border-color:rgba(255,255,255,.55)}
-.btn.ghost.on-brand:hover{background:rgba(255,255,255,.1);color:#FFFFFF}
+.section.brand{background:var(--green-bright);color:var(--on-green)}
+.section.brand h2,.section.brand h3{color:var(--on-green)}
+.section.brand .lead-p,.section.brand p{color:var(--on-green)}
+.section.brand .lead-p b{color:var(--on-green)}
+.section.brand .note.on-brand{color:var(--on-green)}
+.btn.ghost.on-brand{background:var(--bg-card);color:var(--green-text);
+                    border-color:var(--green-text)}
+.btn.ghost.on-brand:hover{background:var(--green-pale);color:var(--on-green-pale)}
 @media (prefers-color-scheme: dark){
-  .section.brand{background:#14312A}
+  .section.brand{background:var(--green-bright)}
 }
 
 /* 線のアイコン。太さ2px、角は丸く */
@@ -1179,7 +1217,8 @@ p,li,dd,
 .form legend{padding:0;font-size:15px;font-weight:700;color:var(--ink)}
 .form .req{
   margin-left:8px;font-size:12px;font-weight:700;letter-spacing:.06em;
-  color:var(--accent);background:var(--accent-pale);
+  /* ごく薄い緑の上なので、文字は濃い緑。明るい緑だと 2.09:1 で読めない */
+  color:var(--on-green-pale);background:var(--green-pale);
   padding:2px 8px;border-radius:999px;vertical-align:2px;
 }
 
