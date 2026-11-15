@@ -16,6 +16,9 @@
  */
 
 import { EmailMessage } from 'cloudflare:email';
+/* フォームにある欄の名前の一覧。build.py が dist/ のフォームから書き出す。
+   手で直さないこと（次のビルドで上書きされる）。 */
+import { FIELD_NAMES } from './form_fields.js';
 
 /* 2026-11-10 にURLを英語に直した。古いURLを控えている方のために転送する。
    このリストは wrangler.toml の run_worker_first と対になっている。
@@ -110,23 +113,42 @@ async function handleForm(request, env) {
        それでも万一のために、入力を返す画面は出す。 */
     return fail(request, fields, '送信を確認できませんでした。');
   }
-  if (token && env.TURNSTILE_SECRET) {
+
+  /* フォームに無い名前の欄が来たら送らない。
+     ボットは欄の名前を作り替えて送ってくることがある
+     （2026-11-15、日本語の名前が「??????」になったものが届いた）。
+     人がフォームから送れば、ここに引っかかることはない。
+     例外は、フォームの欄を変えた直後に古いページから送った場合。
+     そのときも入力は返す画面に残る。 */
+  for (const k of form.keys()) {
+    if (!FIELD_NAMES.has(k)) {
+      return fail(request, fields,
+        '送信された項目がフォームと合いませんでした。ページを読み込み直してお試しください。');
+    }
+  }
+
+  if (!token) {
+    /* トークンが無い。JavaScript が動いていないか、Turnstile の読み込みが
+       止められている。以前はここを通していたが、ボットはトークンを付けずに
+       送るだけで判定をすり抜けられた。
+       止めても入力は消えない。返す画面に入力とメールで送るボタンが出る。
+       フォームの <noscript> でも、メールで送るよう案内している。 */
+    return fail(request, fields,
+      '「人が操作しているか」の確認ができませんでした。' +
+      'JavaScript が動いていないか、確認のしくみの読み込みが止められているようです。');
+  }
+  if (env.TURNSTILE_SECRET) {
     const ok = await verifyTurnstile(token, ip, env.TURNSTILE_SECRET);
     if (!ok) {
       return fail(request, fields, '「人が操作しているか」の確認が通りませんでした。');
     }
-  } else if (token) {
+  } else {
     /* ウィジェットは出ているが、Secret がまだ入っていない。
        Cloudflare は「コードのない Worker」に変数を足させないので、
        いちばん最初のデプロイの前は必ずこの状態になる。
        ここで止めると、せっかくの送信が消える。通したうえで、
        メールの先頭に書いて気づけるようにする。 */
     note = '（Turnstile の Secret が未設定です。自動判定をしていません）';
-  } else {
-    /* JavaScript が動いていないとき。Turnstile はJSが要るのでトークンが無い。
-       ここで止めると、書いてくれた内容がそのまま消える。
-       隠し欄が空であることだけを根拠に通し、件名に印を付けて送る。 */
-    note = '（自動判定なし・JavaScript が動いていない環境からの送信）';
   }
 
   if (fields.length === 0) {

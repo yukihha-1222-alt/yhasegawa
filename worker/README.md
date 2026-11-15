@@ -21,10 +21,12 @@
       ▼
     worker/index.js
       │  1. 隠し欄（_hp）が空かを見る
-      │  2. Turnstile のトークンがあれば Cloudflare に問い合わせて検証
-      │     無ければ（JavaScript が動いていない）、件名に印を付けて通す
-      │  3. 入力を順番に並べて本文にする
-      │  4. send_email でメールを送る。Reply-To に入力のアドレスを入れる
+      │  2. フォームに無い名前の欄が来ていないかを見る
+      │     （一覧は worker/form_fields.js。build.py がフォームから書き出す）
+      │  3. Turnstile のトークンを Cloudflare に問い合わせて検証
+      │     トークンが無ければ（JavaScript が動いていない・ボット）送らない
+      │  4. 入力を順番に並べて本文にする
+      │  5. send_email でメールを送る。Reply-To に入力のアドレスを入れる
       ▼
     長谷川のメール
 
@@ -34,5 +36,8 @@
 
 `pages/monitor.html` と `pages/contact.html` の入力欄は、`name` に
 「会社名」「お名前」… と見出しそのものを入れてあります。
-Worker は受け取った順に並べるだけなので、JavaScript が動いていても
-いなくても、同じ形のメールが届きます。
+Worker は受け取った順に並べるだけなので、見出しがそのままメールの項目名になります。
+
+欄を足したり名前を変えたりしたら、`python3 build.py` を実行して
+`worker/form_fields.js` も一緒にコミットしてください。
+一覧に無い名前の欄が来ると、Worker は送信を止めます。

@@ -563,6 +563,33 @@ def copy_assets():
                 shutil.copy(src, dst)
 
 
+def write_form_fields(pages):
+    """worker/form_fields.js を書く。/api/form に送るフォームの欄の名前の一覧。
+
+    Worker はこの一覧に無い名前の欄が来たら送らない（ボットよけ）。
+    手で一覧を持つと、フォームの欄を変えたときに直し忘れて、
+    人の送信まで止めてしまう。なので組み立てたページから拾う。
+    """
+    names = set(['cf-turnstile-response'])   # Turnstile が送信のときに足す欄
+    for page in pages:
+        for form in re.findall(r'<form\b[^>]*action="/api/form"[^>]*>.*?</form>',
+                               page, flags=re.S):
+            names.update(re.findall(r'<(?:input|textarea|select)\b[^>]*\bname="([^"]+)"',
+                                    form))
+    if len(names) < 3:
+        sys.exit('フォームの欄が見つかりません（worker/form_fields.js を書けない）')
+    body = ',\n'.join('  %s' % json_str(n) for n in sorted(names))
+    write(os.path.join(ROOT, 'worker', 'form_fields.js'),
+          '/* このファイルは build.py が書き出したものです。直接編集しないこと。\n'
+          '   pages/ のフォームから拾った、/api/form が受け付ける欄の名前。 */\n'
+          'export const FIELD_NAMES = new Set([\n' + body + ',\n]);\n')
+    return names
+
+
+def json_str(s):
+    return '\'' + s.replace('\\', '\\\\').replace('\'', '\\\'') + '\''
+
+
 def write_robots_sitemap(urls):
     """robots.txt と sitemap.xml を書く。URLはビルドした実物から作る。"""
     write(os.path.join(DIST, 'robots.txt'),
@@ -636,6 +663,7 @@ def main():
     clean_dist()
 
     built = []
+    pages_out = []
     for fn in sorted(os.listdir(PAGES)):
         # 頭に _ の付くファイルは出力しない。消さずに取っておくための印。
         if not fn.endswith('.html') or fn.startswith('_'):
@@ -700,6 +728,7 @@ def main():
         })
         page = wbr_ja(first_full(tidy_ja(fill(layout, values))))
         write(out, WARNING.format(src='pages/' + fn) + page)
+        pages_out.append(page)
         built.append((url, os.path.relpath(out, ROOT), len(body)))
 
         if preview:
@@ -707,6 +736,7 @@ def main():
 
     copy_assets()
     write_robots_sitemap([u for u, _, _ in built])
+    fields = write_form_fields(pages_out)
 
     if preview:
         # CSS の中の画像も相対に直す。site.css は assets/css/ にあるので1つ上
@@ -733,7 +763,8 @@ def main():
                     shutil.copy(src, os.path.join(PREVIEW, rel)))
         print('プレビューを _preview/ に書き出しました（相対パス・計測タグなし）')
 
-    print('%d ページを組み立てました' % len(built))
+    print('%d ページを組み立てました（フォームの欄 %d 個を worker/form_fields.js へ）'
+          % (len(built), len(fields)))
     for url, path, n in built:
         print('  %-14s → %-26s 本文 %5d 字' % (url, path, n))
 

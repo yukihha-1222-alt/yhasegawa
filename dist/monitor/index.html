@@ -227,8 +227,8 @@
         </label>
 
         <!-- いたずらの送信を防ぐための確認。ほとんどの人は何も操作せずに通ります。
-     JavaScript が動かない環境ではここが出ませんが、
-     そのときも送信はできます（Worker 側で隠し欄を見ています）。 -->
+     JavaScript が動かない環境ではここが出ず、送信もできません
+     （トークンの無い送信は Worker が止める。フォームの <noscript> でメールを案内）。 -->
 <div class="cf-turnstile" data-sitekey="0x4AAAAAAF6EyfFEgIfvcIj9" data-language="ja"></div>
 
 
@@ -238,7 +238,7 @@
         </p>
         <noscript>
           <p class="note">
-            この<wbr>ブラウザでは<wbr>確認のしくみが<wbr>動きませんが、<wbr>そのまま<wbr>送信できます。<wbr>届かないときは、<a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a> までお願いします。
+            この<wbr>ブラウザでは<wbr>確認のしくみが<wbr>動かないため、<wbr>この<wbr>フォームからは<wbr>送信できません。<wbr>お手数ですが、<a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a> まで<wbr>メールでお送りください。
           </p>
         </noscript>
       </form>
