@@ -1116,6 +1116,8 @@ p,li,dd,
 .section.brand .lead-p,.section.brand p{color:var(--on-green)}
 .section.brand .lead-p b{color:var(--on-green)}
 .section.brand .note.on-brand{color:var(--on-green)}
+/* 帯の中の注記のリンク。緑の上に緑の文字は読めないので、注記と同じ濃い色にする */
+.section.brand .note.on-brand a{color:var(--on-green);text-decoration-color:currentColor}
 .btn.ghost.on-brand{background:var(--bg-card);color:var(--green-text);
                     border-color:var(--green-text)}
 .btn.ghost.on-brand:hover{background:var(--green-pale);color:var(--on-green-pale)}

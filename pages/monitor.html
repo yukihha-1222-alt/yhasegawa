@@ -2,23 +2,58 @@
 slug: monitor
 tail: no
 title: {{service}} の先行モニターに申し込む｜期間中は無料です
-description: {{service_full}}の先行モニターを募集しています。期間中は無料です。社内の研修やお客様への説明に動画を使いたい会社の方に、お使いいただければと思います。
+description: {{service_full}}の先行モニターを募集しています。期間は2027年1月12日から4月12日まで、期間中は無料です。社内の研修や新人教育に動画を使いたい会社の方に、お使いいただければと思います。
 -->
 
 <section class="section hero">
   <div class="wrap narrow">
     <p class="eyebrow">先行モニターのお申し込み</p>
-    <p class="wip-line"><span class="wip">開発中</span></p>
+    <p class="wip-line"><span class="wip">正式公開前</span></p>
     <h1><span class="nb">一緒に試してくださる</span><span class="nb">会社を探しています</span></h1>
     <p class="lead">
-      {{service}} は現在開発中です。できあがった機能から、先行モニターの皆さまに順にお使いいただきます。
-      実際の現場で使っていただきながら、形を決めていきたいと思っています。
+      {{service}} は、正式な公開の前の段階です。先行モニターの皆さまに、実際の現場で使っていただきます。
+      使っていただきながら、形を決めていきたいと思っています。
     </p>
     <!-- TODO: 料金が決まったら更新 -->
     <p class="caution">
       <b>先行モニターの期間中は無料です。</b>
       正式な料金は、決まり次第お知らせします。
       お申し込みいただいたからといって、そのまま有料になることはありません。
+    </p>
+  </div>
+</section>
+
+<!-- ============ 期間と、終わったあと ============
+     docs/monitor-guide.md と docs/legal/monitor.md（VideoTask のリポジトリ）と同じ中身にする。
+     向こうを変えたら、ここも直す。 -->
+<section class="section">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <h2>期間と、終わったあと</h2>
+    </div>
+    <ul class="changes">
+      <li>期間は、2027年1月12日（火）から4月12日（月）までです。</li>
+      <li>終わったあとは、続けてお使いいただくかをお選びいただけます。</li>
+      <li>続けない場合は、終わってから30日以内に、御社のデータを消します。暗号化したバックアップに残った分も、最長6か月で古い順に消えます。</li>
+      <li>消す前に、視聴や確認問題の記録を CSV（表計算ソフトで開ける一覧のファイル）で保存できます。</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap narrow">
+    <div class="sec-head">
+      <h2>社員の方が使うもの</h2>
+    </div>
+    <ul class="changes">
+      <li>iPhone のアプリ（iOS 18 以上）</li>
+      <li>Android のアプリ（Android 12 以上）</li>
+      <li>パソコンのブラウザ</li>
+    </ul>
+    <p class="note">
+      先行モニターの間は、正式な公開の前のアプリを配るしくみでお渡しします。
+      iPhone は TestFlight、Android は Google Play の内部テストです。
+      社員の方の登録は、御社の管理者の方が管理画面から行います。
     </p>
   </div>
 </section>
@@ -91,21 +126,21 @@ description: {{service_full}}の先行モニターを募集しています。期
             <label><input type="checkbox" name="使いたい場面" value="社内研修">社内研修</label>
             <label><input type="checkbox" name="使いたい場面" value="商品の勉強">商品の勉強</label>
             <label><input type="checkbox" name="使いたい場面" value="お客様向け">お客様向け</label>
-            <label><input type="checkbox" name="使いたい場面" value="勉強会の録画">勉強会の録画</label>
             <label><input type="checkbox" name="使いたい場面" value="その他">その他</label>
           </div>
         </fieldset>
 
-        <fieldset data-q="社員の方が使っているスマートフォン">
+        <fieldset data-q="社員の方が使う端末">
           <!-- 空の値を1つ送っておく理由は、上の「使いたい場面」と同じ -->
-          <input type="hidden" name="社員の方が使っているスマートフォン" value="">
-          <legend>社員の方が使っているスマートフォン（複数選択可）</legend>
+          <input type="hidden" name="社員の方が使う端末" value="">
+          <legend>社員の方が使う端末（複数選択可）</legend>
           <div class="choices">
-            <label><input type="checkbox" name="社員の方が使っているスマートフォン" value="iPhone（会社で支給）">iPhone（会社で支給）</label>
-            <label><input type="checkbox" name="社員の方が使っているスマートフォン" value="Android（会社で支給）">Android（会社で支給）</label>
-            <label><input type="checkbox" name="社員の方が使っているスマートフォン" value="iPhone（個人のもの）">iPhone（個人のもの）</label>
-            <label><input type="checkbox" name="社員の方が使っているスマートフォン" value="Android（個人のもの）">Android（個人のもの）</label>
-            <label><input type="checkbox" name="社員の方が使っているスマートフォン" value="まだ分からない">まだ分からない</label>
+            <label><input type="checkbox" name="社員の方が使う端末" value="iPhone（会社で支給）">iPhone（会社で支給）</label>
+            <label><input type="checkbox" name="社員の方が使う端末" value="Android（会社で支給）">Android（会社で支給）</label>
+            <label><input type="checkbox" name="社員の方が使う端末" value="iPhone（個人のもの）">iPhone（個人のもの）</label>
+            <label><input type="checkbox" name="社員の方が使う端末" value="Android（個人のもの）">Android（個人のもの）</label>
+            <label><input type="checkbox" name="社員の方が使う端末" value="パソコン">パソコン</label>
+            <label><input type="checkbox" name="社員の方が使う端末" value="まだ分からない">まだ分からない</label>
           </div>
         </fieldset>
 
@@ -204,11 +239,11 @@ description: {{service_full}}の先行モニターを募集しています。期
         <p class="d">どんな動画を配りたいかを、オンラインで（ご希望があれば、こちらからお電話して）お聞きします。</p>
       </li>
       <li>
-        <p class="when">そのあと</p>
+        <p class="when">1月12日から</p>
         <h3>使っていただきます</h3>
         <p class="d">
-          できあがった順にお渡しして、実際の現場で試していただきます。
-          使いにくいところを教えてください。
+          1月7日ごろに、管理画面に入るためのご案内をお送りします。
+          実際の現場で試していただき、月に1回、ご感想をお聞かせください。
         </p>
       </li>
     </ol>
@@ -216,5 +251,6 @@ description: {{service_full}}の先行モニターを募集しています。期
       フォームからでも、<a href="mailto:{{mail}}">{{mail}}</a> へ直接お送りいただいても構いません。
       いただいたお申し込みには、2営業日以内にメールでお返事します。
     </p>
+    <p class="note">VideoTask のサイト：<a href="https://videotask.app">videotask.app</a>　使い方のお問い合わせ：<a href="mailto:support@videotask.app">support@videotask.app</a></p>
   </div>
 </section>
