@@ -323,7 +323,7 @@ def first_full(html):
 #         <b>admin-home.png</b>
 #         管理画面のホーム
 #       </div>
-#       <figcaption class="wip-cap">開発中の画面イメージです。…</figcaption>
+#       <figcaption class="wip-cap">実際の画面です（見本のデータ）。</figcaption>
 #     </figure>
 #
 # assets/img/platform/admin-home.png を置けば、その枠だけが <img> に変わる。
