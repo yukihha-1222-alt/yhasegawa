@@ -62,12 +62,12 @@ destination_address = "support@videotask.app"
 [[d1_databases]]
 binding = "DB"
 database_name = "yhasegawa-form"
-database_id = "TODO-作成後に入れる"
+database_id = "3c9fe6a0-fe86-4b79-b125-9200b9aca6ea"
 
 [[d1_databases]]
 binding = "DB_PREVIEW"
 database_name = "yhasegawa-form-preview"
-database_id = "TODO-作成後に入れる"
+database_id = "41f44010-83a9-42b2-a59f-97128cdf0016"
 
 [vars]
 # 画面に出る鍵。公開してよい
