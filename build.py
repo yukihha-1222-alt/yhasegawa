@@ -63,11 +63,13 @@ SERVICE_FULL = 'VideoTask（ビデオタスク）'
 
 PARTS = os.path.join(ROOT, 'parts')
 PAGES = os.path.join(ROOT, 'pages')
+# 先行モニター規約の版。1 版が 1 ファイル。くわしくは terms/monitor/v1.html の頭
+TERMS = os.path.join(ROOT, 'terms', 'monitor')
 
 WARNING = (
     '<!-- ============================================================\n'
     '     このファイルは build.py が組み立てたものです。直接編集しても、\n'
-    '     次のビルドで消えます。本文は pages/{src}、\n'
+    '     次のビルドで消えます。本文は {src}、\n'
     '     共通部分は parts/ を編集して python3 build.py を実行してください。\n'
     '     ============================================================ -->\n'
 )
@@ -391,6 +393,70 @@ def image_size(path):
             f.seek(ln - 2, 1)
 
 
+def load_terms():
+    """terms/monitor/ の版を、制定日の古い順に返す。[(date, 本文), ...]
+
+    いちばん新しい版が、いまの規約。フォームの同意の印は、この版を指す。
+    """
+    out = []
+    for fn in sorted(os.listdir(TERMS)):
+        if not fn.endswith('.html'):
+            continue
+        text = read(os.path.join(TERMS, fn))
+        m = re.match(r'\s*<!--terms\s*(.*?)-->\s*', text, re.S)
+        if not m:
+            sys.exit('terms/monitor/%s: 先頭に <!--terms ... --> がありません' % fn)
+        dm = re.search(r'^date:\s*(\d{4}-\d{2}-\d{2})\s*$', m.group(1), re.M)
+        if not dm:
+            sys.exit('terms/monitor/%s: date: YYYY-MM-DD がありません' % fn)
+        out.append((dm.group(1), text[m.end():].strip()))
+    if not out:
+        sys.exit('terms/monitor/ に規約の版がありません')
+    dates = [d for d, _ in out]
+    if len(set(dates)) != len(dates):
+        sys.exit('terms/monitor/: 同じ制定日の版が 2 つあります')
+    return sorted(out)
+
+
+def date_ja(iso):
+    y, m, d = (int(x) for x in iso.split('-'))
+    return '%d年%d月%d日' % (y, m, d)
+
+
+def terms_pages(terms):
+    """規約の版から、組み立てるページを作る。[(元の名前, meta, 本文), ...]
+
+    /monitor-terms/<制定日>/ … 版ごとの固定の URL。前の版もここに残る
+    /monitor-terms/          … いまの版（いちばん新しいもの）
+    """
+    latest = terms[-1][0]
+    pages = []
+    for date, body in terms:
+        old = date != latest
+        notice = ''
+        if old:
+            notice = ('<p class="caution">これは前の版です（制定日 %s）。'
+                      'いまの版は<a href="/monitor-terms/">こちら</a>です。</p>' % date_ja(date))
+        head = ('<section class="section page-hero">\n  <div class="wrap narrow">\n'
+                '    <p class="eyebrow">先行モニター規約</p>\n'
+                '    <h1>{{service}} 先行モニター規約</h1>\n'
+                '    <p class="asof">制定日 %s</p>\n%s'
+                '  </div>\n</section>\n' % (date_ja(date), notice))
+        main = ('<section class="section">\n  <div class="wrap narrow terms">\n%s\n'
+                '    <p class="note"><a href="/monitor/">先行モニターのお申し込みへ</a></p>\n'
+                '  </div>\n</section>\n' % body)
+        meta = {'slug': 'monitor-terms/' + date, 'tail': 'no',
+                'title': '{{service}} 先行モニター規約（制定日 %s）' % date_ja(date),
+                'description': '{{service}}の先行モニターの規約です。制定日 %s の版です。'
+                               % date_ja(date)}
+        pages.append(('terms/monitor（%s）' % date, meta, head + main))
+        if not old:
+            cur = dict(meta, slug='monitor-terms',
+                       title='{{service}} 先行モニター規約')
+            pages.append(('terms/monitor（いまの版）', cur, head + main))
+    return pages
+
+
 def place_images(body, keep):
     """用意できた画像を <img> に変え、まだ無いものは枠ごと落とす。"""
     missing = []
@@ -563,7 +629,7 @@ def copy_assets():
                 shutil.copy(src, dst)
 
 
-def write_form_fields(pages):
+def write_form_fields(pages, terms_dates):
     """worker/form_fields.js を書く。/api/form に送るフォームの欄の名前の一覧。
 
     Worker はこの一覧に無い名前の欄が来たら送らない（ボットよけ）。
@@ -582,7 +648,11 @@ def write_form_fields(pages):
     write(os.path.join(ROOT, 'worker', 'form_fields.js'),
           '/* このファイルは build.py が書き出したものです。直接編集しないこと。\n'
           '   pages/ のフォームから拾った、/api/form が受け付ける欄の名前。 */\n'
-          'export const FIELD_NAMES = new Set([\n' + body + ',\n]);\n')
+          'export const FIELD_NAMES = new Set([\n' + body + ',\n]);\n'
+          '\n/* 先行モニター規約の、載せている版の制定日（terms/monitor/ から）。\n'
+          '   フォームから来た「同意した規約の制定日」が、この中にあるかを見る。 */\n'
+          'export const TERMS_DATES = new Set([\n' +
+          ',\n'.join('  %s' % json_str(d) for d in terms_dates) + ',\n]);\n')
     return names
 
 
@@ -645,8 +715,14 @@ def main():
     # サイト共通の値を先に部品へ埋める。
     # 部品は本文に差し込まれたあと走査されないので、ここで埋めておかないと
     # footer の {{mail}} がそのまま残ってしまう。
+    terms = load_terms()
+    terms_date = terms[-1][0]
     scalars = {'mail': MAIL, 'service': SERVICE, 'service_full': SERVICE_FULL,
-               'turnstile_sitekey': TURNSTILE_SITEKEY}
+               'turnstile_sitekey': TURNSTILE_SITEKEY,
+               # 先行モニター規約のいまの版。フォームの同意の印に使う
+               'terms_date': terms_date,
+               'terms_date_ja': date_ja(terms_date),
+               'terms_url': '/monitor-terms/%s/' % terms_date}
     common = {name: fill(read(os.path.join(PARTS, name + '.html')), scalars, strict=False)
               for name in ('header', 'footer', 'mobilebar',
                            'tail_monitor', 'tail_soudan', 'turnstile')}
@@ -664,15 +740,19 @@ def main():
 
     built = []
     pages_out = []
+    sources = []
     for fn in sorted(os.listdir(PAGES)):
         # 頭に _ の付くファイルは出力しない。消さずに取っておくための印。
         if not fn.endswith('.html') or fn.startswith('_'):
             continue
-        src = os.path.join(PAGES, fn)
         try:
-            meta, body = parse_page(read(src))
+            meta, body = parse_page(read(os.path.join(PAGES, fn)))
         except ValueError as e:
             sys.exit('%s: %s' % (fn, e))
+        sources.append(('pages/' + fn, meta, body))
+    sources += terms_pages(terms)
+
+    for fn, meta, body in sources:
 
         slug = meta['slug']
         # トップだけは直下。ほかは /<slug>/index.html に置き、URLの末尾を / にする
@@ -727,16 +807,17 @@ def main():
             'body':        body.strip(),
         })
         page = wbr_ja(first_full(tidy_ja(fill(layout, values))))
-        write(out, WARNING.format(src='pages/' + fn) + page)
+        write(out, WARNING.format(src=fn) + page)
         pages_out.append(page)
         built.append((url, os.path.relpath(out, ROOT), len(body)))
 
         if preview:
-            write(os.path.join(PREVIEW, slug + '.html'), to_preview(page, slug))
+            write(os.path.join(PREVIEW, slug.replace('/', '-') + '.html'),
+                  to_preview(page, slug))
 
     copy_assets()
     write_robots_sitemap([u for u, _, _ in built])
-    fields = write_form_fields(pages_out)
+    fields = write_form_fields(pages_out, [d for d, _ in terms])
 
     if preview:
         # CSS の中の画像も相対に直す。site.css は assets/css/ にあるので1つ上

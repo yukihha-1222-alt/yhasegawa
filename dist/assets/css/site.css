@@ -1291,6 +1291,42 @@ p,li,dd,
    .form label は縦並びの flex なので、包まないとバッジが独立した行になる。 */
 .form .q{display:block}
 
+/* 先行モニターの申し込み。管理者の方・人数・開始日のまとまり */
+.form .admin-box,.form .count-box,.form .start-box{gap:14px}
+.form .admin-box > label:not(.same){margin-top:4px}
+/* 「お申し込みの方と同じ」。.form input の幅 100% を、小さな印に戻す */
+.form label.same,.form .consent-check{
+  flex-direction:row;align-items:center;gap:10px;
+  font-weight:400;font-size:15px;cursor:pointer;margin-top:-6px;
+}
+.form label.same input,.form .consent-check input{
+  width:20px;height:20px;padding:0;margin:0;flex:none;accent-color:var(--accent);
+}
+.form input[readonly]{background:var(--bg-card);color:var(--ink-faint)}
+.counts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.counts label{font-weight:400}
+.start-only{display:flex;flex-direction:column;gap:14px}
+.start-only[hidden]{display:none}
+/* 規約への同意。印と文を、送信ボタンの前にまとめて目立たせる */
+.consent{
+  padding:16px 18px;border:1.5px solid var(--line);border-radius:var(--round);
+  background:var(--bg);display:flex;flex-direction:column;gap:10px;
+}
+.consent-link{margin:0;font-size:15px}
+.form .consent-check{margin-top:0;font-weight:700;align-items:flex-start}
+.form .consent-check span{display:flex;gap:10px;align-items:flex-start;line-height:1.7}
+.form .consent-check input{margin-top:3px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+/* 先行モニター規約のページ */
+.terms h2{font-size:clamp(18px,2.2vw,21px);margin:34px 0 10px}
+.terms h2:first-of-type{margin-top:0}
+.terms ol{padding-left:1.6em;display:flex;flex-direction:column;gap:8px}
+.terms ul{padding-left:1.3em;margin-top:8px;list-style:disc;display:flex;flex-direction:column;gap:6px}
+.terms ol{list-style:decimal}
+.terms p,.terms li{line-height:1.9}
+.terms .terms-sign{margin-top:34px;font-size:14.5px;color:var(--ink-soft)}
+
 /* ==================================================================
    顧問の先生へ
    見えるものと見えないものを並べて示す。

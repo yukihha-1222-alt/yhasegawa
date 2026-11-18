@@ -41,3 +41,37 @@ Worker は受け取った順に並べるだけなので、見出しがそのま�
 欄を足したり名前を変えたりしたら、`python3 build.py` を実行して
 `worker/form_fields.js` も一緒にコミットしてください。
 一覧に無い名前の欄が来ると、Worker は送信を止めます。
+
+## 先行モニターの申し込み（2026-11-18 から）
+
+`_form` が「先行モニター申込」の送信は、`worker/monitor.js` が受けます。
+項目と同意の記録の決まりは、VideoTask のリポジトリの `docs/hp-form.md` の 1.・2. です。
+
+    index.js の守り（隠し欄・欄の名前・Turnstile）
+      ▼
+    monitor.js
+      │  1. 必須・形・規約への同意・同意した規約の制定日を確かめる
+      │     （制定日は worker/form_fields.js の TERMS_DATES にあるものだけ）
+      │  2. D1（DB）の monitor_applications に 1 行残す。残せなければ止める
+      │  3. SEND（Email Sending）で support@videotask.app に送る。送れなければ止める
+      │  4. SEND で申込者に受付のお知らせを送る。送れなくても受付は済む
+      │     （運営者に「送れなかった」メールを送る）
+      ▼
+    送った結果は D1 の ops_mail / receipt_mail に書く
+
+- 表は `worker/schema.sql`。IP アドレスは残しません
+- 相談のフォームは今までどおり、MAIL（Email Routing）で自分あてに送るだけです
+
+## 先行モニター規約の版
+
+`terms/monitor/` に 1 版 1 ファイルで置きます。`build.py` が、
+`/monitor-terms/<制定日>/`（版ごと）と `/monitor-terms/`（いまの版）を作り、
+フォームの同意の印の文と、Worker が受け付ける制定日の一覧を書き出します。
+規約を変えるときは、前の版のファイルを消さずに、新しいファイルを足します。
+
+## テスト
+
+    python3 build.py
+    node --import ./test/register.mjs --test test/worker.test.mjs
+
+D1・メール・Turnstile は偽物に差し替えます。本物のメールは送りません。

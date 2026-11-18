@@ -91,6 +91,12 @@
       }).then(function (j) {
         if (!j.ok) throw new Error(j.error || '送信できませんでした。');
         var thanks = document.getElementById(form.getAttribute('data-thanks'));
+        /* 受付は済んだが、受付のお知らせのメールを送れなかったときなど */
+        if (thanks && j.notice) {
+          var n = document.createElement('p');
+          n.textContent = j.notice;
+          thanks.appendChild(n);
+        }
         if (thanks) {
           form.hidden = true;
           thanks.classList.add('shown');
@@ -106,7 +112,8 @@
         p.setAttribute('role', 'alert');
         p.textContent = String(err.message || err) +
           ' 入力はそのまま残っています。もう一度お試しいただくか、' +
-          'hasegawa@yhasegawa.com まで直接お送りください。';
+          (form.getAttribute('data-mail') || 'hasegawa@yhasegawa.com') +
+          ' まで直接お送りください。';
         form.appendChild(p);
         /* Turnstile は1回しか使えないので、作り直す */
         if (window.turnstile) { try { window.turnstile.reset(); } catch (e) {} }
@@ -137,6 +144,70 @@
       Array.prototype.forEach.call(radios, function (r) {
         r.addEventListener('change', sync);
       });
+      sync();
+    });
+
+
+  /* ---- 3c. 先行モニターの申し込みのフォーム ------------------------
+     ・「お申し込みの方と同じ」：印を付けると、お申し込みの方の欄を写し、
+       書き換えられないようにする（お申し込みの方の欄を直せば、ついてくる）
+     ・開始日：「日付を選ぶ」のときだけ日付の欄を出し、3日後〜14日後に絞る
+     ・送信のボタン：規約への同意の印が付くまで押せない
+     どれも、送る前に Worker がもう一度確かめる。ここは入力を助けるだけ。 */
+  function byName(form, name) {
+    return form.querySelector('[name="' + name + '"]');
+  }
+  Array.prototype.forEach.call(
+    document.querySelectorAll('input[data-same-as]'), function (box) {
+      var form = box.form || box.closest('form');
+      if (!form) return;
+      var src = byName(form, box.getAttribute('data-same-as'));
+      var dst = byName(form, box.getAttribute('data-target'));
+      if (!src || !dst) return;
+      function sync() {
+        if (box.checked) dst.value = src.value;
+        dst.readOnly = box.checked;
+      }
+      box.addEventListener('change', sync);
+      src.addEventListener('input', function () { if (box.checked) sync(); });
+      sync();
+    });
+
+  Array.prototype.forEach.call(
+    document.querySelectorAll('fieldset.start-box'), function (fs) {
+      var box = fs.querySelector('.start-only');
+      var date = fs.querySelector('input[type=date]');
+      var radios = fs.querySelectorAll('input[data-start]');
+      if (!box || !date) return;
+      /* 日本時間の今日から数える。端末の時計の時差に左右されないように */
+      function jst(addDays) {
+        var d = new Date(Date.now() + 9 * 3600 * 1000 + addDays * 86400 * 1000);
+        return d.toISOString().slice(0, 10);
+      }
+      date.min = jst(3);
+      date.max = jst(14);
+      function sync() {
+        var want = false;
+        Array.prototype.forEach.call(radios, function (r) {
+          if (r.checked && r.getAttribute('data-start') === 'date') want = true;
+        });
+        box.hidden = !want;
+        date.required = want;
+        if (!want) date.value = '';
+      }
+      Array.prototype.forEach.call(radios, function (r) {
+        r.addEventListener('change', sync);
+      });
+      sync();
+    });
+
+  Array.prototype.forEach.call(
+    document.querySelectorAll('[data-needs-consent]'), function (btn) {
+      var form = btn.form || btn.closest('form');
+      var box = form && byName(form, '先行モニター規約への同意');
+      if (!box) return;
+      function sync() { btn.disabled = !box.checked; }
+      box.addEventListener('change', sync);
       sync();
     });
 

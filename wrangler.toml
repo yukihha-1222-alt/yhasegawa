@@ -44,6 +44,23 @@ run_worker_first = true
 name = "MAIL"
 destination_address = "sakamotoyuki.develop@gmail.com"
 
+# ------------------------------------------------------------------
+# 先行モニターの申し込み（worker/monitor.js）。
+# Cloudflare Email Sending で、申込者のアドレスと support@videotask.app に送る。
+# 前もって、yhasegawa.com を Email Sending に登録しておくこと（Workers の有料プランが要る）。
+# 送れる差出人は form@yhasegawa.com だけに絞る。
+# ------------------------------------------------------------------
+[[send_email]]
+name = "SEND"
+allowed_sender_addresses = ["form@yhasegawa.com"]
+
+# 先行モニターの申し込みの記録（同意の記録）。表は worker/schema.sql
+# 【作ったら直す】database_id は `npx wrangler d1 create yhasegawa-form` で出た値
+[[d1_databases]]
+binding = "DB"
+database_name = "yhasegawa-form"
+database_id = "TODO-作成後に入れる"
+
 [vars]
 # 画面に出る鍵。公開してよい
 TURNSTILE_SITEKEY = "0x4AAAAAAF6EyfFEgIfvcIj9"

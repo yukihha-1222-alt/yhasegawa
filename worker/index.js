@@ -6,8 +6,11 @@
  *   1. POST /api/form  … 申し込みと相談のフォームを受け取り、メールにして送る
  *   2. それ以外        … dist/ の中の静的ファイルをそのまま返す
  *
- * メールは Cloudflare Email Routing の send_email バインディングで送る。
- * 外部のメール配信サービスは使わない。費用もかからない。
+ * メールは Cloudflare の send_email バインディングで送る。
+ *   MAIL … 相談のフォーム。Email Routing で確かめた自分のアドレスにだけ送れる
+ *   SEND … 先行モニターの申し込み。Email Sending（Workers の有料プラン）で、
+ *          申込者のアドレスと support@videotask.app に送る（worker/monitor.js）
+ * 先行モニターの申し込みは、送る前に D1（DB）に同意の記録を残す。
  *
  * 【入力を落とさないこと】
  * この仕組みの目的は、フォームに書いてくれた人を取りこぼさないこと。
@@ -18,7 +21,9 @@
 import { EmailMessage } from 'cloudflare:email';
 /* フォームにある欄の名前の一覧。build.py が dist/ のフォームから書き出す。
    手で直さないこと（次のビルドで上書きされる）。 */
-import { FIELD_NAMES } from './form_fields.js';
+import { FIELD_NAMES, TERMS_DATES } from './form_fields.js';
+/* 先行モニターの申し込みだけの処理（同意の記録・受付のお知らせ） */
+import { handleMonitor, MONITOR_FORM } from './monitor.js';
 
 /* 2026-11-10 にURLを英語に直した。古いURLを控えている方のために転送する。
    このリストは wrangler.toml の run_worker_first と対になっている。
@@ -155,6 +160,13 @@ async function handleForm(request, env) {
     return fail(request, fields, '入力が空のようです。');
   }
 
+  /* 先行モニターの申し込みは、項目を確かめて、同意の記録を残してから送る */
+  if (formName === MONITOR_FORM) {
+    const r = await handleMonitor(fields, env, { note, termsDates: TERMS_DATES });
+    if (!r.ok) return fail(request, fields, r.error, r.mailTo);
+    return done(request, formName, r.notice);
+  }
+
   const body = buildBody(fields, request, note);
   const subject = '【' + formName + '】' + (fields[0] ? fields[0].v[0].slice(0, 30) : '');
   const replyTo = findEmail(fields);
@@ -199,6 +211,7 @@ function findEmail(fields) {
 }
 
 function buildBody(fields, request, note) {
+  /* 送信元の IP アドレスは書かない（2026-11-18 の決め。プライバシーポリシーにも書いていない） */
   const lines = [];
   if (note) lines.push(note, '');
   for (const f of fields) {
@@ -208,7 +221,6 @@ function buildBody(fields, request, note) {
   }
   lines.push('--');
   lines.push('yhasegawa.com のフォームから');
-  lines.push('送信元: ' + (request.headers.get('CF-Connecting-IP') || '不明'));
   lines.push('日時: ' + new Date().toISOString());
   return lines.join('\n');
 }
@@ -244,18 +256,23 @@ function wantsJson(request) {
   return (request.headers.get('accept') || '').includes('application/json');
 }
 
-function done(request, formName) {
+function done(request, formName, notice) {
   if (wantsJson(request)) {
-    return json({ ok: true });
+    return json(notice ? { ok: true, notice } : { ok: true });
   }
+  const next = formName === MONITOR_FORM
+    ? '受付のお知らせを、お申し込みの方のメールアドレスにお送りしました。2営業日以内に、管理画面のご案内についてご連絡します。'
+    : '数日以内に長谷川からご連絡します。';
   return html(200, 'ありがとうございます', `
     <h1>ありがとうございます</h1>
-    <p>${esc(formName)}を受け取りました。数日以内に長谷川からご連絡します。</p>
+    <p>${esc(formName)}を受け取りました。${esc(next)}</p>
+    ${notice ? '<p>' + esc(notice) + '</p>' : ''}
     <p><a href="/">ホームへもどる</a></p>
   `);
 }
 
-function fail(request, fields, why) {
+function fail(request, fields, why, mailTo) {
+  const to = mailTo || TO_FALLBACK;
   if (wantsJson(request)) {
     return json({ ok: false, error: why }, 400);
   }
@@ -263,7 +280,7 @@ function fail(request, fields, why) {
   const text = fields && fields.length
     ? fields.map((f) => '■ ' + f.k + '\n' + (f.v.filter(Boolean).join('、') || '（未記入）')).join('\n\n')
     : '';
-  const mailto = 'mailto:' + TO_FALLBACK +
+  const mailto = 'mailto:' + to +
     '?subject=' + encodeURIComponent('【お問い合わせ】') +
     '&body=' + encodeURIComponent(text);
   return html(400, '送信できませんでした', `
@@ -272,7 +289,7 @@ function fail(request, fields, why) {
     <p><b>入力していただいた内容は、下に残してあります。</b>
        お手数ですが、コピーしてメールでお送りください。</p>
     <p><a class="btn" href="${mailto}">この内容をメールで送る</a>
-       <a class="btn" href="mailto:${TO_FALLBACK}">${TO_FALLBACK}</a></p>
+       <a class="btn" href="mailto:${to}">${to}</a></p>
     ${text ? '<textarea readonly rows="14">' + esc(text) + '</textarea>' : ''}
     <p><a href="/">ホームへもどる</a></p>
   `);

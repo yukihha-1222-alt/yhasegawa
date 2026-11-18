@@ -1,6 +1,6 @@
 <!-- ============================================================
      このファイルは build.py が組み立てたものです。直接編集しても、
-     次のビルドで消えます。本文は pages/pages/privacy.html、
+     次のビルドで消えます。本文は pages/privacy.html、
      共通部分は parts/ を編集して python3 build.py を実行してください。
      ============================================================ -->
 <!DOCTYPE html>
@@ -9,12 +9,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>プライバシーポリシー｜お預かりした情報の扱い｜長谷川侑希</title>
-<meta name="description" content="このサイトでお預かりする情報と、その使い道をまとめています。お申し込みとご相談へのご連絡にだけ使い、第三者には渡しません。フォームに入力された内容が、このサイトのサーバーに残ることはありません。">
+<meta name="description" content="このサイトでお預かりする情報と、その使い道、残す期間、渡す先をまとめています。先行モニターのお申し込みとご相談へのご連絡、規約への同意の記録にだけ使います。">
 <link rel="canonical" href="https://yhasegawa.com/privacy/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yhasegawa.com/privacy/">
 <meta property="og:title" content="プライバシーポリシー｜お預かりした情報の扱い｜長谷川侑希">
-<meta property="og:description" content="このサイトでお預かりする情報と、その使い道をまとめています。お申し込みとご相談へのご連絡にだけ使い、第三者には渡しません。フォームに入力された内容が、このサイトのサーバーに残ることはありません。">
+<meta property="og:description" content="このサイトでお預かりする情報と、その使い道、残す期間、渡す先をまとめています。先行モニターのお申し込みとご相談へのご連絡、規約への同意の記録にだけ使います。">
 <meta property="og:site_name" content="長谷川侑希｜動画のしくみ VideoTask と、業務アプリの受託開発">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:image" content="https://yhasegawa.com/assets/img/ogp.png">
@@ -91,17 +91,25 @@
     <ul class="bullets">
       <!-- ここは「次のものだけです」と言い切っているので、実際のフォームの
            項目と完全に一致させること。項目を足したり減らしたりしたら、
-           ここも直す。いまの対応は、pages/monitor.html の12項目と
-           pages/contact.html の6項目（「お名前・ご連絡先」は、お名前と
-           メールアドレスで受けている。電話番号とつながりやすい時間帯は、
-           折り返しを希望した方だけが書く欄）。 -->
-      <li>申し込みフォームと<wbr>相談フォームに<wbr>入力していただいた<wbr>内容<wbr>（会社名・業種、<wbr>お名前、<wbr>メールアドレス、<wbr>従業員数、<wbr>使いたい<wbr>場面、<wbr>社員の<wbr>方が<wbr>使う<wbr>端末の<wbr>種類、<wbr>研修や<wbr>説明での<wbr>動画の<wbr>利用状況、<wbr>ご紹介くださった<wbr>先生のお名前、<wbr>ご相談の<wbr>内容・ひとこと、<wbr>ご連絡方法のご希望、<wbr>折り返しをご希望の<wbr>場合の<wbr>電話番号とつながりやすい<wbr>時間帯）</li>
+           ここも直す。先行モニターは VideoTask のリポジトリの docs/hp-form.md の 4.、
+           フォームは pages/monitor.html。相談は pages/contact.html の6項目
+           （「お名前・ご連絡先」は、お名前とメールアドレスで受けている。電話番号と
+           つながりやすい時間帯は、折り返しを希望した方だけが書く欄）。 -->
+      <li>先行モニターのお申し込みの<wbr>フォームに<wbr>入力していただいた<wbr>内容<wbr>（会社名、<wbr>お申し込みの<wbr>方のお名前・役職・<wbr>メールアドレス、<wbr>最初の<wbr>管理者のお名前・<wbr>メールアドレス・<wbr>お電話番号、<wbr>社員の<wbr>方のおおよその<wbr>人数と<wbr>端末の<wbr>内訳、<wbr>Android の<wbr>アプリのご希望、<wbr>開始日のご希望、<wbr>ご紹介くださった<wbr>先生のお名前、<wbr>ご質問の<wbr>内容）と、<wbr>規約に<wbr>同意いただいた<wbr>日時、<wbr>同意いただいた<wbr>規約の<wbr>制定日</li>
+      <li>相談の<wbr>フォームに<wbr>入力していただいた<wbr>内容<wbr>（業種・会社名、<wbr>ご相談の<wbr>内容、<wbr>お名前、<wbr>メールアドレス、<wbr>ご連絡方法のご希望、<wbr>折り返しをご希望の<wbr>場合の<wbr>電話番号とつながりやすい<wbr>時間帯）</li>
       <li>メールやお電話でやり取りした<wbr>内容</li>
       <li>どの<wbr>ページが<wbr>何回見られたかの<wbr>集計</li>
     </ul>
 
     <p>
-      最後の<wbr>集計には<wbr> Cloudflare Web Analytics というしくみを<wbr>使っています。<wbr>
+      フォームでは、<wbr>社員の<wbr>方の<wbr>個人の<wbr>情報はいただきません。<wbr>社員の<wbr>方の<wbr>情報は、<wbr>お申し込みの<wbr>会社が<wbr> VideoTask<wbr>（ビデオタスク）<wbr> の<wbr>管理画面で<wbr>登録し、<wbr>
+      VideoTask の<wbr>プライバシーポリシー<wbr>（<a href="https://videotask.app/privacy">https://videotask.app/privacy</a>）のとおりに<wbr>扱います。
+    </p>
+    <p>
+      送信元の<wbr> IP アドレスは、<wbr>フォームの<wbr>記録にも<wbr>メールにも<wbr>残しません。
+    </p>
+    <p>
+      ページの<wbr>集計には<wbr> Cloudflare Web Analytics というしくみを<wbr>使っています。<wbr>
       Cookie は<wbr>使いません。<wbr>どなたが<wbr>見たのかは<wbr>分からない<wbr>形で<wbr>数えているだけです。
     </p>
     <p>
@@ -120,7 +128,10 @@
 
     <p>お預かりした<wbr>情報は、<wbr>次の<wbr>目的にだけ<wbr>使います。</p>
     <ul class="bullets">
-      <li>先行モニターのお申し込みへのご連絡</li>
+      <li>先行モニターのお申し込みの<wbr>受付と、<wbr>ご連絡</li>
+      <li>VideoTask に<wbr>御社と<wbr>最初の<wbr>管理者の<wbr>方の<wbr>アカウントを<wbr>作ること</li>
+      <li>最初の<wbr>パスワードを、<wbr>お電話でお伝えすること</li>
+      <li>先行モニター規約に<wbr>同意いただいた<wbr>記録として<wbr>残すこと</li>
       <li>ご相談へのお返事、<wbr>お見積り、<wbr>その後のやり取り</li>
     </ul>
     <p>
@@ -129,14 +140,22 @@
   </div>
 </section>
 
-<!-- ============ 第三者には渡しません ============ -->
+<!-- ============ 渡す先 ============ -->
 <section class="section alt">
   <div class="wrap narrow">
-    <div class="sec-head"><h2>第三者には<wbr>渡しません</h2></div>
+    <div class="sec-head"><h2>渡す先</h2></div>
 
     <p>
       お預かりした<wbr>情報を、<wbr>ほかの<wbr>会社や<wbr>個人に<wbr>売ったり貸したりすることはありません。<wbr>法令にもとづいて<wbr>求められた<wbr>場合を<wbr>除き、<wbr>ご本人の<wbr>同意なく<wbr>外部に<wbr>出すこともありません。
     </p>
+    <p>ただし、<wbr>フォームと<wbr>メールを<wbr>動かすために、<wbr>次の<wbr>事業者のしくみを<wbr>使っています。</p>
+    <ul class="bullets">
+      <li>Cloudflare, Inc.<wbr>（米国）<wbr>：フォームの<wbr>受け取り、<wbr>先行モニターのお申し込みの<wbr>記録、<wbr>メールの<wbr>送信と<wbr>転送</li>
+      <li>Google LLC<wbr>（米国）<wbr>：届いた<wbr>メールの<wbr>保管<wbr>（Gmail）</li>
+      <li>
+        VideoTask の<wbr>サーバーの<wbr>事業者：最初の<wbr>管理者の<wbr>方のお名前と<wbr>メールアドレスを、<wbr>御社の<wbr>アカウントを<wbr>作るときに<wbr>入れます。<wbr>事業者の<wbr>一覧は、<wbr>VideoTask の<wbr>プライバシーポリシーの<wbr> 5.<wbr>（<a href="https://videotask.app/privacy">https://videotask.app/privacy</a>）にあります
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -146,22 +165,29 @@
     <div class="sec-head"><h2>どう<wbr>管理しているか</h2></div>
 
     <p class="caution">
-      申し込みフォームと<wbr>相談フォームに<wbr>入力された<wbr>内容は、<wbr>この<wbr>サイトを<wbr>動かしている<wbr>
-      Cloudflare のしくみがいったん<wbr>受け取り、<wbr>そのまま<wbr>長谷川の<wbr>メールに<wbr>送ります。
-      <b>内容をためておく<wbr>場所<wbr>（データベース）は<wbr>持っていません。</b>
-      受け取って<wbr>メールにするまでの、<wbr>ごく<wbr>短いあいだだけ通過します。
+      先行モニターのお申し込みは、<wbr>この<wbr>サイトを<wbr>動かしている<wbr> Cloudflare のしくみで<wbr>受け取ります。<wbr>同意の<wbr>記録として<wbr> Cloudflare の<wbr>データベースに<wbr>残し、support@videotask.app に<wbr>メールで<wbr>送ります。<wbr>お申し込みの<wbr>方の<wbr>メールアドレスにも、<wbr>同じ<wbr>内容の<wbr>受付のお知らせをお送りします。<wbr>相談の<wbr>フォームの<wbr>内容は、<wbr>データベースには<wbr>残さず、<wbr>長谷川の<wbr>メールに<wbr>送るだけです。
     </p>
     <p>
-      届いた<wbr>メールは、<wbr>長谷川侑希の<wbr>メールの<wbr>受信箱で<wbr>管理しています。<wbr>見られるのは<wbr>長谷川だけです。<wbr>ほかの<wbr>人に<wbr>見せることはありません。
-    </p>
-    <p>
-      やり取りが<wbr>終わった<wbr>情報は、<wbr>お見積りや<wbr>契約の<wbr>記録として<wbr>必要な<wbr>期間だけ<wbr>残します。<wbr>必要がなくなったものは<wbr>消します。
+      記録と<wbr>メールを<wbr>見られるのは<wbr>長谷川だけです。<wbr>ほかの<wbr>人に<wbr>見せることはありません。
     </p>
   </div>
 </section>
 
-<!-- ============ 消してほしいとき ============ -->
+<!-- ============ 残す期間 ============ -->
 <section class="section alt">
+  <div class="wrap narrow">
+    <div class="sec-head"><h2>残す<wbr>期間</h2></div>
+
+    <ul class="bullets">
+      <li>先行モニター規約への<wbr>同意の<wbr>記録<wbr>（会社名・<wbr>お名前・役職・同意いただいた<wbr>日時・規約の<wbr>制定日）<wbr>：先行モニターが<wbr>終わってから<wbr>5年間</li>
+      <li>先行モニターのお申し込みの、<wbr>それ以外の<wbr>内容：先行モニターが<wbr>終わってから<wbr>1年以内に<wbr>消します。<wbr>お申し込みだけで<wbr>始めなかった<wbr>場合は、<wbr>お申し込みから<wbr>1年以内に<wbr>消します</li>
+      <li>ご相談の<wbr>内容：お見積りや<wbr>契約の<wbr>記録として<wbr>必要な<wbr>期間だけ残し、<wbr>必要がなくなったものは<wbr>消します</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 消してほしいとき ============ -->
+<section class="section">
   <div class="wrap narrow">
     <div class="sec-head"><h2>消してほしいとき</h2></div>
 
@@ -172,7 +198,7 @@
 </section>
 
 <!-- ============ お問い合わせ先 ============ -->
-<section class="section">
+<section class="section alt">
   <div class="wrap narrow">
     <div class="sec-head"><h2>お問い合わせ先</h2></div>
 
@@ -182,12 +208,16 @@
       <dt>メール</dt>
       <dd><a href="mailto:hasegawa@yhasegawa.com">hasegawa@yhasegawa.com</a></dd>
     </dl>
+    <p>先行モニターについては、<a href="mailto:support@videotask.app">support@videotask.app</a> でも<wbr>承ります。</p>
     <!-- TODO: 法人化後に運営会社名を追記 -->
 
     <p class="note">
       内容を<wbr>変えたときは、<wbr>この<wbr>ページを<wbr>更新します。<wbr>大きく<wbr>変えるときは、<wbr>トップページでもお知らせします。
     </p>
-    <p class="asof">2026年11月10日 制定</p>
+    <!-- 改定の日は、先行モニター規約の制定日と同じ日（同じ日に本番に出すため）。
+         terms/monitor/ の date を直せば、ここも変わる。次にこのページだけを
+         変えるときは、日付を手で書くこと。 -->
+    <p class="asof">2026年11月10日 制定／2026年11月19日 改定</p>
   </div>
 </section>
 
