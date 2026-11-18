@@ -2,24 +2,30 @@
  * 先行モニターの申し込み（pages/monitor.html のフォーム）
  *
  * VideoTask のリポジトリの docs/hp-form.md の 1.・2. のとおりにする。
+ * ただし、申込者への自動の受付メールは送らない（2026-11-18 の決め。
+ * Email Sending は Workers の有料プランが要り、今の申し込みの量では見合わない）。
  *
  *   1. 項目を確かめる（必須・形・規約への同意・同意した規約の制定日）
  *   2. 同意の記録を D1 に残す（送信の日時・会社名・お名前・役職・メールアドレス・
- *      規約の制定日・全部の項目）。残せなければ、メールも送らずに止める
- *   3. 運営者あて（support@videotask.app）に、同じ内容を送る。
+ *      規約の制定日・全部の項目）。残せなければ、メールも送らずに止める。
+ *      本番は DB、プレビュー（yhasegawa.com 以外）は DB_PREVIEW
+ *   3. 運営者あて（support@videotask.app）に、同じ内容を送る（Email Routing。無料）。
  *      送れなければ止める（入力は返す画面に残る）
- *   4. お申し込みの方に、受付のお知らせを送る。
- *      送れなくても受付は済んでいるので止めない。運営者に知らせる
+ *   4. 受け付けた内容を返す。送信した直後の画面に出す（保存・印刷してもらう）。
+ *      メールでは、運営者が管理画面のご案内とあわせて送る
  *
  * ここに来る前に、index.js が隠し欄・欄の名前・Turnstile を確かめている。
  * IP アドレスは残さない（2026-11-18 の決め）。
  */
 
+import { EmailMessage } from 'cloudflare:email';
+import { mime } from './mail.js';
+
 export const MONITOR_FORM = '先行モニター申込';
 
 const SITE_URL = 'https://yhasegawa.com';
 const OPS_TO = 'support@videotask.app';
-const FROM = { email: 'form@yhasegawa.com', name: 'VideoTask 先行モニター' };
+const FROM = 'form@yhasegawa.com';
 
 /* 欄の名前（pages/monitor.html の name と同じ）。並びは docs/hp-form.md の 1.〜11. */
 const F = {
@@ -55,10 +61,12 @@ const MAX = {
 
 /**
  * @param fields  index.js が拾った入力 [{k, v: [..]}]
- * @param env     DB（D1）と SEND（Email Sending）
- * @returns {ok:true, notice?} か {ok:false, error, mailTo}
+ * @param env     DB / DB_PREVIEW（D1）と SUPPORT（support@videotask.app あての send_email）
+ * @param live    本番のドメインから来たか。false なら DB_PREVIEW に残し、件名に【プレビュー】
+ * @returns {ok:true, receipt} か {ok:false, error, mailTo}
  */
-export async function handleMonitor(fields, env, { note = '', termsDates, now = new Date() } = {}) {
+export async function handleMonitor(fields, env,
+                                    { note = '', termsDates, live = true, now = new Date() } = {}) {
   const bad = (error) => ({ ok: false, error, mailTo: OPS_TO });
 
   /* ---- 1. 確かめる ---- */
@@ -143,12 +151,13 @@ export async function handleMonitor(fields, env, { note = '', termsDates, now = 
   ];
 
   /* ---- 2. 同意の記録を残す ---- */
-  if (!env.DB) {
+  const db = live ? env.DB : env.DB_PREVIEW;
+  if (!db) {
     return bad('受付の記録を残せませんでした（記録の場所が設定されていません）。');
   }
   let id;
   try {
-    const r = await env.DB.prepare(
+    const r = await db.prepare(
       'INSERT INTO monitor_applications ' +
       '(submitted_at, company, applicant_name, applicant_title, applicant_email, ' +
       ' terms_date, referrer, fields_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
@@ -161,7 +170,7 @@ export async function handleMonitor(fields, env, { note = '', termsDates, now = 
   const mark = async (col, val) => {
     if (id === undefined) return;
     try {
-      await env.DB.prepare('UPDATE monitor_applications SET ' + col + ' = ? WHERE id = ?')
+      await db.prepare('UPDATE monitor_applications SET ' + col + ' = ? WHERE id = ?')
         .bind(val, id).run();
     } catch (e) { /* 記録の本体は残っている。メールの結果だけ書けなかった */ }
   };
@@ -169,11 +178,15 @@ export async function handleMonitor(fields, env, { note = '', termsDates, now = 
   const listText = items.map(([k, v]) => '■ ' + k + '\n' + (v || '（未記入）')).join('\n\n');
 
   /* ---- 3. 運営者あて ---- */
+  const tag = live ? '' : '【プレビュー】';
   const opsBody = [
     note,
     note ? '' : null,
+    live ? null : '（プレビューからの送信です。記録はプレビュー用の D1 に残しています）',
+    live ? null : '',
     '先行モニターのお申し込みを受け付けました。',
     'このメールは「先行モニターの同意の記録」のフォルダに入れ、先行モニターが終わってから5年間残してください（規約の 14.）。',
+    'お申し込みの方には、自動のメールは送っていません。管理画面のご案内とあわせて、受け付けた内容をお送りください。',
     '',
     '【同意の記録】',
     '受付番号：' + (id ?? '（不明）'),
@@ -192,76 +205,60 @@ export async function handleMonitor(fields, env, { note = '', termsDates, now = 
     'yhasegawa.com の先行モニターのお申し込みのフォームから',
   ].filter((x) => x !== null).join('\n');
   try {
-    await env.SEND.send({
-      from: FROM,
-      to: OPS_TO,
-      replyTo: get(F.email),
-      subject: '【先行モニター申込】' + get(F.company).slice(0, 40) + '（受付番号 ' + (id ?? '-') + '）',
-      text: opsBody,
-      html: toHtml(opsBody),
-    });
+    const to = OPS_TO;
+    await env.SUPPORT.send(new EmailMessage(FROM, to, mime({
+      from: FROM, to, replyTo: get(F.email), fromName: 'VideoTask 先行モニター',
+      subject: tag + '【先行モニター申込】' + get(F.company).slice(0, 40) + '（受付番号 ' + (id ?? '-') + '）',
+      body: opsBody,
+    })));
     await mark('ops_mail', 'sent ' + jstMinute(new Date()));
   } catch (e) {
     await mark('ops_mail', 'failed: ' + errText(e));
     return bad('お申し込みを送れませんでした（' + errText(e) + '）。');
   }
 
-  /* ---- 4. お申し込みの方へ、受付のお知らせ ---- */
-  const receipt = [
-    get(F.company),
-    get(F.name) + ' 様',
-    '',
-    'VideoTask の先行モニターにお申し込みいただき、ありがとうございます。',
-    '次の内容で受け付けました。',
-    '',
-    '受付の日時：' + submittedAt + '（日本時間）',
-    '受付番号：' + (id ?? '（不明）'),
-    '',
-    listText,
-    '',
-    '同意いただいた規約：先行モニター規約（制定日 ' + dateJa(termsDate) + '）',
-    termsUrl,
-    '',
-    '2営業日以内に、管理画面のご案内についてご連絡します。',
-    '最初の管理者の方には、お電話で最初のパスワードをお伝えします。',
-    '',
-    'このメールは、お申し込みのフォームから自動でお送りしています。',
-    'お心当たりがない場合や、ご不明な点は、support@videotask.app までご連絡ください。',
-    '',
-    '――――――――',
-    'VideoTask',
-    '長谷川 侑希',
-    'support@videotask.app',
-    'https://videotask.app',
-  ].join('\n');
-  try {
-    await env.SEND.send({
-      from: FROM,
-      to: get(F.email),
-      replyTo: OPS_TO,
-      subject: '【VideoTask 先行モニター】お申し込みを受け付けました',
-      text: receipt,
-      html: toHtml(receipt),
-    });
-    await mark('receipt_mail', 'sent ' + jstMinute(new Date()));
-  } catch (e) {
-    await mark('receipt_mail', 'failed: ' + errText(e));
-    try {
-      await env.SEND.send({
-        from: FROM,
-        to: OPS_TO,
-        subject: '【先行モニター申込】受付のお知らせを送れませんでした（受付番号 ' + (id ?? '-') + '）',
-        text: get(F.company) + ' ' + get(F.name) + ' 様（' + get(F.email) + '）への受付のお知らせを送れませんでした。\n' +
-              '理由：' + errText(e) + '\n受付は済んでいます（同意の記録は残っています）。こちらからご連絡してください。',
-      });
-    } catch (e2) { /* 記録には残っている */ }
-    return {
-      ok: true,
-      notice: '受付は済みましたが、受付のお知らせのメールを送れませんでした。こちらから、2営業日以内にご連絡します。',
-    };
-  }
+  /* ---- 4. 受け付けた内容を返す（送信した直後の画面に出す） ---- */
+  return {
+    ok: true,
+    receipt: {
+      id: id ?? null,
+      submittedAt,
+      termsDate,
+      termsDateJa: dateJa(termsDate),
+      termsUrl,
+      items: [
+        [F.company,    get(F.company)],
+        [F.name,       get(F.name)],
+        [F.title,      get(F.title)],
+        [F.email,      get(F.email)],
+        [F.adminName,  get(F.adminName)],
+        [F.adminEmail, get(F.adminEmail)],
+        [F.iphone,     counts[F.iphone]],
+        [F.android,    counts[F.android]],
+        [F.pc,         counts[F.pc]],
+        [F.androidApp, get(F.androidApp)],
+        [F.start,      startText],
+        [F.referrer,   get(F.referrer)],
+      ],
+    },
+  };
+}
 
-  return { ok: true };
+/* 受け付けた内容の HTML。JavaScript が動かずに送られたときの返すページで使う。
+   JavaScript が動くときは、assets/js/site.js が同じ形をフォームのページに出す。 */
+export function receiptHtml(r, esc) {
+  const rows = r.items.map(([k, v]) =>
+    '<dt>' + esc(k) + '</dt><dd>' + (v ? esc(v) : '（未記入）') + '</dd>').join('');
+  return '<h1>受け付けました</h1>' +
+    '<p>2営業日以内に、管理画面のご案内とあわせて、受け付けた内容をメールでお送りします。</p>' +
+    '<p><b>この画面を保存・印刷してください。</b></p>' +
+    '<dl>' +
+    '<dt>受付番号</dt><dd>' + esc(String(r.id ?? '')) + '</dd>' +
+    '<dt>送信の日時</dt><dd>' + esc(r.submittedAt) + '（日本時間）</dd>' +
+    rows +
+    '<dt>同意した規約</dt><dd>先行モニター規約（制定日 ' + esc(r.termsDateJa) + '）<br>' +
+    '<a href="' + esc(r.termsUrl) + '">' + esc(r.termsUrl) + '</a></dd>' +
+    '</dl>';
 }
 
 /* ------------------------------------------------------------------ */
@@ -300,11 +297,4 @@ function dateJa(iso) {
 
 function errText(e) {
   return String((e && (e.code ? e.code + ' ' : '') + (e.message || e)) || e).slice(0, 160);
-}
-
-function toHtml(text) {
-  const esc = (s) => s.replace(/[&<>"']/g, (c) => (
-    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  return '<!DOCTYPE html><html lang="ja"><body><div style="font-family:sans-serif;line-height:1.8;white-space:pre-wrap">' +
-    esc(text) + '</div></body></html>';
 }

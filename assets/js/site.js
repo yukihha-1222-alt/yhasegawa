@@ -91,12 +91,9 @@
       }).then(function (j) {
         if (!j.ok) throw new Error(j.error || '送信できませんでした。');
         var thanks = document.getElementById(form.getAttribute('data-thanks'));
-        /* 受付は済んだが、受付のお知らせのメールを送れなかったときなど */
-        if (thanks && j.notice) {
-          var n = document.createElement('p');
-          n.textContent = j.notice;
-          thanks.appendChild(n);
-        }
+        /* 先行モニター：受け付けた内容を出す。申込者にメールは自動で送らないので、
+           この画面を保存・印刷してもらう。形は worker/monitor.js の receiptHtml と同じ */
+        if (thanks && j.receipt) showReceipt(thanks, j.receipt);
         if (thanks) {
           form.hidden = true;
           thanks.classList.add('shown');
@@ -119,6 +116,35 @@
         if (window.turnstile) { try { window.turnstile.reset(); } catch (e) {} }
       });
     });
+  });
+
+
+  function showReceipt(box, r) {
+    var dl = box.querySelector('.receipt');
+    if (!dl) return;
+    function row(k, v, link) {
+      var dt = document.createElement('dt'), dd = document.createElement('dd');
+      dt.textContent = k;
+      dd.textContent = v || '（未記入）';
+      if (link) {
+        var a = document.createElement('a');
+        a.href = link; a.textContent = link;
+        dd.appendChild(document.createElement('br'));
+        dd.appendChild(a);
+      }
+      dl.appendChild(dt); dl.appendChild(dd);
+    }
+    dl.textContent = '';
+    row('受付番号', r.id == null ? '' : String(r.id));
+    row('送信の日時', r.submittedAt + '（日本時間）');
+    (r.items || []).forEach(function (it) { row(it[0], it[1]); });
+    row('同意した規約', '先行モニター規約（制定日 ' + r.termsDateJa + '）', r.termsUrl);
+    dl.hidden = false;
+  }
+
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-print]'), function (b) {
+    b.addEventListener('click', function () { window.print(); });
   });
 
 

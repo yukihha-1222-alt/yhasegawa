@@ -6,11 +6,14 @@
  *   1. POST /api/form  … 申し込みと相談のフォームを受け取り、メールにして送る
  *   2. それ以外        … dist/ の中の静的ファイルをそのまま返す
  *
- * メールは Cloudflare の send_email バインディングで送る。
- *   MAIL … 相談のフォーム。Email Routing で確かめた自分のアドレスにだけ送れる
- *   SEND … 先行モニターの申し込み。Email Sending（Workers の有料プラン）で、
- *          申込者のアドレスと support@videotask.app に送る（worker/monitor.js）
- * 先行モニターの申し込みは、送る前に D1（DB）に同意の記録を残す。
+ * メールは Cloudflare Email Routing の send_email バインディングで送る。
+ * Email Routing で確かめた（Verified の）アドレスにだけ送れる。費用はかからない。
+ *   MAIL    … 相談のフォーム。長谷川あて
+ *   SUPPORT … 先行モニターの申し込み。support@videotask.app あて（worker/monitor.js）
+ * 申込者には、メールを自動で送らない（2026-11-18 の決め）。受け付けた内容は、
+ * 送信した直後の画面に出す。
+ * 先行モニターの申し込みは、送る前に D1 に同意の記録を残す。
+ * D1 は本番（DB）とプレビュー（DB_PREVIEW）で分ける。試しの記録を本番に混ぜない。
  *
  * 【入力を落とさないこと】
  * この仕組みの目的は、フォームに書いてくれた人を取りこぼさないこと。
@@ -19,11 +22,12 @@
  */
 
 import { EmailMessage } from 'cloudflare:email';
+import { mime } from './mail.js';
 /* フォームにある欄の名前の一覧。build.py が dist/ のフォームから書き出す。
    手で直さないこと（次のビルドで上書きされる）。 */
 import { FIELD_NAMES, TERMS_DATES } from './form_fields.js';
-/* 先行モニターの申し込みだけの処理（同意の記録・受付のお知らせ） */
-import { handleMonitor, MONITOR_FORM } from './monitor.js';
+/* 先行モニターの申し込みだけの処理（同意の記録・運営者あてのメール・受け付けた内容） */
+import { handleMonitor, MONITOR_FORM, receiptHtml } from './monitor.js';
 
 /* 2026-11-10 にURLを英語に直した。古いURLを控えている方のために転送する。
    このリストは wrangler.toml の run_worker_first と対になっている。
@@ -162,9 +166,10 @@ async function handleForm(request, env) {
 
   /* 先行モニターの申し込みは、項目を確かめて、同意の記録を残してから送る */
   if (formName === MONITOR_FORM) {
-    const r = await handleMonitor(fields, env, { note, termsDates: TERMS_DATES });
+    const live = new URL(request.url).hostname === SITE_HOST;
+    const r = await handleMonitor(fields, env, { note, termsDates: TERMS_DATES, live });
     if (!r.ok) return fail(request, fields, r.error, r.mailTo);
-    return done(request, formName, r.notice);
+    return done(request, formName, r.receipt);
   }
 
   const body = buildBody(fields, request, note);
@@ -225,48 +230,25 @@ function buildBody(fields, request, note) {
   return lines.join('\n');
 }
 
-/* 日本語の件名は、そのままだと文字化けする。RFC 2047 の形にする */
-function encodeSubject(s) {
-  const b = btoa(String.fromCharCode(...new TextEncoder().encode(s)));
-  return '=?UTF-8?B?' + b + '?=';
-}
-
-function mime({ from, to, subject, body, replyTo }) {
-  const b64 = btoa(String.fromCharCode(...new TextEncoder().encode(body)));
-  const wrapped = b64.match(/.{1,76}/g).join('\r\n');
-  const id = '<' + Date.now().toString(36) + '.' + Math.random().toString(36).slice(2) +
-             '@yhasegawa.com>';
-  const head = [
-    'From: ' + encodeSubject('yhasegawa.com フォーム') + ' <' + from + '>',
-    'To: <' + to + '>',
-    replyTo ? 'Reply-To: <' + replyTo + '>' : null,
-    'Subject: ' + encodeSubject(subject),
-    'Message-ID: ' + id,
-    'Date: ' + new Date().toUTCString(),
-    'MIME-Version: 1.0',
-    'Content-Type: text/plain; charset="UTF-8"',
-    'Content-Transfer-Encoding: base64',
-  ].filter(Boolean);
-  return head.join('\r\n') + '\r\n\r\n' + wrapped + '\r\n';
-}
-
 /* ------------------------------------------------------------------ */
 
 function wantsJson(request) {
   return (request.headers.get('accept') || '').includes('application/json');
 }
 
-function done(request, formName, notice) {
+function done(request, formName, receipt) {
   if (wantsJson(request)) {
-    return json(notice ? { ok: true, notice } : { ok: true });
+    return json(receipt ? { ok: true, receipt } : { ok: true });
   }
-  const next = formName === MONITOR_FORM
-    ? '受付のお知らせを、お申し込みの方のメールアドレスにお送りしました。2営業日以内に、管理画面のご案内についてご連絡します。'
-    : '数日以内に長谷川からご連絡します。';
+  if (receipt) {
+    /* 先行モニター。JavaScript が動かずにふつうに送られたとき。
+       受け付けた内容を、フォームのページと同じ形で出す */
+    return html(200, '受け付けました', receiptHtml(receipt, esc) +
+      '<p><a href="/">ホームへもどる</a></p>');
+  }
   return html(200, 'ありがとうございます', `
     <h1>ありがとうございます</h1>
-    <p>${esc(formName)}を受け取りました。${esc(next)}</p>
-    ${notice ? '<p>' + esc(notice) + '</p>' : ''}
+    <p>${esc(formName)}を受け取りました。数日以内に長谷川からご連絡します。</p>
     <p><a href="/">ホームへもどる</a></p>
   `);
 }
@@ -341,6 +323,9 @@ function html(status, title, inner) {
        background:var(--hl);color:var(--on-hl);font-weight:700;text-decoration:none;
        border:1.5px solid var(--hl)}
   .btn+.btn{background:var(--card);border-color:var(--green-text);color:var(--green-text)}
+  dl{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;padding:14px 16px;
+     background:var(--card);border:1px solid var(--line);border-radius:10px}
+  dt{opacity:.7} dd{margin:0;overflow-wrap:anywhere}
   textarea{width:100%;box-sizing:border-box;margin-top:14px;padding:14px;
            border:1px solid var(--line);border-radius:10px;background:var(--card);
            color:var(--ink);font:inherit;font-size:15px;line-height:1.8}

@@ -491,6 +491,8 @@ figcaption{margin-top:10px;font-size:13.5px;color:var(--ink-faint);line-height:1
 .contact-ways dd a:hover{color:var(--accent-ink)}
 
 .form{display:flex;flex-direction:column;gap:18px;margin-top:28px;max-width:34rem}
+/* 送信が済んだら site.js が hidden を付ける。display:flex に負けないように */
+.form[hidden]{display:none}
 .form label{display:flex;flex-direction:column;gap:7px;font-size:15px;font-weight:700;color:var(--ink)}
 .form .hint{font-weight:400;font-size:13.5px;color:var(--ink-faint);line-height:1.7}
 .form input,.form textarea{
@@ -1389,3 +1391,26 @@ p,li,dd,
   padding-bottom:4px;border-bottom:2.5px solid var(--accent);margin-bottom:10px;
 }
 @media (max-width:560px){ .trade-fold .body{padding-left:0} }
+
+/* 先行モニターの、受け付けた内容（送信した直後の画面） */
+.receipt{
+  display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:16px 0 0;
+  padding:16px 18px;background:var(--bg-card);border:1px solid var(--line);border-radius:var(--round);
+  font-size:15px;line-height:1.7;
+}
+.receipt[hidden]{display:none}
+.receipt dt{color:var(--ink-faint)}
+.receipt dd{margin:0;color:var(--ink);overflow-wrap:anywhere}
+@media (max-width:600px){
+  .receipt{grid-template-columns:1fr;gap:2px}
+  .receipt dd{margin-bottom:8px}
+}
+.print-row{margin-top:16px}
+/* 印刷するときは、受け付けた内容だけを出す。受け付けた後のページだけに効く */
+@media print{
+  body:has(.thanks.shown) *{visibility:hidden}
+  body:has(.thanks.shown) .thanks.shown,
+  body:has(.thanks.shown) .thanks.shown *{visibility:visible}
+  body:has(.thanks.shown) .thanks.shown{position:absolute;left:0;top:0;width:100%;border:0}
+  body:has(.thanks.shown) .print-row{display:none}
+}

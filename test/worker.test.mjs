@@ -33,24 +33,26 @@ function fakeDB({ failInsert = false } = {}) {
   return db;
 }
 
-function fakeSend({ failTo = null } = {}) {
-  const s = { sent: [] };
-  s.send = async (msg) => {
-    if (failTo && msg.to === failTo) {
-      const e = new Error('recipient rejected');
-      e.code = 'E_RECIPIENT_NOT_ALLOWED';
-      throw e;
-    }
-    s.sent.push(msg);
-    return { messageId: 'm' + s.sent.length };
+/* Email Routing の send_email の偽物。EmailMessage（from, to, raw）を覚える */
+function fakeMail({ fail = false } = {}) {
+  const m = { sent: [] };
+  m.send = async (msg) => {
+    if (fail) throw new Error('destination address not verified');
+    m.sent.push(msg);
   };
-  return s;
+  return m;
 }
 
-function fakeMail() {
-  const m = { sent: [] };
-  m.send = async (msg) => { m.sent.push(msg); };
-  return m;
+/* MIME の本文と件名を読む */
+function decode(msg) {
+  const [head, body] = msg.raw.split('\r\n\r\n');
+  const subj = head.match(/^Subject: =\?UTF-8\?B\?(.*)\?=$/m)[1];
+  const reply = (head.match(/^Reply-To: <(.*)>$/m) || [])[1];
+  return {
+    subject: Buffer.from(subj, 'base64').toString('utf8'),
+    text: Buffer.from(body.replace(/\r\n/g, ''), 'base64').toString('utf8'),
+    replyTo: reply,
+  };
 }
 
 let turnstileAnswer = true;
@@ -71,7 +73,8 @@ function makeEnv(opts = {}) {
   return {
     TURNSTILE_SECRET: 'secret' in opts ? opts.secret : 'test-secret',
     DB: fakeDB(opts.db),
-    SEND: fakeSend(opts.send),
+    DB_PREVIEW: fakeDB(),
+    SUPPORT: fakeMail(opts.support),
     MAIL: fakeMail(),
     MAIL_TO: 'owner@example.com',
   };
@@ -126,8 +129,8 @@ function contactForm(over = {}) {
   return fd;
 }
 
-async function post(env, fd) {
-  const req = new Request('https://yhasegawa.com/api/form', {
+async function post(env, fd, host = 'yhasegawa.com') {
+  const req = new Request('https://' + host + '/api/form', {
     method: 'POST', body: fd,
     headers: { accept: 'application/json', 'CF-Connecting-IP': '203.0.113.7' },
   });
@@ -137,8 +140,9 @@ async function post(env, fd) {
 
 function nothingHappened(env) {
   assert.equal(env.DB.rows.length, 0, 'D1 に書いていない');
-  assert.equal(env.SEND.sent.length, 0, 'Email Sending で送っていない');
-  assert.equal(env.MAIL.sent.length, 0, 'Email Routing で送っていない');
+  assert.equal(env.DB_PREVIEW.rows.length, 0, 'プレビューの D1 にも書いていない');
+  assert.equal(env.SUPPORT.sent.length, 0, '運営者あてに送っていない');
+  assert.equal(env.MAIL.sent.length, 0, '相談のメールも送っていない');
 }
 
 /* ================= 今までの守り（両方のフォーム） ================= */
@@ -195,7 +199,7 @@ test('相談: Email Routing で自分あてに送る。IP アドレスは書か�
   assert.deepEqual(r.body, { ok: true });
   assert.equal(env.MAIL.sent.length, 1);
   assert.equal(env.MAIL.sent[0].to, 'owner@example.com');
-  assert.equal(env.SEND.sent.length, 0);
+  assert.equal(env.SUPPORT.sent.length, 0);
   assert.equal(env.DB.rows.length, 0, '相談は D1 に残さない');
   const raw = env.MAIL.sent[0].raw;
   const body = Buffer.from(raw.split('\r\n\r\n')[1].replace(/\r\n/g, ''), 'base64').toString('utf8');
@@ -206,14 +210,15 @@ test('相談: Email Routing で自分あてに送る。IP アドレスは書か�
 
 /* ================= 先行モニター ================= */
 
-test('先行モニター: 記録を残し、運営者と申込者に送る', async () => {
+test('先行モニター: 記録を残し、運営者に送り、受け付けた内容を返す。申込者には送らない', async () => {
   const env = makeEnv();
   const r = await post(env, monitorForm());
   assert.equal(r.status, 200);
-  assert.deepEqual(r.body, { ok: true });
+  assert.equal(r.body.ok, true);
 
-  /* D1 の記録 */
+  /* D1 の記録（本番の DB） */
   assert.equal(env.DB.rows.length, 1);
+  assert.equal(env.DB_PREVIEW.rows.length, 0);
   const [at, company, name, title, email, terms, referrer, json] = env.DB.rows[0].args;
   assert.match(at, /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/);
   assert.equal(company, '見本商事株式会社');
@@ -228,30 +233,56 @@ test('先行モニター: 記録を残し、運営者と申込者に送る', asy
   assert.equal(all['同意した規約の制定日'], TERMS);
   assert.ok(!JSON.stringify(env.DB.rows).includes('203.0.113.7'), 'IP アドレスを残さない');
 
-  /* メールは 2 通。どちらも form@yhasegawa.com から */
-  assert.equal(env.SEND.sent.length, 2);
-  const [ops, receipt] = env.SEND.sent;
-  for (const m of [ops, receipt]) {
-    assert.equal(m.from.email, 'form@yhasegawa.com');
-    assert.ok(m.text && m.html);
-    assert.doesNotMatch(m.text, /203\.0\.113\.7/);
-  }
-  assert.equal(ops.to, 'support@videotask.app');
+  /* メールは運営者あての 1 通だけ（Email Routing。申込者には送らない） */
+  assert.equal(env.SUPPORT.sent.length, 1);
+  assert.equal(env.MAIL.sent.length, 0);
+  const msg = env.SUPPORT.sent[0];
+  assert.equal(msg.from, 'form@yhasegawa.com');
+  assert.equal(msg.to, 'support@videotask.app');
+  const ops = decode(msg);
   assert.equal(ops.replyTo, 'taro@example.com');
-  assert.match(ops.subject, /先行モニター申込.*見本商事株式会社.*受付番号 1/);
-  assert.match(ops.text, /同意した規約の制定日：/ );
+  assert.match(ops.subject, /^【先行モニター申込】見本商事株式会社（受付番号 1）$/);
   assert.match(ops.text, new RegExp('送信の日時：' + at));
+  assert.match(ops.text, new RegExp('同意した規約の制定日：' + TERMS));
   assert.match(ops.text, /見本 一郎 先生/);
+  assert.doesNotMatch(ops.text, /203\.0\.113\.7/);
+  assert.deepEqual(env.DB.updates.map((u) => u.sql.match(/SET (\w+)/)[1]), ['ops_mail']);
 
-  assert.equal(receipt.to, 'taro@example.com');
-  assert.equal(receipt.replyTo, 'support@videotask.app');
-  assert.match(receipt.text, new RegExp('https://yhasegawa.com/monitor-terms/' + TERMS + '/'));
-  assert.match(receipt.text, /2営業日以内に、管理画面のご案内についてご連絡します/);
-  assert.match(receipt.text, /先行モニター規約（制定日 \d{4}年\d+月\d+日）を読み、同意します/);
-  assert.match(receipt.text, /ご紹介くださった先生のお名前\n見本 一郎 先生/);
+  /* 画面に出す、受け付けた内容 */
+  const rc = r.body.receipt;
+  assert.equal(rc.id, 1);
+  assert.equal(rc.submittedAt, at);
+  assert.equal(rc.termsDate, TERMS);
+  assert.equal(rc.termsUrl, 'https://yhasegawa.com/monitor-terms/' + TERMS + '/');
+  const items = Object.fromEntries(rc.items);
+  for (const k of ['会社名', 'お申し込みの方のお名前', 'お申し込みの方のメールアドレス',
+                   '最初の管理者のお名前', '最初の管理者のメールアドレス',
+                   '社員の方の人数（iPhone）', '社員の方の人数（Android）', '社員の方の人数（パソコン）',
+                   'Android のアプリのご希望', '開始日のご希望', 'ご紹介くださった先生のお名前']) {
+    assert.ok(k in items, k);
+  }
+  assert.equal(items['ご紹介くださった先生のお名前'], '見本 一郎 先生');
+});
 
-  /* 送った結果を記録に書く */
-  assert.deepEqual(env.DB.updates.map((u) => u.sql.match(/SET (\w+)/)[1]), ['ops_mail', 'receipt_mail']);
+test('先行モニター: JavaScript なしで送られたときは、受け付けた内容のページを返す', async () => {
+  const env = makeEnv();
+  const req = new Request('https://yhasegawa.com/api/form', { method: 'POST', body: monitorForm() });
+  const res = await worker.fetch(req, env, {});
+  assert.equal(res.status, 200);
+  const page = await res.text();
+  assert.match(page, /受け付けました/);
+  assert.match(page, /この画面を保存・印刷してください/);
+  assert.match(page, /見本商事株式会社/);
+  assert.ok(page.includes('/monitor-terms/' + TERMS + '/'));
+});
+
+test('先行モニター: プレビューからの送信は、プレビューの D1 に残し、件名に【プレビュー】', async () => {
+  const env = makeEnv();
+  const r = await post(env, monitorForm(), 'abc123-yhasegawa.appron.workers.dev');
+  assert.equal(r.status, 200);
+  assert.equal(env.DB.rows.length, 0, '本番の同意の記録に混ぜない');
+  assert.equal(env.DB_PREVIEW.rows.length, 1);
+  assert.match(decode(env.SUPPORT.sent[0]).subject, /^【プレビュー】【先行モニター申込】/);
 });
 
 test('先行モニター: ご紹介の先生が空なら、空のまま記録とお知らせに入る', async () => {
@@ -259,7 +290,8 @@ test('先行モニター: ご紹介の先生が空なら、空のまま記録と
   const r = await post(env, monitorForm({ 'ご紹介くださった先生のお名前': '' }));
   assert.equal(r.status, 200);
   assert.equal(env.DB.rows[0].args[6], '');
-  assert.match(env.SEND.sent[1].text, /ご紹介くださった先生のお名前\n（未記入）/);
+  assert.match(decode(env.SUPPORT.sent[0]).text, /ご紹介くださった先生のお名前\n（未記入）/);
+  assert.equal(Object.fromEntries(r.body.receipt.items)['ご紹介くださった先生のお名前'], '');
 });
 
 test('先行モニター: 規約への同意の印が無ければ止める（記録もメールもしない）', async () => {
@@ -344,7 +376,7 @@ test('先行モニター: 記録を残せなければ、メールも送らずに
   const r = await post(env, monitorForm());
   assert.equal(r.status, 400);
   assert.match(r.body.error, /記録を残せませんでした/);
-  assert.equal(env.SEND.sent.length, 0);
+  assert.equal(env.SUPPORT.sent.length, 0);
 });
 
 test('先行モニター: D1 がつながっていなければ止める', async () => {
@@ -352,27 +384,16 @@ test('先行モニター: D1 がつながっていなければ止める', async 
   delete env.DB;
   const r = await post(env, monitorForm());
   assert.equal(r.status, 400);
-  assert.equal(env.SEND.sent.length, 0);
+  assert.equal(env.SUPPORT.sent.length, 0);
 });
 
 test('先行モニター: 運営者あてが送れなければ止める（記録には失敗を書く）', async () => {
-  const env = makeEnv({ send: { failTo: 'support@videotask.app' } });
+  const env = makeEnv({ support: { fail: true } });
   const r = await post(env, monitorForm());
   assert.equal(r.status, 400);
+  assert.equal(r.body.receipt, undefined);
   assert.equal(env.DB.rows.length, 1);
-  assert.match(env.DB.updates[0].args[0], /^failed: E_RECIPIENT_NOT_ALLOWED/);
-  assert.equal(env.SEND.sent.length, 0, '申込者には送らない');
-});
-
-test('先行モニター: 受付のお知らせが送れなくても受付は済む。運営者に知らせる', async () => {
-  const env = makeEnv({ send: { failTo: 'taro@example.com' } });
-  const r = await post(env, monitorForm());
-  assert.equal(r.status, 200);
-  assert.equal(r.body.ok, true);
-  assert.match(r.body.notice, /受付のお知らせのメールを送れませんでした/);
-  assert.equal(env.SEND.sent.length, 2);
-  assert.equal(env.SEND.sent[1].to, 'support@videotask.app');
-  assert.match(env.SEND.sent[1].subject, /送れませんでした/);
+  assert.match(env.DB.updates[0].args[0], /^failed: /);
 });
 
 test('先行モニター: Secret が無いときは、トークンがあれば通し、メールの先頭に書く（今までどおり）', async () => {
@@ -380,7 +401,7 @@ test('先行モニター: Secret が無いときは、トークンがあれば�
   const r = await post(env, monitorForm());
   assert.equal(r.status, 200);
   assert.equal(turnstileCalls, 0);
-  assert.match(env.SEND.sent[0].text, /^（Turnstile の Secret が未設定です/);
+  assert.match(decode(env.SUPPORT.sent[0]).text, /^（Turnstile の Secret が未設定です/);
 });
 
 test('フォームのページの欄が、Worker の欄の一覧に全部ある', async () => {

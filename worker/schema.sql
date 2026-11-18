@@ -1,7 +1,11 @@
--- 先行モニターの申し込みの記録（D1: yhasegawa-form）。worker/monitor.js が書く。
+-- 先行モニターの申し込みの記録。worker/monitor.js が書く。
+-- D1 は 2 つ。同じ表を両方に作る。
+--   yhasegawa-form          … 本番（yhasegawa.com からの送信。binding DB）
+--   yhasegawa-form-preview  … プレビュー（*.workers.dev からの送信。binding DB_PREVIEW）
 --
 -- 作るとき（1 回だけ）:
---   npx wrangler d1 execute yhasegawa-form --remote --file worker/schema.sql
+--   npx wrangler d1 execute yhasegawa-form         --remote --file worker/schema.sql
+--   npx wrangler d1 execute yhasegawa-form-preview --remote --file worker/schema.sql
 --
 -- 残す期間（HP のプライバシーポリシーと、VideoTask の docs/hp-form.md の 4.）:
 --   ・同意の記録（submitted_at, company, applicant_name, applicant_title, terms_date）
@@ -26,6 +30,5 @@ CREATE TABLE IF NOT EXISTS monitor_applications (
   referrer         TEXT NOT NULL DEFAULT '',   -- ご紹介くださった先生のお名前
   fields_json      TEXT NOT NULL,              -- フォームの全部の項目（見出し → 値）
   ops_mail         TEXT NOT NULL DEFAULT '',   -- 運営者あてのメール「sent 日時」か「failed: 理由」
-  receipt_mail     TEXT NOT NULL DEFAULT '',   -- 受付のお知らせ。同上
   erased_at        TEXT NOT NULL DEFAULT ''    -- 同意の記録以外を消した日
 );

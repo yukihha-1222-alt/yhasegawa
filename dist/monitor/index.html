@@ -124,14 +124,14 @@
 
 <!-- ============ 申し込みフォーム ============
      項目は VideoTask のリポジトリの docs/hp-form.md の 1.（1〜11）と同じにする。
-     欄の name は、そのまま運営者あてのメールと受付のお知らせの見出しになる。
+     欄の name は、そのまま運営者あてのメールと、送信した直後の画面の見出しになる。
      name を変えたら、worker/index.js の MONITOR（必須の欄の一覧）も直す。 -->
 <section class="section alt">
   <div class="wrap narrow">
     <div class="contact-card">
       <h2>お申し込み</h2>
       <p class="lead-p">
-        この<wbr>フォームで、<wbr>先行モニターを<wbr>始めるのに<wbr>要るものと、<wbr>規約への<wbr>同意を<wbr>一度にいただきます。<wbr>送信すると、<wbr>受付のお知らせが<wbr>メールで<wbr>届きます。
+        この<wbr>フォームで、<wbr>先行モニターを<wbr>始めるのに<wbr>要るものと、<wbr>規約への<wbr>同意を<wbr>一度にいただきます。<wbr>送信すると、<wbr>受け付けた<wbr>内容がこの<wbr>画面に<wbr>出ます。
       </p>
 
       <form class="form" method="post" action="/api/form" data-thanks="thanks-monitor" data-mail="support@videotask.app">
@@ -161,7 +161,7 @@
 
         <label data-q="お申し込みの方のメールアドレス">
           <span class="q">お申し込みの<wbr>方の<wbr>メールアドレス<span class="req">必須</span></span>
-          <span class="hint">受付のお知らせを、<wbr>この<wbr>アドレスにお送りします。</span>
+          <span class="hint">管理画面のご案内と、<wbr>受け付けた<wbr>内容を、<wbr>この<wbr>アドレスにお送りします。</span>
           <input type="email" name="お申し込みの方のメールアドレス" autocomplete="email" maxlength="254" required>
         </label>
 
@@ -273,12 +273,14 @@
         </noscript>
       </form>
 
+      <!-- 送信した直後に出す。受け付けた内容（.receipt）は site.js が入れる。
+           申込者にメールは自動で送らない（2026-11-18 の決め）ので、保存・印刷してもらう。 -->
       <div class="thanks" id="thanks-monitor" role="status">
-        <h3>ありがとうございます</h3>
-        <p>
-          受付のお知らせを、<wbr>お申し込みの<wbr>方の<wbr>メールアドレスにお送りしました。<wbr>
-          2営業日以内に、<wbr>管理画面のご案内についてご連絡します。
-        </p>
+        <h3>受け付けました</h3>
+        <p>2営業日以内に、<wbr>管理画面のご案内とあわせて、<wbr>受け付けた<wbr>内容を<wbr>メールでお送りします。</p>
+        <p><b>この<wbr>画面を<wbr>保存・印刷してください。</b></p>
+        <dl class="receipt" hidden></dl>
+        <p class="print-row"><button class="btn ghost" type="button" data-print>この<wbr>画面を<wbr>印刷する</button></p>
       </div>
     </div>
   </div>
@@ -294,14 +296,14 @@
     <ol class="flow">
       <li>
         <p class="when"><span class="nb">送信して</span><span class="nb">すぐ</span></p>
-        <h3>受付のお知らせが<wbr>届きます</h3>
-        <p class="d">いただいた<wbr>内容と、<wbr>同意いただいた<wbr>規約の<wbr>制定日を、<wbr>メールでお知らせします。</p>
+        <h3>受け付けた<wbr>内容が<wbr>画面に<wbr>出ます</h3>
+        <p class="d">いただいた<wbr>内容と、<wbr>同意いただいた<wbr>規約の<wbr>制定日が<wbr>出ます。<wbr>保存か<wbr>印刷をしておいてください。</p>
       </li>
       <li>
         <p class="when"><span class="nb">2営業日</span><span class="nb">以内</span></p>
         <h3>管理画面のご案内をお送りします</h3>
         <p class="d">
-          最初の<wbr>管理者の<wbr>方に、<wbr>お電話で<wbr>最初の<wbr>パスワードをお伝えします。<wbr>そのあと、<wbr>管理画面のご案内と、<wbr>開始日と<wbr>終わりの<wbr>日を<wbr>メールでお送りします。
+          最初の<wbr>管理者の<wbr>方に、<wbr>お電話で<wbr>最初の<wbr>パスワードをお伝えします。<wbr>そのあと、<wbr>管理画面のご案内と<wbr>受け付けた<wbr>内容、<wbr>開始日と<wbr>終わりの<wbr>日を<wbr>メールでお送りします。
         </p>
       </li>
       <li>

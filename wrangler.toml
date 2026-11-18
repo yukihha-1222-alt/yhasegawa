@@ -45,20 +45,28 @@ name = "MAIL"
 destination_address = "sakamotoyuki.develop@gmail.com"
 
 # ------------------------------------------------------------------
-# 先行モニターの申し込み（worker/monitor.js）。
-# Cloudflare Email Sending で、申込者のアドレスと support@videotask.app に送る。
-# 前もって、yhasegawa.com を Email Sending に登録しておくこと（Workers の有料プランが要る）。
-# 送れる差出人は form@yhasegawa.com だけに絞る。
+# 先行モニターの申し込み（worker/monitor.js）。運営者あてのメール。
+# MAIL と同じ Email Routing のしくみ（無料）。Verified のアドレスにだけ送れるので、
+# 前もって Email Routing の宛先（Destination addresses）に
+# support@videotask.app を足し、届いた確認のメールのリンクを押しておくこと。
+# 申込者には、メールを自動で送らない（2026-11-18 の決め）。
 # ------------------------------------------------------------------
 [[send_email]]
-name = "SEND"
-allowed_sender_addresses = ["form@yhasegawa.com"]
+name = "SUPPORT"
+destination_address = "support@videotask.app"
 
 # 先行モニターの申し込みの記録（同意の記録）。表は worker/schema.sql
-# 【作ったら直す】database_id は `npx wrangler d1 create yhasegawa-form` で出た値
+# 本番とプレビューで分ける。どちらを使うかは、worker/index.js がドメインで決める
+# （yhasegawa.com なら DB、それ以外なら DB_PREVIEW）。
+# 【作ったら直す】database_id は `npx wrangler d1 create <名前>` で出た値
 [[d1_databases]]
 binding = "DB"
 database_name = "yhasegawa-form"
+database_id = "TODO-作成後に入れる"
+
+[[d1_databases]]
+binding = "DB_PREVIEW"
+database_name = "yhasegawa-form-preview"
 database_id = "TODO-作成後に入れる"
 
 [vars]

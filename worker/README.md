@@ -46,21 +46,25 @@ Worker は受け取った順に並べるだけなので、見出しがそのま�
 
 `_form` が「先行モニター申込」の送信は、`worker/monitor.js` が受けます。
 項目と同意の記録の決まりは、VideoTask のリポジトリの `docs/hp-form.md` の 1.・2. です。
+申込者には、メールを自動で送りません（Email Sending は有料プランが要るため）。
 
     index.js の守り（隠し欄・欄の名前・Turnstile）
       ▼
     monitor.js
       │  1. 必須・形・規約への同意・同意した規約の制定日を確かめる
       │     （制定日は worker/form_fields.js の TERMS_DATES にあるものだけ）
-      │  2. D1（DB）の monitor_applications に 1 行残す。残せなければ止める
-      │  3. SEND（Email Sending）で support@videotask.app に送る。送れなければ止める
-      │  4. SEND で申込者に受付のお知らせを送る。送れなくても受付は済む
-      │     （運営者に「送れなかった」メールを送る）
+      │  2. D1 の monitor_applications に 1 行残す。残せなければ止める
+      │     本番（yhasegawa.com）は DB、プレビュー（*.workers.dev）は DB_PREVIEW
+      │  3. SUPPORT（Email Routing。無料）で support@videotask.app に送る。
+      │     送れなければ止める。結果は D1 の ops_mail に書く
+      │  4. 受け付けた内容を返す → 送信した直後の画面に出す（保存・印刷してもらう）
       ▼
-    送った結果は D1 の ops_mail / receipt_mail に書く
+    運営者が、管理画面のご案内とあわせて、受け付けた内容をメールで送る
 
 - 表は `worker/schema.sql`。IP アドレスは残しません
-- 相談のフォームは今までどおり、MAIL（Email Routing）で自分あてに送るだけです
+- SUPPORT は Verified のアドレスにしか送れません。Email Routing の宛先に
+  support@videotask.app を足して、確認のリンクを押しておくこと
+- 相談のフォームは今までどおり、MAIL で自分あてに送るだけです
 
 ## 先行モニター規約の版
 
