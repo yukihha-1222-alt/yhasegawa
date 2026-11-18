@@ -11,3 +11,6 @@ _preview/
 __pycache__/
 
 # dist/ は配信するものなのでコミットする（.gitignore に入れないこと）
+
+# wrangler が手元に作るもの（ログインやD1のコマンドの控え）
+.wrangler/
