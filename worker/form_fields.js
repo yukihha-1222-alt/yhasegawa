@@ -32,5 +32,5 @@ export const FIELD_NAMES = new Set([
 /* 先行モニター規約の、載せている版の制定日（terms/monitor/ から）。
    フォームから来た「同意した規約の制定日」が、この中にあるかを見る。 */
 export const TERMS_DATES = new Set([
-  '2026-11-19',
+  '2026-11-18',
 ]);
