@@ -432,6 +432,8 @@ def terms_pages(terms):
     latest = terms[-1][0]
     pages = []
     for date, body in terms:
+        # 本文の中の {{版の制定日}} は、その版の制定日（14. の同意の印の文）
+        body = body.replace('{{版の制定日}}', date_ja(date))
         old = date != latest
         notice = ''
         if old:
