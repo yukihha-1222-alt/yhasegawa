@@ -208,7 +208,8 @@ export async function handleMonitor(fields, env,
     const to = OPS_TO;
     await env.SUPPORT.send(new EmailMessage(FROM, to, mime({
       from: FROM, to, replyTo: get(F.email), fromName: 'VideoTask 先行モニター',
-      subject: tag + '【先行モニター申込】' + get(F.company).slice(0, 40) + '（受付番号 ' + (id ?? '-') + '）',
+      /* 受付番号を頭に。D1 の行の番号で、申込者の画面に出る受付番号と同じ */
+      subject: tag + '【受付番号 ' + (id ?? '-') + '】【先行モニター申込】' + get(F.company).slice(0, 40),
       body: opsBody,
     })));
     await mark('ops_mail', 'sent ' + jstMinute(new Date()));

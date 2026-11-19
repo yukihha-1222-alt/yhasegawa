@@ -241,7 +241,8 @@ test('先行モニター: 記録を残し、運営者に送り、受け付けた
   assert.equal(msg.to, 'support@videotask.app');
   const ops = decode(msg);
   assert.equal(ops.replyTo, 'taro@example.com');
-  assert.match(ops.subject, /^【先行モニター申込】見本商事株式会社（受付番号 1）$/);
+  assert.equal(ops.subject, '【受付番号 1】【先行モニター申込】見本商事株式会社');
+  assert.match(ops.text, /受付番号：1\n/);
   assert.match(ops.text, new RegExp('送信の日時：' + at));
   assert.match(ops.text, new RegExp('同意した規約の制定日：' + TERMS));
   assert.match(ops.text, /見本 一郎 先生/);
@@ -251,6 +252,7 @@ test('先行モニター: 記録を残し、運営者に送り、受け付けた
   /* 画面に出す、受け付けた内容 */
   const rc = r.body.receipt;
   assert.equal(rc.id, 1);
+  assert.equal(rc.id, env.DB.rows.length, '画面の受付番号は D1 の行の番号');
   assert.equal(rc.submittedAt, at);
   assert.equal(rc.termsDate, TERMS);
   assert.equal(rc.termsUrl, 'https://yhasegawa.com/monitor-terms/' + TERMS + '/');
@@ -283,7 +285,7 @@ test('先行モニター: プレビューからの送信は、プレビューの
   assert.equal(r.status, 200);
   assert.equal(env.DB.rows.length, 0, '本番の同意の記録に混ぜない');
   assert.equal(env.DB_PREVIEW.rows.length, 1);
-  assert.match(decode(env.SUPPORT.sent[0]).subject, /^【プレビュー】【先行モニター申込】/);
+  assert.match(decode(env.SUPPORT.sent[0]).subject, /^【プレビュー】【受付番号 1】【先行モニター申込】/);
 });
 
 test('先行モニター: ご紹介の先生が空なら、空のまま記録とお知らせに入る', async () => {
