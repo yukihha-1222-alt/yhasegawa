@@ -33,4 +33,5 @@ export const FIELD_NAMES = new Set([
    フォームから来た「同意した規約の制定日」が、この中にあるかを見る。 */
 export const TERMS_DATES = new Set([
   '2026-11-18',
+  '2026-11-19',
 ]);
