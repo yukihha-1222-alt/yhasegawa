@@ -13,6 +13,21 @@ main = "worker/index.js"
 compatibility_date = "2026-11-10"
 
 # ------------------------------------------------------------------
+# 入口(2026-11-26 運営者の決定)
+#   ・本番の入口は yhasegawa.com だけ(Custom Domain)。前は画面だけで付けていた。
+#     ファイルに書いて、画面の設定とずれないようにする
+#   ・本番の *.workers.dev のアドレス(yhasegawa.appron.workers.dev)は閉じる。
+#     画面で閉じても、ここに書いていないと次のデプロイでまた開く
+#     (route を書いていないと workers_dev は true が既定のため)
+#   ・版ごとのアドレス(<版>-yhasegawa.appron.workers.dev・renewal-yhasegawa…)は残す。
+#     Cloudflare Access(Previews only)で、運営者だけが開ける。
+#     workers_dev = false だけだと、設定がないときに版ごとのアドレスも切れる既定になるので、はっきり書く
+# ------------------------------------------------------------------
+routes = [{ pattern = "yhasegawa.com", custom_domain = true }]
+workers_dev = false
+preview_urls = true
+
+# ------------------------------------------------------------------
 # 配信するのは dist/ の中だけ。
 # pages/ parts/ vendor/ build.py check.py *.md は入らないので、
 # URL を打っても 404 になります。
