@@ -59,6 +59,11 @@ TURNSTILE_SITEKEY = '0x4AAAAAAF6EyfFEgIfvcIj9'
 # 手で書き分けると、共通の末尾ブロックが先に来るページで取りこぼす。
 SERVICE      = 'VideoTask'
 SERVICE_FULL = 'VideoTask（ビデオタスク）'
+# モニター期間の後の料金（予定）。ページでは {{price_after}} と書く。videotask.app の紹介のページと同じ書き方にする
+# （2026-11-26 運営者の決定。全角の記号、数字と単位の間に空きを入れない。変えるときは videotask.app と一緒に）
+# 「月額」「税込」と金額の間は、折り返さない空き（&nbsp;）にする（スマホで「税込」と金額が別の行に分かれないように）
+PRICE_AFTER  = ('モニター期間の後の料金（予定）：社員20人まで 月額&nbsp;20,000円（税込&nbsp;22,000円）。'
+                '20人を超えるときは、20人ごとに 10,000円（税込&nbsp;11,000円）を足します。')
 # ------------------------------------------------------------------
 
 PARTS = os.path.join(ROOT, 'parts')
@@ -720,6 +725,7 @@ def main():
     terms = load_terms()
     terms_date = terms[-1][0]
     scalars = {'mail': MAIL, 'service': SERVICE, 'service_full': SERVICE_FULL,
+               'price_after': PRICE_AFTER,
                'turnstile_sitekey': TURNSTILE_SITEKEY,
                # 先行モニター規約のいまの版。フォームの同意の印に使う
                'terms_date': terms_date,
